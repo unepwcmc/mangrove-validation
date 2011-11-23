@@ -33,11 +33,11 @@ default_run_options[:pty] = true # Must be set for the password prompt from git 
 # depend :remote, :command, "brightbox"
 #
 # Specify your specific Rails version if it is not vendored
-depend :remote, :gem, "rails", "=2.3.8"
-depend :remote, :gem, "authlogic", "=2.1.4"
-depend :remote, :gem, "faker", "=0.9.5"
-depend :remote, :gem, "hashie", "=0.2.0"
-depend :remote, :gem, "pg", "=0.11.0"
+#depend :remote, :gem, "rails", "=2.3.8"
+#depend :remote, :gem, "authlogic", "=2.1.4"
+#depend :remote, :gem, "faker", "=0.9.5"
+#depend :remote, :gem, "hashie", "=0.2.0"
+#depend :remote, :gem, "pg", "=0.11.0"
 
 ## Local Shared Area
 # These are the list of files and directories that you want
