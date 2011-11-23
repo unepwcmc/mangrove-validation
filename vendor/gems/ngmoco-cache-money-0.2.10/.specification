@@ -1,0 +1,145 @@
+--- !ruby/object:Gem::Specification 
+name: ngmoco-cache-money
+version: !ruby/object:Gem::Version 
+  hash: 3
+  prerelease: false
+  segments: 
+  - 0
+  - 2
+  - 10
+  version: 0.2.10
+platform: ruby
+authors: 
+- Nick Kallen
+- Ashley Martens
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2010-01-07 23:00:00 +00:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: activerecord
+  prerelease: false
+  requirement: &id001 !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 7
+        segments: 
+        - 2
+        - 2
+        - 0
+        version: 2.2.0
+  type: :runtime
+  version_requirements: *id001
+- !ruby/object:Gem::Dependency 
+  name: activesupport
+  prerelease: false
+  requirement: &id002 !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 7
+        segments: 
+        - 2
+        - 2
+        - 0
+        version: 2.2.0
+  type: :runtime
+  version_requirements: *id002
+description: Cache utilities.
+email: teamplatform@ngmoco.com
+executables: []
+
+extensions: []
+
+extra_rdoc_files: []
+
+files: 
+- README
+- TODO
+- UNSUPPORTED_FEATURES
+- lib/cash/accessor.rb
+- lib/cash/buffered.rb
+- lib/cash/config.rb
+- lib/cash/finders.rb
+- lib/cash/index.rb
+- lib/cash/local.rb
+- lib/cash/lock.rb
+- lib/cash/fake.rb
+- lib/cash/query/abstract.rb
+- lib/cash/query/calculation.rb
+- lib/cash/query/primary_key.rb
+- lib/cash/query/select.rb
+- lib/cash/request.rb
+- lib/cash/transactional.rb
+- lib/cash/util/array.rb
+- lib/cash/util/marshal.rb
+- lib/cash/write_through.rb
+- lib/cache_money.rb
+- lib/memcached_wrapper.rb
+- rails/init.rb
+- init.rb
+- config/environment.rb
+- config/memcached.yml
+- db/schema.rb
+- spec/cash/accessor_spec.rb
+- spec/cash/active_record_spec.rb
+- spec/cash/calculations_spec.rb
+- spec/cash/finders_spec.rb
+- spec/cash/lock_spec.rb
+- spec/cash/order_spec.rb
+- spec/cash/transactional_spec.rb
+- spec/cash/window_spec.rb
+- spec/cash/write_through_spec.rb
+- spec/cash/marshal_spec.rb
+- spec/spec_helper.rb
+has_rdoc: true
+homepage: http://github.com/ngmoco/cache-money
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+requirements: []
+
+rubyforge_project: 
+rubygems_version: 1.6.2
+signing_key: 
+specification_version: 3
+summary: Write-through and Read-through Cacheing for ActiveRecord
+test_files: 
+- config/environment.rb
+- config/memcached.yml
+- db/schema.rb
+- spec/cash/accessor_spec.rb
+- spec/cash/active_record_spec.rb
+- spec/cash/calculations_spec.rb
+- spec/cash/finders_spec.rb
+- spec/cash/lock_spec.rb
+- spec/cash/order_spec.rb
+- spec/cash/transactional_spec.rb
+- spec/cash/window_spec.rb
+- spec/cash/write_through_spec.rb
+- spec/cash/marshal_spec.rb
+- spec/spec_helper.rb
