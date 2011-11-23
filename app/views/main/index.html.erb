@@ -1,3 +1,30 @@
 <% title "Protected Area Explore Tool"%>
-<p>FOR BROWSERS</p>
-
+<div class="row login-form">
+  <div class="span4 columns">
+    <%= image_tag "/images/unepwcmc_logo.png", :class => "logo" %>
+  </div>
+  <div class="span12 columns">
+    <% form_for @user_session do |f| %>
+      <fieldset>
+        <legend>Sign in</legend>
+        <div class="clearfix">
+          <%= f.label :username %>
+          <div class="input">
+            <%= f.text_field :username, :value => "", :class => "xlarge" %>
+            <span class="help-block">Hint: username or WCMC\username</span>
+          </div>
+        </div>
+        <div class="clearfix">
+          <%= f.label :password %>
+          <div class="input">
+            <%= f.password_field :password, :value => "", :class => "xlarge" %>
+          </div>
+        </div>
+      </fieldset>
+      <div class="actions">
+        <%= f.submit "Sign in", :class => "btn primary" %>
+      </div>
+    <% end %>
+    <p>FOR BROWSERS</p>
+  </div>
+</div>

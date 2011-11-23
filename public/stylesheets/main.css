@@ -1,0 +1,26 @@
+html, body {
+  background-color: #E1E7E8;
+}
+
+#main {
+  background-color: #FFF;
+  border: 1px solid #CCC;
+
+  margin-top: 60px;
+  margin-bottom: 40px;
+
+  padding-left: 20px;
+  padding-right: 20px;
+
+  -moz-box-shadow: 3px 3px 4px #BBB;
+  -webkit-box-shadow: 3px 3px 4px #BBB;
+  box-shadow: 3px 3px 4px #BBB;
+}
+
+#main div.login-form{
+  padding-top: 20px;
+}
+
+form input.xlarge{
+  margin-right: 5px;
+}
