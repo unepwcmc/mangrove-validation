@@ -14,7 +14,7 @@ development:
   database: pa-explorer_development
   pool: 5
   username: postgres
-  password:
+  password: postgres
   template: template_postgis
   
   # Connect on a TCP socket. Omitted by default since the client uses a
