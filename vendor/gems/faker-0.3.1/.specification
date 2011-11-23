@@ -1,7 +1,8 @@
 --- !ruby/object:Gem::Specification 
 name: faker
 version: !ruby/object:Gem::Version 
-  prerelease: false
+  hash: 17
+  prerelease: 
   segments: 
   - 0
   - 3
@@ -14,7 +15,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-04-03 00:00:00 +02:00
+date: 2008-04-03 00:00:00 +01:00
 default_executable: 
 dependencies: []
 
@@ -24,37 +25,9 @@ executables: []
 
 extensions: []
 
-extra_rdoc_files: 
-- History.txt
-- License.txt
-- Manifest.txt
-- README.txt
+extra_rdoc_files: []
+
 files: 
-- History.txt
-- License.txt
-- Manifest.txt
-- README.txt
-- Rakefile
-- config/hoe.rb
-- config/requirements.rb
-- faker.tmproj
-- lib/extensions/array.rb
-- lib/extensions/object.rb
-- lib/faker.rb
-- lib/faker/address.rb
-- lib/faker/company.rb
-- lib/faker/internet.rb
-- lib/faker/lorem.rb
-- lib/faker/name.rb
-- lib/faker/phone_number.rb
-- lib/faker/version.rb
-- script/destroy
-- script/generate
-- script/txt2html
-- setup.rb
-- tasks/deployment.rake
-- tasks/environment.rake
-- tasks/website.rake
 - test/test_faker.rb
 - test/test_faker_internet.rb
 - test/test_faker_name.rb
@@ -64,29 +37,32 @@ homepage: http://faker.rubyforge.org
 licenses: []
 
 post_install_message: 
-rdoc_options: 
-- --main
-- README.txt
+rdoc_options: []
+
 require_paths: 
 - lib
 required_ruby_version: !ruby/object:Gem::Requirement 
+  none: false
   requirements: 
   - - ">="
     - !ruby/object:Gem::Version 
+      hash: 3
       segments: 
       - 0
       version: "0"
 required_rubygems_version: !ruby/object:Gem::Requirement 
+  none: false
   requirements: 
   - - ">="
     - !ruby/object:Gem::Version 
+      hash: 3
       segments: 
       - 0
       version: "0"
 requirements: []
 
 rubyforge_project: faker
-rubygems_version: 1.3.6
+rubygems_version: 1.6.2
 signing_key: 
 specification_version: 2
 summary: A port of Perl's Data::Faker - Generates fake names, phone numbers, etc.
