@@ -84,14 +84,10 @@ div#loader img {position:relative; margin:24px 0 0 24px;}
 p#response {position:absolute; display:none; z-index:200; height:35px; width:50px; -webkit-border-radius:10px; -moz-border-radius:10px; opacity:0.80; background:#333333; top:15px; left:300px; font:normal 21px Junction; color:white; text-align:center; padding:15px 0 0 0;}
 
 span#home_logout {
-  float: right;
-  font-size: 10px;
-  padding-right: 10px;
-}
-span#home_logout a{
-  color: blue;
+  margin-left: 10px;
 }
 
-span#home_logout a:hover {
-  color: darkBlue;
+a.btn.x-small{
+  font-size: 9px;
+  padding: 4px 7px;
 }

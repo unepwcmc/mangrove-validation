@@ -130,7 +130,7 @@ var profile_visible = false;
 							$('ul#main_list').append(li_html);
 						} else {
 							findYou = true;
-							var li_html = '<li class="you"><div class="top"><div class="image"><img src="'+result[i].avatar+'" alt="'+result[i].username+'"/></div><div class="data"><p >'+checkLengthUsername(result[i].username)+'<sup>('+result[i].rank+getRankingEnd(result[i].rank)+')</sup><span id="home_logout"><a href="/logout">Logout</a></span></p><p class="number">'+fillWithZeros(result[i].meters_explored,true) +'<label>METERS <br />DONE</label></p></div></div><div class="bottom"><a class="ranking" href="#"></a><a class="profile" href="javascript:showProfile();"></a><a class="gotomap" href="javascript:hideProfile();"></a></div>';
+							var li_html = '<li class="you"><div class="top"><div class="image"><img src="'+result[i].avatar+'" alt="'+result[i].username+'"/></div><div class="data"><p >'+checkLengthUsername(result[i].username)+'<sup>('+result[i].rank+getRankingEnd(result[i].rank)+')</sup><span id="home_logout"><a href="/logout" class="btn primary x-small">Logout</a></span></p><p class="number">'+fillWithZeros(result[i].meters_explored,true) +'<label>METERS <br />DONE</label></p></div></div><div class="bottom"><a class="ranking" href="#"></a><a class="profile" href="javascript:showProfile();"></a><a class="gotomap" href="javascript:hideProfile();"></a></div>';
 							$('ul#main_list').append(li_html);
 						}
 					}
