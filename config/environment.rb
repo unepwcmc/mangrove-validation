@@ -18,6 +18,7 @@ Rails::Initializer.run do |config|
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
+  config.gem "rails", :version => "2.3.8"
   config.gem "authlogic", :version => '2.1.4'
   config.gem "faker", :version => "0.9.5"
   config.gem "hashie", :version => "0.2.0"
