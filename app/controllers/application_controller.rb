@@ -7,17 +7,9 @@ class ApplicationController < ActionController::Base
 
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password
-  
+
   helper_method :current_user_session, :current_user  
   before_filter :adjust_format_for_apple_requests
-
-  before_filter :verify_access
-  def verify_access
-    authenticate_or_request_with_http_basic("Vizzuality email service. Please sign in.") do |username, password|
-      username == "xxx" && password == "xxx"
-    end
-  end  
-
 
   private
 
