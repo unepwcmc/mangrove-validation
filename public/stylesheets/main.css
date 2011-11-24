@@ -20,3 +20,7 @@ html, body {
 #main div.login-form{
   padding-top: 20px;
 }
+
+div.login-form input{
+  height: 28px;
+}
