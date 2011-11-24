@@ -1,18 +1,1 @@
-<% form_for @user_session do |f| %>
-  <%= f.error_messages %>
-  <fieldset>
-  <div class="clearfix">
-    <%= f.label :username %>
-    <div class="input">
-      <%= f.text_field :username %>
-    </div>
-  </div>
-  <div class="clearfix">
-    <%= f.label :password %>
-    <div class="input">
-      <%= f.password_field :password %>
-    </div>
-  </div>
-  <div class="actions"><%= f.submit "Submit", :class => "btn primary" %></div>
-</fieldset>
-<% end %>
+<%= render :partial => "form" %>
