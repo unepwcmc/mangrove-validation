@@ -40,6 +40,7 @@ class ApplicationController < ActionController::Base
   def adjust_format_for_apple_requests
     request.format = :iphone if iphone_request?
     request.format = :ipad if ipad_request?
+    #request.format = :ipad
   end
   
   def iphone_request?
