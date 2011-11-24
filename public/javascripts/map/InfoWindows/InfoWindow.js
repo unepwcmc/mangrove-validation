@@ -232,6 +232,7 @@ InfoWindow.prototype.onAdd = function() {
   this.div_ = div;
 
   var panes = this.getPanes();
+  panes.overlayLayer.style["zIndex"] = 1001;
   panes.overlayLayer.appendChild(this.div_);
 
  	second_map = new google.maps.Map(image_static_layer,mapOptions);
