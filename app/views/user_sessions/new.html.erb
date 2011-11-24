@@ -1,40 +1,18 @@
-<% title "New User Session" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml"> 
-	<head lang="en" xml:lang="en"> 
-		<meta http-equiv="Content-type" content="text/html; charset=utf-8" /> 
-		<title></title> 
-		<meta name="description" content=""> 
-		<meta name="keywords" content=""> 
-		
-		<%= stylesheet_link_tag 'application' %>
-
-	</head>
-	
-	<body>
-		<div id="layout">
-			<% form_for @user_session do |f| %>
-			  <%= f.error_messages %>
-			  <p>
-			    <%= f.label :username %><br />
-			    <%= f.text_field :username %>
-			  </p>
-			  <p>
-			    <%= f.label :password %><br />
-			    <%= f.password_field :password %>
-			  </p>
-			  <p><%= f.submit %></p>
-			<% end %>
-		</div>
-	</body> 
-</html> 
- 
- 
-
-
-
-
-
-
-
-
+<% form_for @user_session do |f| %>
+  <%= f.error_messages %>
+  <fieldset>
+  <div class="clearfix">
+    <%= f.label :username %>
+    <div class="input">
+      <%= f.text_field :username %>
+    </div>
+  </div>
+  <div class="clearfix">
+    <%= f.label :password %>
+    <div class="input">
+      <%= f.password_field :password %>
+    </div>
+  </div>
+  <div class="actions"><%= f.submit "Submit", :class => "btn primary" %></div>
+</fieldset>
+<% end %>
