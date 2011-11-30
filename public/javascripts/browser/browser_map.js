@@ -3,11 +3,13 @@ var projection;
 var MERCATOR_RANGE = 256;
 var infowindow;
 var trackData = [];
-var stripes1;
-var stripes2;
-var stripes3;
+var stripes, stripes_select;
 var globalMaptile = new GlobalMercator();
 var start_latlng;
+
+// Load images
+stripes_select = new Image();
+stripes_select.src = "images/stripes_select.png";
 
 function bound(value, opt_min, opt_max) {
   if (opt_min != null) value = Math.max(value, opt_min);
@@ -21,14 +23,13 @@ function degreesToRadians(deg) {
 
 function radiansToDegrees(rad) {
   return rad / (Math.PI / 180);
-}  
+} 
 
 function MercatorProjection() {
-  this.pixelOrigin_ = new google.maps.Point(
-    MERCATOR_RANGE / 2, MERCATOR_RANGE / 2);
+  this.pixelOrigin_ = new google.maps.Point(MERCATOR_RANGE / 2, MERCATOR_RANGE / 2);
   this.pixelsPerLonDegree_ = MERCATOR_RANGE / 360;
   this.pixelsPerLonRadian_ = MERCATOR_RANGE / (2 * Math.PI);
-};
+}
 
 function getTileByLatLng(latlng) {
   var worldCoordinate = projection.fromLatLngToPoint(latlng);
@@ -51,7 +52,7 @@ MercatorProjection.prototype.fromLatLngToPoint = function(latLng, opt_point) {
   var siny = bound(Math.sin(degreesToRadians(latLng.lat())), -0.9999, 0.9999);
   point.y = origin.y + 0.5 * Math.log((1 + siny) / (1 - siny)) * -me.pixelsPerLonRadian_;
   return point;
-}; 
+};
 
 MercatorProjection.prototype.fromPointToLatLng = function(point) {
   var me = this;
@@ -61,18 +62,19 @@ MercatorProjection.prototype.fromPointToLatLng = function(point) {
   var latRadians = (point.y - origin.y) / -me.pixelsPerLonRadian_;
   var lat = radiansToDegrees(2 * Math.atan(Math.exp(latRadians)) - Math.PI / 2);
   return new google.maps.LatLng(lat, lng);
-}; 
+};
 
 function CoordMapType(tileSize) {
   this.tileSize = tileSize;
 }
 
 CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
-  var canvas = document.createElement("canvas");
+  var canvas = ownerDocument.createElement("canvas");
   var id = 'id-' + coord.x + '-' + coord.y + '-' + zoom;
 
-  if (typeof G_vmlCanvasManager != 'undefined') 
+  if (typeof G_vmlCanvasManager != 'undefined') {
     G_vmlCanvasManager.initElement(canvas);
+  }
 
   canvas.id = id;
   canvas.width = canvas.height = 256;
@@ -198,10 +200,15 @@ function initialize() {
               map.setZoom(15);
             });
 
+            initializeMapEdition();
+
             //infowindow = new InfoWindow(start_latlng, map, trackData);
 
-            setTimeout('map.overlayMapTypes.insertAt(0, new CoordMapType(new google.maps.Size(256, 256)))',1000);
-            setTimeout('map.overlayMapTypes.insertAt(0, new FillMap(new google.maps.Size(256, 256)))',1000);
+            // Draw grid
+            map.overlayMapTypes.insertAt(0, new CoordMapType(new google.maps.Size(256, 256)));
+
+            // Fill squares
+            map.overlayMapTypes.insertAt(0, new FillMap(new google.maps.Size(256, 256)))
 
             hideLoading();
           }
@@ -250,64 +257,95 @@ function FillMap(tileSize) {
 }
 
 FillMap.prototype.getTile = function(coord, zoom, ownerDocument) {
-  var canvas = document.createElement("canvas");
-  if (typeof G_vmlCanvasManager != 'undefined') 
+  var canvas = ownerDocument.createElement("canvas");
+  if (typeof G_vmlCanvasManager != 'undefined') {
     G_vmlCanvasManager.initElement(canvas);
+  }
 
-  var id = 'id-' + coord.x + '-' + coord.y + '-' + zoom;
-
-  canvas.id = id;
-  canvas.width = canvas.height = 256;
+  canvas.id = 'id-' + coord.x + '-' + coord.y + '-' + zoom;
+  canvas.width = 256;
+  canvas.height = 256;
   canvas.style.width = '256px';
   canvas.style.height = '256px';	
   canvas.style.left = '0px';
   canvas.style.top =  '0px';
-  canvas.style.position = "relative";	
+  canvas.style.position = "relative";
 
-  $.ajax({
-    type: "GET",
-    url: "tiles/"+coord.x+"/"+coord.y+'/15',
-    success: function(result){	
-      var context = canvas.getContext("2d");
-      var cellsSize = 64;
+  var context = canvas.getContext("2d");
+  var cellsSize = 64;
 
-      stripes1 = new Image();
-      stripes1.src = "images/stripes.png";
-      stripes2 = new Image();
-      stripes2.src = "images/stripes_2.png";
-      stripes3 = new Image();
-      stripes3.src = "images/stripes_3.png";
-				
-      var x_coord = Math.floor(coord.x*4);
-      var y_coord = Math.floor(coord.y*4);
-
-      stripes3.onload = function() {
-        var x=0, y=0;
-        for (var i = x_coord; i < (x_coord + 4); i++) {
-          for (var j = y_coord; j< (y_coord + 4); j++) {
-            var image = checkCellType(result,i,j);
-            if (image!=null) {
-              context.drawImage(image, (cellsSize*x), (cellsSize*y));
-            }
-            y = y+1;
-          }
-          y = 0;
-          x = x+1;
-        }
-      };
-    }
-  });
-  return canvas;
-};
-
-function checkCellType(data, coord_x, coord_y) {
-  for(var i=0; i<data.length; i++) {
-    if(data[i].x == coord_x && data[i].y == coord_y) {
-      return stripes1;
-    }
+  stripes = new Image();
+  stripes.src = "images/stripes.png";
+  
+  stripes.onload = function() {
+    context.drawImage(stripes, cellsSize*0, cellsSize*0);
   }
-  return null;
+
+  // Debug
+  console.log(canvas.id);
+
+  return canvas;
 }
+
+//FillMap.prototype.getTile = function(coord, zoom, ownerDocument) {
+//  var canvas = document.createElement("canvas");
+//  if (typeof G_vmlCanvasManager != 'undefined') 
+//    G_vmlCanvasManager.initElement(canvas);
+//
+//  var id = 'id-' + coord.x + '-' + coord.y + '-' + zoom;
+//
+//  canvas.id = id;
+//  canvas.width = canvas.height = 256;
+//  canvas.style.width = '256px';
+//  canvas.style.height = '256px';	
+//  canvas.style.left = '0px';
+//  canvas.style.top =  '0px';
+//  canvas.style.position = "relative";
+//
+//  $.ajax({
+//    type: "GET",
+//    url: "tiles/"+coord.x+"/"+coord.y+'/15',
+//    success: function(result) {	
+//      var context = canvas.getContext("2d");
+//      var cellsSize = 64;
+//
+//      stripes1 = new Image();
+//      stripes1.src = "images/stripes.png";
+//      stripes2 = new Image();
+//      stripes2.src = "images/stripes_2.png";
+//      stripes3 = new Image();
+//      stripes3.src = "images/stripes_3.png";
+//				
+//      var x_coord = Math.floor(coord.x*4);
+//      var y_coord = Math.floor(coord.y*4);
+//
+//      stripes3.onload = function() {
+//        var x=0, y=0;
+//        for (var i = x_coord; i < (x_coord + 4); i++) {
+//          for (var j = y_coord; j< (y_coord + 4); j++) {
+//            var image = checkCellType(result,i,j);
+//            if (image!=null) {
+//              context.drawImage(image, (cellsSize*x), (cellsSize*y));
+//            }
+//            y = y+1;
+//          }
+//          y = 0;
+//          x = x+1;
+//        }
+//      };
+//    }
+//  });
+//  return canvas;
+//};
+//
+//function checkCellType(data, coord_x, coord_y) {
+//  for(var i=0; i<data.length; i++) {
+//    if(data[i].x == coord_x && data[i].y == coord_y) {
+//      return stripes1;
+//    }
+//  }
+//  return null;
+//}
 
 function getCellCenter(x,y,zoom) {
   var google_tiles = globalMaptile.GoogleTile(x, y, 17);
