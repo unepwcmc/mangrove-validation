@@ -1,0 +1,36 @@
+<h1>Editing map</h1>
+
+<% form_for(@map) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :x %><br />
+    <%= f.text_field :x %>
+  </p>
+  <p>
+    <%= f.label :y %><br />
+    <%= f.text_field :y %>
+  </p>
+  <p>
+    <%= f.label :z %><br />
+    <%= f.text_field :z %>
+  </p>
+  <p>
+    <%= f.label :parent_x %><br />
+    <%= f.text_field :parent_x %>
+  </p>
+  <p>
+    <%= f.label :parent_y %><br />
+    <%= f.text_field :parent_y %>
+  </p>
+  <p>
+    <%= f.label :parent_z %><br />
+    <%= f.text_field :parent_z %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @map %> |
+<%= link_to 'Back', maps_path %>

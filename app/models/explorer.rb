@@ -25,7 +25,7 @@ class Explorer
     @max_axis     = 2**@loc.z
     @path         = []    
     @track        = track
-    survey    
+    survey
     @path << @loc
   end
   
@@ -137,7 +137,14 @@ class Explorer
     
     # add self if requested
     ca << cell if opts[:include_self]        
-    ca
+    
+    # TODO: Check if the cells exist on the map!
+    valid_ca = []
+    ca.each do |cell_a|
+      valid_ca << cell_a if Map.find_by_x_and_y_and_z(cell_a.x, cell_a.y, 17)
+    end
+
+    valid_ca
   end  
   
   # Tests if any possible cells around a cell touch or are in the current path

@@ -1,0 +1,33 @@
+<p>
+  <b>X:</b>
+  <%=h @map.x %>
+</p>
+
+<p>
+  <b>Y:</b>
+  <%=h @map.y %>
+</p>
+
+<p>
+  <b>Z:</b>
+  <%=h @map.z %>
+</p>
+
+<p>
+  <b>Parent x:</b>
+  <%=h @map.parent_x %>
+</p>
+
+<p>
+  <b>Parent y:</b>
+  <%=h @map.parent_y %>
+</p>
+
+<p>
+  <b>Parent z:</b>
+  <%=h @map.parent_z %>
+</p>
+
+
+<%= link_to 'Edit', edit_map_path(@map) %> |
+<%= link_to 'Back', maps_path %>

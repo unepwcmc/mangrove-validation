@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100530164850) do
+ActiveRecord::Schema.define(:version => 20111129172248) do
 
   create_table "cells", :force => true do |t|
     t.integer  "positive_count", :default => 0
@@ -41,22 +41,15 @@ ActiveRecord::Schema.define(:version => 20100530164850) do
 
   add_index "classifications", ["x", "y", "z"], :name => "index_classifications_on_x_and_y_and_z"
 
-  create_table "geometry_columns", :id => false, :force => true do |t|
-    t.string  "f_table_catalog",   :limit => 256, :null => false
-    t.string  "f_table_schema",    :limit => 256, :null => false
-    t.string  "f_table_name",      :limit => 256, :null => false
-    t.string  "f_geometry_column", :limit => 256, :null => false
-    t.integer "coord_dimension",                  :null => false
-    t.integer "srid",                             :null => false
-    t.string  "type",              :limit => 30,  :null => false
-  end
-
-  create_table "spatial_ref_sys", :id => false, :force => true do |t|
-    t.integer "srid",                      :null => false
-    t.string  "auth_name", :limit => 256
-    t.integer "auth_srid"
-    t.string  "srtext",    :limit => 2048
-    t.string  "proj4text", :limit => 2048
+  create_table "maps", :force => true do |t|
+    t.integer  "x"
+    t.integer  "y"
+    t.integer  "z"
+    t.integer  "parent_x"
+    t.integer  "parent_y"
+    t.integer  "parent_z"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "tracks", :force => true do |t|

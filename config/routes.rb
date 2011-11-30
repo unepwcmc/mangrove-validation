@@ -4,6 +4,7 @@ ActionController::Routing::Routes.draw do |map|
   map.login "login", :controller => "user_sessions", :action => "new"
   map.logout "logout", :controller => "user_sessions", :action => "destroy"
 
+  map.resources :maps
   map.resources :games
   map.resources :cells 
   map.resources :classifications
