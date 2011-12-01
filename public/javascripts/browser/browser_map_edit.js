@@ -25,8 +25,6 @@ function changePolyColor(event) {
   } else {
     poly.setOptions({fillColor: "#00FF00"});
   }
-  
-  console.log(poly.fillColor);
 }
 
 function addPoint(event) {
@@ -41,44 +39,43 @@ function pathChange() {
   updateGrid();
 }
 
-function updateGrid() {
-  var tile_coordinates = [], i, j,
-    min_x, max_x, min_y, max_y,
-    canvas, zoom = map.getZoom();
+function updateGrid(clear) {
+  if (clear == null) clear = false;
   
   // Path as to be at least a triangle
-  if(path.length < 3) {
+  if(path.length < 3 && !clear) {
     return;
   }
 
-  // Get all the grids that COULD intersect the path
-  for(i = 0; i < path.length; i++) {
-    tile_coordinates.push(getTileCoordinates(path.getAt(i)).tileCoordinate);
-  }
-
-  // Get min and max values for X and Y of the tiles
-  for(i = 0; i < tile_coordinates.length; i++) {
-    min_x = min_x ? (min_x > tile_coordinates[i].x ? tile_coordinates[i].x : min_x) : tile_coordinates[i].x;
-    max_x = max_x ? (max_x < tile_coordinates[i].x ? tile_coordinates[i].x : max_x) : tile_coordinates[i].x;
-    min_y = min_y ? (min_y > tile_coordinates[i].y ? tile_coordinates[i].y : min_y) : tile_coordinates[i].y;
-    max_y = max_y ? (max_y < tile_coordinates[i].y ? tile_coordinates[i].y : max_y) : tile_coordinates[i].y;
-  }
-
-  for(i = min_x; i <= max_x; i++) {
-    for(j = min_y; j <= max_y; j++) {
-      canvas = document.getElementById('id-' + i + '-' + j + '-' + zoom);
-      updateCanvas(i, j, canvas, path);
-    }
-  }
-  
-  // TODO: clean deselected tiles
+  // Update tiles
+  $("canvas.canvasTiles").each(function(index) {
+    var id_split = $(this).attr('id').split('-');
+    updateCanvas(id_split[1], id_split[2], this, path);
+  });
 }
 
 function updateCanvas(canvas_x, canvas_y, canvas, path) {
-  var x, y, cellSize = 64, poly,
-    context = canvas.getContext("2d");
+  var x = 0, y = 0, cellSize = 64, poly,
+    context = canvas.getContext("2d"),
+    cellsSize = 64;
 
   context.clearRect(0, 0, MERCATOR_RANGE, MERCATOR_RANGE);
+
+  if(canvas.tiles_data !== undefined) {
+    var x_coord = Math.floor(canvas_x*4);
+    var y_coord = Math.floor(canvas_y*4);
+
+    for (var i = x_coord; i < (x_coord + 4); i++) {
+      for (var j = y_coord; j< (y_coord + 4); j++) {
+        if (checkCellType(canvas.tiles_data, i, j)) {
+          context.drawImage(stripes, (cellsSize*x), (cellsSize*y));
+        }
+        y = y+1;
+      }
+      y = 0;
+      x = x+1;
+    }
+  }
 
   for (x = 0; x < 4; x++) {
     for (y = 0; y < 4; y++) {
@@ -87,13 +84,10 @@ function updateCanvas(canvas_x, canvas_y, canvas, path) {
         new google.maps.Point((canvas_x * MERCATOR_RANGE) + ((x + 1) * cellSize), (canvas_y * MERCATOR_RANGE) + (y * cellSize)),
         new google.maps.Point((canvas_x * MERCATOR_RANGE) + ((x + 1) * cellSize), (canvas_y * MERCATOR_RANGE) + ((y + 1) * cellSize)),
         new google.maps.Point((canvas_x * MERCATOR_RANGE) + (x * cellSize), (canvas_y * MERCATOR_RANGE) + ((y + 1) * cellSize))
-//        [ (canvas_x * MERCATOR_RANGE) + (x * cellSize), (canvas_y * MERCATOR_RANGE) + (y * cellSize) ],
-//        [ (canvas_x * MERCATOR_RANGE) + ((x + 1) * cellSize), (canvas_y * MERCATOR_RANGE) + (y * cellSize) ],
-//        [ (canvas_x * MERCATOR_RANGE) + ((x + 1) * cellSize), (canvas_y * MERCATOR_RANGE) + ((y + 1) * cellSize) ],
-//        [ (canvas_x * MERCATOR_RANGE) + (x * cellSize), (canvas_y * MERCATOR_RANGE) + ((y + 1) * cellSize) ]
       ];
 
       if(polyIntersectsPath(poly, path)) {
+        context.clearRect(cellsSize*x, cellsSize*y, 64, 64);
         context.drawImage(stripes_select, cellSize*x, cellSize*y);
       }
     }

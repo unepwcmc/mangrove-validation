@@ -10,6 +10,8 @@ var start_latlng;
 // Load images
 stripes_select = new Image();
 stripes_select.src = "images/stripes_select.png";
+stripes = new Image();
+stripes.src = "images/stripes.png";
 
 function bound(value, opt_min, opt_max) {
   if (opt_min != null) value = Math.max(value, opt_min);
@@ -37,7 +39,6 @@ function getTileByLatLng(latlng) {
   var tileCoordinate = new google.maps.Point(Math.floor(pixelCoordinate.x / MERCATOR_RANGE), Math.floor(pixelCoordinate.y / MERCATOR_RANGE));
 
   var tileCoordStr = "Tile Coordinate: " + tileCoordinate.x + " , " + tileCoordinate.y + " at Zoom Level: " + map.getZoom();
-  console.log(tileCoordStr);
 }
 
 MercatorProjection.prototype.fromLatLngToPoint = function(latLng, opt_point) {
@@ -211,6 +212,22 @@ function initialize() {
             map.overlayMapTypes.insertAt(0, new FillMap(new google.maps.Size(256, 256)))
 
             hideLoading();
+            
+            var sendButton = $("<a style='border:none;border-width:0px;position:absolute;top:15px;right:15px;width:64px;cursor:pointer;height:35px;background:url(../images/yes.png) no-repeat 0 0;'></a>")
+
+            sendButton.hover(function(ev) {
+              $(this).css('background-position','0 -37px');
+            }, function(ev) {
+              $(this).css('background-position','0 0');
+            });
+            sendButton.click(function() {
+              // Clear path
+              path.clear();
+              // Update Grid
+              updateGrid(true);
+            });
+
+            $("#layout").append(sendButton);
           }
         }
       });
@@ -263,6 +280,7 @@ FillMap.prototype.getTile = function(coord, zoom, ownerDocument) {
   }
 
   canvas.id = 'id-' + coord.x + '-' + coord.y + '-' + zoom;
+  canvas.setAttribute('class', 'canvasTiles')
   canvas.width = 256;
   canvas.height = 256;
   canvas.style.width = '256px';
@@ -270,82 +288,46 @@ FillMap.prototype.getTile = function(coord, zoom, ownerDocument) {
   canvas.style.left = '0px';
   canvas.style.top =  '0px';
   canvas.style.position = "relative";
-
-  var context = canvas.getContext("2d");
-  var cellsSize = 64;
-
-  stripes = new Image();
-  stripes.src = "images/stripes.png";
   
-  stripes.onload = function() {
-    context.drawImage(stripes, cellsSize*0, cellsSize*0);
-  }
+  updateCanvas(coord.x, coord.y, canvas, path);
 
-  // Debug
-  console.log(canvas.id);
+  $.ajax({
+    type: "GET",
+    url: "tiles/"+coord.x+"/"+coord.y+'/15',
+    success: function(result) {
+      canvas.tiles_data = result;
+
+      var x=0, y=0;
+      var context = canvas.getContext("2d");
+      var cellsSize = 64;
+
+      var x_coord = Math.floor(coord.x*4);
+      var y_coord = Math.floor(coord.y*4);
+
+      for (var i = x_coord; i < (x_coord + 4); i++) {
+        for (var j = y_coord; j< (y_coord + 4); j++) {
+          if (checkCellType(result,i,j)) {
+            context.drawImage(stripes, (cellsSize*x), (cellsSize*y));
+          }
+          y = y+1;
+        }
+        y = 0;
+        x = x+1;
+      }
+    }
+  });
 
   return canvas;
 }
 
-//FillMap.prototype.getTile = function(coord, zoom, ownerDocument) {
-//  var canvas = document.createElement("canvas");
-//  if (typeof G_vmlCanvasManager != 'undefined') 
-//    G_vmlCanvasManager.initElement(canvas);
-//
-//  var id = 'id-' + coord.x + '-' + coord.y + '-' + zoom;
-//
-//  canvas.id = id;
-//  canvas.width = canvas.height = 256;
-//  canvas.style.width = '256px';
-//  canvas.style.height = '256px';	
-//  canvas.style.left = '0px';
-//  canvas.style.top =  '0px';
-//  canvas.style.position = "relative";
-//
-//  $.ajax({
-//    type: "GET",
-//    url: "tiles/"+coord.x+"/"+coord.y+'/15',
-//    success: function(result) {	
-//      var context = canvas.getContext("2d");
-//      var cellsSize = 64;
-//
-//      stripes1 = new Image();
-//      stripes1.src = "images/stripes.png";
-//      stripes2 = new Image();
-//      stripes2.src = "images/stripes_2.png";
-//      stripes3 = new Image();
-//      stripes3.src = "images/stripes_3.png";
-//				
-//      var x_coord = Math.floor(coord.x*4);
-//      var y_coord = Math.floor(coord.y*4);
-//
-//      stripes3.onload = function() {
-//        var x=0, y=0;
-//        for (var i = x_coord; i < (x_coord + 4); i++) {
-//          for (var j = y_coord; j< (y_coord + 4); j++) {
-//            var image = checkCellType(result,i,j);
-//            if (image!=null) {
-//              context.drawImage(image, (cellsSize*x), (cellsSize*y));
-//            }
-//            y = y+1;
-//          }
-//          y = 0;
-//          x = x+1;
-//        }
-//      };
-//    }
-//  });
-//  return canvas;
-//};
-//
-//function checkCellType(data, coord_x, coord_y) {
-//  for(var i=0; i<data.length; i++) {
-//    if(data[i].x == coord_x && data[i].y == coord_y) {
-//      return stripes1;
-//    }
-//  }
-//  return null;
-//}
+function checkCellType(data, coord_x, coord_y) {
+  for(var i = 0; i < data.length; i++) {
+    if(data[i].x == coord_x && data[i].y == coord_y) {
+      return true;
+    }
+  }
+  return false;
+}
 
 function getCellCenter(x,y,zoom) {
   var google_tiles = globalMaptile.GoogleTile(x, y, 17);
