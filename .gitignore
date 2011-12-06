@@ -1,13 +1,6 @@
-log/*
 .bundle
 db/*.sqlite3
 log/*.log
-log/*.db
-tmp/**/*
-*.swp
-*.swo
-*.DS_Store
-.idea/*
-public/system/*
-vendor/ruby
-nbproject/*
+tmp/
+
+nbproject/

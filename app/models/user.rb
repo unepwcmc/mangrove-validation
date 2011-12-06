@@ -4,8 +4,7 @@ class User < ActiveRecord::Base
   after_create { User.refresh_rank }
   
   def refresh_stats
-    cx = Classification.count :joins => [:track => :user], 
-                               :conditions => "value IS NOT NULL AND user_id = #{self.id}"    
+    cx = Classification.count(:joins => [:track => :user], :conditions => "value IS NOT NULL AND user_id = #{self.id}")
     self.meters_explored = cx * APP_CONFIG[:meters_per_cell]
     save
     User.refresh_rank
