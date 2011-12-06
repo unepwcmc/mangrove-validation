@@ -12,7 +12,7 @@ class Map < ActiveRecord::Base
   end
   
   def self.random_map_cell
-    find(:order => "random()")
+    self.find(:first, :order => "random()")
   end
   
   def game_json

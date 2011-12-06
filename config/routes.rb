@@ -1,4 +1,19 @@
-PaExplore::Application.routes.draw do
+PaExplore::Application.routes.draw do |map|
+  map.root :controller => "main", :action => "index"
+  map.tiles 'tiles/:x/:y/:z', :controller => "cells", :action => "tiles"
+  map.login "login", :controller => "user_sessions", :action => "new"
+  map.logout "logout", :controller => "user_sessions", :action => "destroy"
+  map.resources :maps
+  map.resources :games
+  map.resources :cells 
+  map.resources :classifications
+  map.resources :tracks
+  map.resources :user_sessions
+  map.resources :users, :collection => {:rank => :get}
+
+  map.connect ':controller/:action/:id'
+  map.connect ':controller/:action/:id.:format'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
