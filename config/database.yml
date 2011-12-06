@@ -13,8 +13,8 @@ development:
   encoding: unicode
   database: pa-explore_development
   pool: 5
-  username: pa-explore
-  password:
+  username: postgres
+  password: postgres
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
@@ -39,8 +39,8 @@ test:
   encoding: unicode
   database: pa-explore_test
   pool: 5
-  username: pa-explore
-  password:
+  username: postgres
+  password: postgres
 
 production:
   adapter: postgresql
