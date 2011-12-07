@@ -12,7 +12,7 @@ class UsersController < ApplicationController
       flash[:notice] = "Successfully created user."
       redirect_to games_url
     else
-      render :action => 'new'
+      render :action => 'new', :layout => "main"
     end
   end
   

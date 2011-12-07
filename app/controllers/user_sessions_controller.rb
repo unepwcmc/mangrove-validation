@@ -16,7 +16,7 @@ class UserSessionsController < ApplicationController
         redirect_to url
       end  
     else
-      render :action => 'new'
+      render :action => 'new', :layout => "main"
     end
   end
   
