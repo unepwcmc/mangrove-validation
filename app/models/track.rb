@@ -20,10 +20,12 @@ class Track < ActiveRecord::Base
     #x = (108171..108225).to_a.rand #=> Sabah
     #y = (63541..63599).to_a.rand #=> Sabah
 
-    x = (63520..63600).to_a.sample #=> SPAIN
-    y = (51220..51300).to_a.sample #=> SPAIN
-    #x = 63520
-    #y = 51220
+    #x = (63520..63600).to_a.sample #=> SPAIN
+    #y = (51220..51300).to_a.sample #=> SPAIN
+    #x = (63520..63600).to_a.sample #=> SPAIN
+    #y = (51220..51300).to_a.sample #=> SPAIN
+    x = (108500..109023).to_a.sample #=> Very close to Indonesia
+    y = (68550..68623).to_a.sample #=> Very close to Indonesia
 
     # Get a starting cell from the DB map
 #    random_cell = Map.random_map_cell
