@@ -212,25 +212,27 @@ function initialize() {
             map.overlayMapTypes.insertAt(0, new FillMap(new google.maps.Size(256, 256)))
 
             hideLoading();
-            
-            var sendButton = $("<a style='border:none;border-width:0px;position:absolute;top:15px;right:15px;width:64px;cursor:pointer;height:35px;background:url(../images/yes.png) no-repeat 0 0;'></a>");
 
-            sendButton.hover(function(ev) {
-              $(this).css('background-position','0 -37px');
-            }, function(ev) {
-              $(this).css('background-position','0 0');
-            });
+            var drawing_controls = $("<div id='drawing_controls'></div>");
+
+            var buildPolygon = $("<div class='options'><input type='checkbox' id='build_polygon'/><label for='build_polygon'>Draw polygon</label></options>");
+            drawing_controls.append(buildPolygon);
+
+            var sendButton = $("<a class='btn primary'>Send</a>")
+            $('#my-modal').modal({backdrop: 'static', keyboard: true});
+
             sendButton.click(function() {
               // Clear path
               path.clear();
               // Update Grid
               updateGrid(true);
+              // Open Modal Box
+              $('#my-modal').modal('show')
             });
 
-            $("#layout").append(sendButton);
+            drawing_controls.append(sendButton);
 
-            var buildPolygon = $("<input type='checkbox' id='build_polygon' style='border:none;border-width:0px;position:absolute;top:15px;right:50px;height:35px;'/>");
-            $("#layout").append(buildPolygon);
+            $("#layout").append(drawing_controls);
           }
         }
       });

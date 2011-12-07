@@ -97,3 +97,21 @@ p.logout a{
 p.logout a:hover {
   color: #eee;
 }
+
+div#drawing_controls{
+  position: absolute; top: 15px; right: 15px;
+  background-color: #000;
+  color: #fff;
+}
+div#drawing_controls div.options{
+  float: left;
+  margin-right: 10px;
+  margin-top: 5px;
+}
+div#drawing_controls div.options label{
+  line-height: 7px;
+  margin-right: 5px;
+  color: #fff;
+  width: 100px;
+}
+}
