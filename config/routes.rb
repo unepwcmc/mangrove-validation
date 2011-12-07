@@ -11,12 +11,14 @@ PaExplore::Application.routes.draw do
   resources :cells 
   resources :classifications
   resources :tracks
-  resources :user_sessions
+
   resources :users do
     collection do
       get 'rank'
     end
   end
+
+  resource :user_sessions
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

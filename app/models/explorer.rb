@@ -17,10 +17,10 @@ class Explorer
     opts.reverse_merge! :z => 17
     opts.reverse_merge! :x => rand(2**opts[:z]), 
                         :y => rand(2**opts[:z]), 
-                        :distance => APP_CONFIG[:cells_per_track]
+                        :distance => APP_CONFIG['cells_per_track']
     @loc          = Loc.new :x => opts[:x], :y => opts[:y], :z => opts[:z]
     @distance     = opts[:distance]
-    @total_distance = opts[:distance]    
+    @total_distance = opts[:distance]
     @total_cells  = (2**@loc.z)**2
     @max_axis     = 2**@loc.z
     @path         = []    
