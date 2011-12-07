@@ -212,19 +212,17 @@ function initialize() {
             map.overlayMapTypes.insertAt(0, new FillMap(new google.maps.Size(256, 256)))
 
             hideLoading();
-            
-            var sendButton = $("<a style='border:none;border-width:0px;position:absolute;top:15px;right:15px;width:64px;cursor:pointer;height:35px;background:url(../images/yes.png) no-repeat 0 0;'></a>")
 
-            sendButton.hover(function(ev) {
-              $(this).css('background-position','0 -37px');
-            }, function(ev) {
-              $(this).css('background-position','0 0');
-            });
+            var sendButton = $("<a class='btn primary' style='position:absolute;top:15px;right:15px'>Send</a>")
+            $('#my-modal').modal({backdrop: 'static', keyboard: true});
+
             sendButton.click(function() {
               // Clear path
               path.clear();
               // Update Grid
               updateGrid(true);
+              // Open Modal Box
+              $('#my-modal').modal('show')
             });
 
             $("#layout").append(sendButton);

@@ -15,6 +15,7 @@
 		<%= javascript_include_tag 'browser/browser_home' %>
 		<%= javascript_include_tag 'browser/browser_map' %>
 		<%= javascript_include_tag 'browser/browser_map_edit' %>
+		<%= javascript_include_tag 'bootstrap-modal' %>
 		<script type="text/javascript">
 
 		  var _gaq = _gaq || [];
@@ -128,7 +129,15 @@
 		</div>
 			
 
-		
+    <div id="my-modal" class="modal hide">
+      <div class="modal-header">
+        <a href="#" class="close">&times;</a>
+        <h3>Data sent</h3>
+      </div>
+      <div class="modal-body">
+        <p>The information was sent to the server. Thank you.</p>
+      </div>
+    </div>
 	</body> 
 </html> 
  
