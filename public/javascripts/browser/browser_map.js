@@ -213,7 +213,7 @@ function initialize() {
 
             hideLoading();
             
-            var sendButton = $("<a style='border:none;border-width:0px;position:absolute;top:15px;right:15px;width:64px;cursor:pointer;height:35px;background:url(../images/yes.png) no-repeat 0 0;'></a>")
+            var sendButton = $("<a style='border:none;border-width:0px;position:absolute;top:15px;right:15px;width:64px;cursor:pointer;height:35px;background:url(../images/yes.png) no-repeat 0 0;'></a>");
 
             sendButton.hover(function(ev) {
               $(this).css('background-position','0 -37px');
@@ -228,6 +228,9 @@ function initialize() {
             });
 
             $("#layout").append(sendButton);
+
+            var buildPolygon = $("<input type='checkbox' id='build_polygon' style='border:none;border-width:0px;position:absolute;top:15px;right:50px;height:35px;'/>");
+            $("#layout").append(buildPolygon);
           }
         }
       });
