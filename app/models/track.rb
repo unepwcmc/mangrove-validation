@@ -20,15 +20,15 @@ class Track < ActiveRecord::Base
     #x = (108171..108225).to_a.rand #=> Sabah
     #y = (63541..63599).to_a.rand #=> Sabah
 
-    #x = (63520..63600).to_a.rand #=> SPAIN
-    #y = (51220..51300).to_a.rand #=> SPAIN
+    x = (63520..63600).to_a.sample #=> SPAIN
+    y = (51220..51300).to_a.sample #=> SPAIN
     #x = 63520
     #y = 51220
 
     # Get a starting cell from the DB map
-    random_cell = Map.random_map_cell
-    x = random_cell.x
-    y = random_cell.y
+#    random_cell = Map.random_map_cell
+#    x = random_cell.x
+#    y = random_cell.y
 
     Track.transaction do
       explorer = Explorer.new self, :x => x, :y => y, :z => 17    
