@@ -227,12 +227,26 @@ function initialize() {
               // Update Grid
               updateGrid(true);
               // Open Modal Box
-              $('#my-modal').modal('show')
+              $('#my-modal').modal('show');
+              // NoPolygon reset
+              no_polygon.reset();
             });
 
             drawing_controls.append(sendButton);
 
             $("#layout").append(drawing_controls);
+
+            $("#build_polygon").click(function() {
+              if(!$("#build_polygon").is(":checked")) {
+                // Clear path
+                path.clear();
+                // Update Grid
+                updateGrid(true);
+              } else {
+                // NoPolygon reset
+                no_polygon.reset();
+              }
+            });
           }
         }
       });

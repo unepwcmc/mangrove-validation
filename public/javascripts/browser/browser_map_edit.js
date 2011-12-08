@@ -2,6 +2,74 @@ var poly;
 var markers = [];
 var path = new google.maps.MVCArray;
 
+// Creating the class
+var noPolygon = function() {
+  // Private options used for construction
+  var options = {
+    points: []
+  };
+
+  function getTileCoordinates(point) {
+    var numTiles = 1 << map.getZoom();
+    var projection = new MercatorProjection();
+    var worldCoordinate = projection.fromLatLngToPoint(point);
+    var pixelCoordinate = new google.maps.Point(worldCoordinate.x * numTiles, worldCoordinate.y * numTiles);
+    var tileCoordinate = new google.maps.Point(Math.floor(pixelCoordinate.x / MERCATOR_RANGE), Math.floor(pixelCoordinate.y / MERCATOR_RANGE));
+    var gridCoordinate = new google.maps.Point(Math.floor(pixelCoordinate.x / 64), Math.floor(pixelCoordinate.y / 64));
+
+    return {worldCoordinate: worldCoordinate, pixelCoordinate: pixelCoordinate, tileCoordinate: tileCoordinate, gridCoordinate: gridCoordinate};
+  }
+
+  // Begin public section
+  return {
+    reset: function() {
+      options.points = [];
+      this.updateGrids();
+    },
+    updateGrids: function() {
+      var i, canvas, new_x, new_y;
+
+      $("canvas.canvasTiles").each(function(index) {
+        this.getContext("2d").clearRect(0, 0, MERCATOR_RANGE, MERCATOR_RANGE);
+      });
+
+      for(i = 0; i < options.points.length; i++) {
+        new_x = Math.floor(options.points[i].x/4);
+        new_y = Math.floor(options.points[i].y/4);
+
+        canvas = $('#id-' + new_x + '-' + new_y + '-15');
+        if(canvas.length > 0) {
+          canvas[0].getContext("2d").drawImage(stripes_select, (options.points[i].x - (new_x * 4)) * 64, (options.points[i].y - (new_y * 4)) * 64);
+        }
+      }
+    },
+    click: function(latLng) {
+      var i, gridCoordinate = getTileCoordinates(latLng).gridCoordinate;
+
+      for(i = 0; i < options.points.length; i++) {
+        if (options.points[i].x === gridCoordinate.x && options.points[i].y === gridCoordinate.y) {
+          // Remove point if found
+          options.points.splice(i, 1);
+
+          this.updateGrids();
+
+          return;
+        }
+      }
+
+      // Add point if not found
+      options.points.push(gridCoordinate);
+
+      this.updateGrids();
+    },
+    points: function() {
+      return options.points;
+    }
+  };
+};
+
+var no_polygon = noPolygon();
+
 function initializeMapEdition() {
   poly = new google.maps.Polygon({
     strokeWeight: 2,
@@ -28,10 +96,14 @@ function changePolyColor(event) {
 }
 
 function addPoint(event) {
-  // Insert path
-  path.insertAt(path.length, event.latLng);
-  // Update Grid
-  updateGrid();
+  if($("#build_polygon").is(":checked")) {
+    // Insert path
+    path.insertAt(path.length, event.latLng);
+    // Update Grid
+    updateGrid();
+  } else {
+    no_polygon.click(event.latLng);
+  }
 }
 
 function pathChange() {
