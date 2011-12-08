@@ -127,6 +127,11 @@ function updateGrid(clear) {
 }
 
 function updateCanvas(canvas_x, canvas_y, canvas, path) {
+  if(!$("#build_polygon").is(":checked")) {
+    no_polygon.updateGrids();
+    return;
+  }
+
   var x = 0, y = 0, cellSize = 64, poly,
     context = canvas.getContext("2d"),
     cellsSize = 64;
