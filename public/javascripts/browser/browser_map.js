@@ -230,6 +230,14 @@ function initialize() {
               $('#my-modal').modal('show');
               // NoPolygon reset
               no_polygon.reset();
+              // Remove All the markers
+              for(var i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+              }
+              markers = [];
+              for(var i = 0; i < path.length; i++) {
+                path.removeAt(i);
+              }
             });
 
             drawing_controls.append(sendButton);
@@ -242,6 +250,14 @@ function initialize() {
                 path.clear();
                 // Update Grid
                 updateGrid(true);
+                // Remove All the markers
+                for(var i = 0; i < markers.length; i++) {
+                  markers[i].setMap(null);
+                }
+                markers = [];
+                for(var i = 0; i < path.length; i++) {
+                  path.removeAt(i);
+                }
               } else {
                 // NoPolygon reset
                 no_polygon.reset();

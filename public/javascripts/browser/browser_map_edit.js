@@ -131,7 +131,7 @@ var no_polygon = noPolygon();
 function initializeMapEdition() {
   poly = new google.maps.Polygon({
     strokeWeight: 2,
-    fillColor: '#00FF00',
+    fillColor: '#00FF00'
   });
   markers = [];
   poly.setMap(map);
