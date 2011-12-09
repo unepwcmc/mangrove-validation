@@ -74,8 +74,8 @@ function initializeMapEdition() {
   poly = new google.maps.Polygon({
     strokeWeight: 2,
     fillColor: '#00FF00',
-    editable: true
   });
+  markers = [];
   poly.setMap(map);
   poly.setPaths(new google.maps.MVCArray([path]));
 
@@ -95,10 +95,36 @@ function changePolyColor(event) {
   }
 }
 
+function addMarker(event){
+  var marker = new google.maps.Marker({
+    position: event.latLng,
+    map: map,
+    icon: vertexIcon,
+    draggable: true
+  });
+  markers.push(marker);
+  google.maps.event.addListener(marker, 'click', function(){
+    marker.setMap(null);
+    for( var i = 0, I = markers.length; i < I && markers[i] != marker; i++)
+     ;
+    markers.splice(i,1);
+    path.removeAt(i);
+    updateGrid();
+  });
+
+  google.maps.event.addListener(marker, 'dragend', function() {
+    for (var i = 0, I = markers.length; i < I && markers[i] != marker; ++i)
+    ;
+    path.setAt(i, marker.getPosition());
+    propagateChanges();
+  });
+}
+
 function addPoint(event) {
   if($("#build_polygon").is(":checked")) {
     // Insert path
     path.insertAt(path.length, event.latLng);
+    addMarker(event);
     // Update Grid
     updateGrid();
   } else {
@@ -219,3 +245,9 @@ function getTileCoordinates(point) {
 
   return {worldCoordinate: worldCoordinate, pixelCoordinate: pixelCoordinate, tileCoordinate: tileCoordinate};
 }
+
+var vertexIcon = new google.maps.MarkerImage('/images/vertex.png',
+                                             new google.maps.Size(12, 12), // The origin for this image
+                                             new google.maps.Point(0, 0), // The anchor for this image
+                                             new google.maps.Point(6, 6)
+                                            );
