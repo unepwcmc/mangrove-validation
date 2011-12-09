@@ -27,10 +27,51 @@ var noPolygon = function() {
       this.updateGrids();
     },
     updateGrids: function() {
+      var x = 0, y = 0, id_split, cellsSize = 64;
       var i, canvas, new_x, new_y;
 
+      // Update tiles
       $("canvas.canvasTiles").each(function(index) {
-        this.getContext("2d").clearRect(0, 0, MERCATOR_RANGE, MERCATOR_RANGE);
+        var id_split = $(this).attr('id').split('-');
+        (function(canvas_x, canvas_y, canvas, path) {
+          var x = 0, y = 0, cellSize = 64, poly,
+            context = canvas.getContext("2d"),
+            cellsSize = 64;
+
+          context.clearRect(0, 0, MERCATOR_RANGE, MERCATOR_RANGE);
+
+          if(canvas.tiles_data !== undefined) {
+            var x_coord = Math.floor(canvas_x*4);
+            var y_coord = Math.floor(canvas_y*4);
+
+            for (var i = x_coord; i < (x_coord + 4); i++) {
+              for (var j = y_coord; j< (y_coord + 4); j++) {
+                if (checkCellType(canvas.tiles_data, i, j)) {
+                  context.drawImage(stripes, (cellsSize*x), (cellsSize*y));
+                }
+                y = y+1;
+              }
+              y = 0;
+              x = x+1;
+            }
+          }
+
+          for (x = 0; x < 4; x++) {
+            for (y = 0; y < 4; y++) {
+              poly = [
+                new google.maps.Point((canvas_x * MERCATOR_RANGE) + (x * cellSize), (canvas_y * MERCATOR_RANGE) + (y * cellSize)),
+                new google.maps.Point((canvas_x * MERCATOR_RANGE) + ((x + 1) * cellSize), (canvas_y * MERCATOR_RANGE) + (y * cellSize)),
+                new google.maps.Point((canvas_x * MERCATOR_RANGE) + ((x + 1) * cellSize), (canvas_y * MERCATOR_RANGE) + ((y + 1) * cellSize)),
+                new google.maps.Point((canvas_x * MERCATOR_RANGE) + (x * cellSize), (canvas_y * MERCATOR_RANGE) + ((y + 1) * cellSize))
+              ];
+
+              if(polyIntersectsPath(poly, path)) {
+                context.clearRect(cellsSize*x, cellsSize*y, 64, 64);
+                context.drawImage(stripes_select, cellSize*x, cellSize*y);
+              }
+            }
+          }
+        }(id_split[1], id_split[2], this, path));
       });
 
       for(i = 0; i < options.points.length; i++) {
@@ -38,6 +79,23 @@ var noPolygon = function() {
         new_y = Math.floor(options.points[i].y/4);
 
         canvas = $('#id-' + new_x + '-' + new_y + '-15');
+
+        if(canvas.tiles_data !== undefined) {
+          var x_coord = Math.floor(new_x*4);
+          var y_coord = Math.floor(new_y*4);
+
+          for (var j = x_coord; j < (x_coord + 4); j++) {
+            for (var k = y_coord; k< (y_coord + 4); k++) {
+              if (checkCellType(canvas.tiles_data, j, k)) {
+                context.drawImage(stripes, (cellsSize*j), (cellsSize*k));
+              }
+              y = y+1;
+            }
+            y = 0;
+            x = x+1;
+          }
+        }
+
         if(canvas.length > 0) {
           canvas[0].getContext("2d").drawImage(stripes_select, (options.points[i].x - (new_x * 4)) * 64, (options.points[i].y - (new_y * 4)) * 64);
         }

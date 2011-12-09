@@ -7,8 +7,8 @@ end
 
 desc "generate test map"
 task :fake_map => :environment do
-    (63520..63600).to_a.each do |x|
-      (51220..51300).to_a.each do |y|
+    (108500..109023).to_a.each do |x|
+      (68550..68623).to_a.each do |y|
         Map.create({:x => x, :y => y, :z => 17}) if rand >= 0.5
       end
     end
