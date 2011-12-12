@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   
   def refresh_stats
     cx = Classification.count(:joins => [:track => :user], :conditions => "value IS NOT NULL AND user_id = #{self.id}")
-    self.meters_explored = cx * APP_CONFIG[:meters_per_cell]
+    self.meters_explored = cx * APP_CONFIG["meters_per_cell"]
     save
     User.refresh_rank
   end
@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
   
   def game_json current_user
     
-    md = self.meters_explored - current_user.meters_explored    
+    md = self.meters_explored - current_user.meters_explored
     md = md > 0 ? "+#{md}" : "-#{md}"
     
     {:id => self.id,

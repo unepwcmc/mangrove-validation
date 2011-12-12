@@ -1,6 +1,7 @@
-var poly;
+var poly, poly_green = 1;
 var markers = [];
 var path = new google.maps.MVCArray;
+var polygon_points = [];
 
 // Creating the class
 var noPolygon = function() {
@@ -46,8 +47,12 @@ var noPolygon = function() {
 
             for (var i = x_coord; i < (x_coord + 4); i++) {
               for (var j = y_coord; j< (y_coord + 4); j++) {
-                if (checkCellType(canvas.tiles_data, i, j)) {
+                if (checkCellType(canvas.tiles_data.mangroves, i, j)) {
                   context.drawImage(stripes, (cellsSize*x), (cellsSize*y));
+                }
+
+                if (checkCellType(canvas.tiles_data.user_selections, i, j)) {
+                  context.drawImage(stripes_user_select, (cellsSize*x), (cellsSize*y));
                 }
                 y = y+1;
               }
@@ -68,6 +73,7 @@ var noPolygon = function() {
               if(polyIntersectsPath(poly, path)) {
                 context.clearRect(cellsSize*x, cellsSize*y, 64, 64);
                 context.drawImage(stripes_select, cellSize*x, cellSize*y);
+                polygon_points.push({debug: 1, x: (canvas_x * 4) + x, y: (canvas_y * 4) + y, value: poly_green});
               }
             }
           }
@@ -86,8 +92,11 @@ var noPolygon = function() {
 
           for (var j = x_coord; j < (x_coord + 4); j++) {
             for (var k = y_coord; k< (y_coord + 4); k++) {
-              if (checkCellType(canvas.tiles_data, j, k)) {
+              if (checkCellType(canvas.tiles_data.mangroves, j, k)) {
                 context.drawImage(stripes, (cellsSize*j), (cellsSize*k));
+              }
+              if (checkCellType(canvas.tiles_data.user_selections, j, k)) {
+                context.drawImage(stripes_user_select, (cellsSize*j), (cellsSize*k));
               }
               y = y+1;
             }
@@ -98,6 +107,7 @@ var noPolygon = function() {
 
         if(canvas.length > 0) {
           canvas[0].getContext("2d").drawImage(stripes_select, (options.points[i].x - (new_x * 4)) * 64, (options.points[i].y - (new_y * 4)) * 64);
+          polygon_points.push({debug: 2, x: (options.points[i].x - (new_x * 4)), y: (options.points[i].y - (new_y * 4)), value: poly_green});
         }
       }
     },
@@ -133,6 +143,7 @@ function initializeMapEdition() {
     strokeWeight: 2,
     fillColor: '#00FF00'
   });
+  poly_green = 1;
   markers = [];
   poly.setMap(map);
   poly.setPaths(new google.maps.MVCArray([path]));
@@ -148,8 +159,10 @@ function initializeMapEdition() {
 function changePolyColor(event) {
   if(poly.fillColor == "#00FF00") {
     poly.setOptions({fillColor: "#FF0000"});
+    poly_green = 0;
   } else {
     poly.setOptions({fillColor: "#00FF00"});
+    poly_green = 1;
   }
 }
 
@@ -179,6 +192,7 @@ function addMarker(event){
 }
 
 function addPoint(event) {
+  polygon_points = [];
   if($("#build_polygon").is(":checked")) {
     // Insert path
     path.insertAt(path.length, event.latLng);
@@ -228,8 +242,11 @@ function updateCanvas(canvas_x, canvas_y, canvas, path) {
 
     for (var i = x_coord; i < (x_coord + 4); i++) {
       for (var j = y_coord; j< (y_coord + 4); j++) {
-        if (checkCellType(canvas.tiles_data, i, j)) {
+        if (checkCellType(canvas.tiles_data.mangroves, i, j)) {
           context.drawImage(stripes, (cellsSize*x), (cellsSize*y));
+        }
+        if (checkCellType(canvas.tiles_data.user_selections, i, j)) {
+          context.drawImage(stripes_user_select, (cellsSize*x), (cellsSize*y));
         }
         y = y+1;
       }
@@ -250,6 +267,7 @@ function updateCanvas(canvas_x, canvas_y, canvas, path) {
       if(polyIntersectsPath(poly, path)) {
         context.clearRect(cellsSize*x, cellsSize*y, 64, 64);
         context.drawImage(stripes_select, cellSize*x, cellSize*y);
+        polygon_points.push({debug: 3, x: (canvas_x * 4) + x, y: (canvas_y * 4) + y, value: poly_green});
       }
     }
   }

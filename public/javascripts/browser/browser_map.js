@@ -3,7 +3,7 @@ var projection;
 var MERCATOR_RANGE = 256;
 var infowindow;
 var trackData = [];
-var stripes, stripes_select;
+var stripes, stripes_select, stripes_user_select;
 var globalMaptile = new GlobalMercator();
 var start_latlng;
 
@@ -12,6 +12,8 @@ stripes_select = new Image();
 stripes_select.src = "images/stripes_select.png";
 stripes = new Image();
 stripes.src = "images/stripes.png";
+stripes_user_select = new Image();
+stripes_user_select.src = "images/stripes_user_select.png";
 
 function bound(value, opt_min, opt_max) {
   if (opt_min != null) value = Math.max(value, opt_min);
@@ -222,14 +224,21 @@ function initialize() {
             $('#my-modal').modal({backdrop: 'static', keyboard: true});
 
             sendButton.click(function() {
-              $.post("/classifications", {selection: no_polygon.points()})
-              
+              // Open Modal Box
+              $('#my-modal').modal('show');
+            });
+            
+            $("#modal-send").click(function() {
+              if($("#build_polygon").is(":checked")) {
+                $.post("/classifications", {selection: polygon_points});
+              } else {
+                $.post("/classifications", {selection: no_polygon.points()});
+              }
+
               // Clear path
               path.clear();
               // Update Grid
               updateGrid(true);
-              // Open Modal Box
-              $('#my-modal').modal('show');
               // NoPolygon reset
               no_polygon.reset();
               // Remove All the markers
@@ -240,6 +249,11 @@ function initialize() {
               for(var i = 0; i < path.length; i++) {
                 path.removeAt(i);
               }
+              $('#my-modal').modal('hide');
+            });
+
+            $("#modal-cancel").click(function() {
+              $('#my-modal').modal('hide');
             });
 
             drawing_controls.append(sendButton);
@@ -343,8 +357,12 @@ FillMap.prototype.getTile = function(coord, zoom, ownerDocument) {
 
       for (var i = x_coord; i < (x_coord + 4); i++) {
         for (var j = y_coord; j< (y_coord + 4); j++) {
-          if (checkCellType(result,i,j)) {
+          if (checkCellType(result.mangroves,i,j)) {
             context.drawImage(stripes, (cellsSize*x), (cellsSize*y));
+          }
+
+          if (checkCellType(result.user_selections,i,j)) {
+            context.drawImage(stripes_user_select, (cellsSize*x), (cellsSize*y));
           }
           y = y+1;
         }
