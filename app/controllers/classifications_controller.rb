@@ -1,5 +1,10 @@
 class ClassificationsController < ApplicationController
-  before_filter :require_user, :only => [:index, :update] 
+  before_filter :require_user
+  
+  def create
+    p params
+    render :json => {:ok => true}
+  end
   
   def update
     @classification = Classification.find(params[:id], :include => [{:track => :user}, :cell])    

@@ -222,6 +222,8 @@ function initialize() {
             $('#my-modal').modal({backdrop: 'static', keyboard: true});
 
             sendButton.click(function() {
+              $.post("/classifications", {selection: no_polygon.points()})
+              
               // Clear path
               path.clear();
               // Update Grid
