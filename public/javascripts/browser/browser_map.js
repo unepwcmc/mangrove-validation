@@ -41,13 +41,13 @@ function MercatorProjection() {
   this.pixelsPerLonRadian_ = MERCATOR_RANGE / (2 * Math.PI);
 }
 
-function getTileByLatLng(latlng) {
-  var worldCoordinate = projection.fromLatLngToPoint(latlng);
-  var pixelCoordinate = new google.maps.Point(worldCoordinate.x * Math.pow(2, map.getZoom()), worldCoordinate.y * Math.pow(2, map.getZoom()));
-  var tileCoordinate = new google.maps.Point(Math.floor(pixelCoordinate.x / MERCATOR_RANGE), Math.floor(pixelCoordinate.y / MERCATOR_RANGE));
-
-  var tileCoordStr = "Tile Coordinate: " + tileCoordinate.x + " , " + tileCoordinate.y + " at Zoom Level: " + map.getZoom();
-}
+//function getTileByLatLng(latlng) {
+//  var worldCoordinate = projection.fromLatLngToPoint(latlng);
+//  var pixelCoordinate = new google.maps.Point(worldCoordinate.x * Math.pow(2, map.getZoom()), worldCoordinate.y * Math.pow(2, map.getZoom()));
+//  var tileCoordinate = new google.maps.Point(Math.floor(pixelCoordinate.x / MERCATOR_RANGE), Math.floor(pixelCoordinate.y / MERCATOR_RANGE));
+//
+//  var tileCoordStr = "Tile Coordinate: " + tileCoordinate.x + " , " + tileCoordinate.y + " at Zoom Level: " + map.getZoom();
+//}
 
 MercatorProjection.prototype.fromLatLngToPoint = function(latLng, opt_point) {
   var me = this;

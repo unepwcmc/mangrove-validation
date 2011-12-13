@@ -19,7 +19,7 @@ set(:deploy_to) { File.join("", "home", user, application) }
 # another repository, like git or subversion.
 
 #set :deploy_via, :copy
-set :repository, "git@github.com:unepwcmc/pa-explore.git"
+set :repository, "git@github.com:unepwcmc/mangrove-validation.git"
 
 set :scm, :git
 set :branch, "master"
