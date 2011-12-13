@@ -7,6 +7,6 @@ class CellsController < ApplicationController
     user_cells = Classification.find(:all, :conditions => ["classifications.parent_x = ? AND classifications.parent_y = ? AND classifications.parent_z = ? AND classifications.value IS NOT NULL AND classifications.user_id = ?", params[:x], params[:y], params[:z], current_user.id])
     user_selections = user_cells.map { |c| c.game_json }
 
-    render :json => {mangroves: mangroves, user_selections: user_selections}, :callback => params[:callback]
+    render :json => {:mangroves => mangroves, :user_selections => user_selections}, :callback => params[:callback]
   end
 end
