@@ -3,7 +3,7 @@ var projection;
 var MERCATOR_RANGE = 256;
 var infowindow;
 var trackData = [];
-var stripes, stripes_select, stripes_user_select;
+var stripes, stripes_select, stripes_user_select, stripes_red, stripes_green;
 var globalMaptile = new GlobalMercator();
 var start_latlng;
 
@@ -14,6 +14,12 @@ stripes = new Image();
 stripes.src = "images/stripes.png";
 stripes_user_select = new Image();
 stripes_user_select.src = "images/stripes_user_select.png";
+stripes_user_select_red = new Image();
+stripes_user_select_red.src = "images/stripes_user_select_red.png";
+stripes_red = new Image();
+stripes_red.src = "images/stripes_red.png";
+stripes_green = new Image();
+stripes_green.src = "images/stripes_green.png";
 
 function bound(value, opt_min, opt_max) {
   if (opt_min != null) value = Math.max(value, opt_min);
@@ -229,11 +235,7 @@ function initialize() {
             });
             
             $("#modal-send").click(function() {
-              if($("#build_polygon").is(":checked")) {
-                $.post("/classifications", {selection: polygon_points});
-              } else {
-                $.post("/classifications", {selection: no_polygon.points()});
-              }
+              $.post("/classifications", {selection: polygon_points});
 
               // Clear path
               path.clear();
@@ -361,8 +363,13 @@ FillMap.prototype.getTile = function(coord, zoom, ownerDocument) {
             context.drawImage(stripes, (cellsSize*x), (cellsSize*y));
           }
 
-          if (checkCellType(result.user_selections,i,j)) {
-            context.drawImage(stripes_user_select, (cellsSize*x), (cellsSize*y));
+          var element_checked;
+          if ((element_checked = checkCellTypeWithElement(result.user_selections,i,j)) !== null) {
+            if(element_checked.value === true) {
+              context.drawImage(stripes_user_select, (cellsSize*x), (cellsSize*y));
+            } else {
+              context.drawImage(stripes_user_select_red, (cellsSize*x), (cellsSize*y));
+            }
           }
           y = y+1;
         }
@@ -382,6 +389,15 @@ function checkCellType(data, coord_x, coord_y) {
     }
   }
   return false;
+}
+
+function checkCellTypeWithElement(data, coord_x, coord_y) {
+  for(var i = 0; i < data.length; i++) {
+    if(data[i].x == coord_x && data[i].y == coord_y) {
+      return data[i];
+    }
+  }
+  return null;
 }
 
 function getCellCenter(x,y,zoom) {

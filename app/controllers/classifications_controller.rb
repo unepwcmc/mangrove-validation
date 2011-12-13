@@ -13,7 +13,11 @@ class ClassificationsController < ApplicationController
       classification = Classification.new()
       classification.track_id = track.id
       classification.cell_id = cell.id
+      classification.x = selection[1][:x]
+      classification.y = selection[1][:y]
+      classification.z = 17
       classification.value = selection[1][:value]
+      classification.user_id = current_user.id
       classification.save!
     end
     

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111212101952) do
+ActiveRecord::Schema.define(:version => 20111213120131) do
 
   create_table "cells", :force => true do |t|
     t.integer  "positive_count", :default => 0
@@ -40,8 +40,13 @@ ActiveRecord::Schema.define(:version => 20111212101952) do
     t.integer  "cell_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "parent_x"
+    t.integer  "parent_y"
+    t.integer  "parent_z"
+    t.integer  "user_id"
   end
 
+  add_index "classifications", ["parent_x", "parent_y", "parent_z", "user_id"], :name => "parents_and_user_id"
   add_index "classifications", ["x", "y", "z"], :name => "index_classifications_on_x_and_y_and_z"
 
   create_table "tracks", :force => true do |t|

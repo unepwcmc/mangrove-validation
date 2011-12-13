@@ -51,9 +51,15 @@ var noPolygon = function() {
                   context.drawImage(stripes, (cellsSize*x), (cellsSize*y));
                 }
 
-                if (checkCellType(canvas.tiles_data.user_selections, i, j)) {
-                  context.drawImage(stripes_user_select, (cellsSize*x), (cellsSize*y));
+                var element_checked;
+                if ((element_checked = checkCellTypeWithElement(canvas.tiles_data.user_selections, i, j)) !== null) {
+                  if(element_checked.value === true) {
+                    context.drawImage(stripes_user_select, (cellsSize*x), (cellsSize*y));
+                  } else {
+                    context.drawImage(stripes_user_select_red, (cellsSize*x), (cellsSize*y));
+                  }
                 }
+                
                 y = y+1;
               }
               y = 0;
@@ -72,8 +78,19 @@ var noPolygon = function() {
 
               if(polyIntersectsPath(poly, path)) {
                 context.clearRect(cellsSize*x, cellsSize*y, 64, 64);
-                context.drawImage(stripes_select, cellSize*x, cellSize*y);
-                polygon_points.push({debug: 1, x: (canvas_x * 4) + x, y: (canvas_y * 4) + y, value: poly_green});
+                var value = null;
+                if(canvas.tiles_data !== undefined) {
+                  if (checkCellType(canvas.tiles_data.mangroves, x, y)) {
+                    value = false;
+                    context.drawImage(stripes_red, cellSize*x, cellSize*y);
+                  } else {
+                    value = true;
+                    context.drawImage(stripes_green, cellSize*x, cellSize*y);
+                  }
+                } else {
+                  context.drawImage(stripes_select, cellSize*x, cellSize*y);
+                }
+                polygon_points.push({debug: 1, x: (canvas_x * 4) + x, y: (canvas_y * 4) + y, value: value});
               }
             }
           }
@@ -95,8 +112,13 @@ var noPolygon = function() {
               if (checkCellType(canvas.tiles_data.mangroves, j, k)) {
                 context.drawImage(stripes, (cellsSize*j), (cellsSize*k));
               }
-              if (checkCellType(canvas.tiles_data.user_selections, j, k)) {
-                context.drawImage(stripes_user_select, (cellsSize*j), (cellsSize*k));
+              var element_checked;
+              if ((element_checked = checkCellTypeWithElement(canvas.tiles_data.user_selections, j, k)) !== null) {
+                if(element_checked.value === true) {
+                  context.drawImage(stripes_user_select, (cellsSize*j), (cellsSize*k));
+                } else {
+                  context.drawImage(stripes_user_select_red, (cellsSize*j), (cellsSize*k));
+                }
               }
               y = y+1;
             }
@@ -106,8 +128,19 @@ var noPolygon = function() {
         }
 
         if(canvas.length > 0) {
-          canvas[0].getContext("2d").drawImage(stripes_select, (options.points[i].x - (new_x * 4)) * 64, (options.points[i].y - (new_y * 4)) * 64);
-          polygon_points.push({debug: 2, x: (options.points[i].x - (new_x * 4)), y: (options.points[i].y - (new_y * 4)), value: poly_green});
+          if(canvas[0].tiles_data !== undefined) {
+            var value = null;
+            if (checkCellType(canvas[0].tiles_data.mangroves, options.points[i].x, options.points[i].y)) {
+              value = false;
+              canvas[0].getContext("2d").drawImage(stripes_red, (options.points[i].x - (new_x * 4)) * 64, (options.points[i].y - (new_y * 4)) * 64);
+            } else {
+              value = true;
+              canvas[0].getContext("2d").drawImage(stripes_green, (options.points[i].x - (new_x * 4)) * 64, (options.points[i].y - (new_y * 4)) * 64);
+            }
+          } else {
+            canvas[0].getContext("2d").drawImage(stripes_select, (options.points[i].x - (new_x * 4)) * 64, (options.points[i].y - (new_y * 4)) * 64);
+          }
+          polygon_points.push({debug: 2, x: options.points[i].x, y: options.points[i].y, value: value});
         }
       }
     },
@@ -164,6 +197,8 @@ function changePolyColor(event) {
     poly.setOptions({fillColor: "#00FF00"});
     poly_green = 1;
   }
+  // Update Grid
+  updateGrid();
 }
 
 function addMarker(event){
@@ -245,9 +280,15 @@ function updateCanvas(canvas_x, canvas_y, canvas, path) {
         if (checkCellType(canvas.tiles_data.mangroves, i, j)) {
           context.drawImage(stripes, (cellsSize*x), (cellsSize*y));
         }
-        if (checkCellType(canvas.tiles_data.user_selections, i, j)) {
-          context.drawImage(stripes_user_select, (cellsSize*x), (cellsSize*y));
+        var element_checked;
+        if ((element_checked = checkCellTypeWithElement(canvas.tiles_data.user_selections, i, j)) !== null) {
+          if(element_checked.value === true) {
+            context.drawImage(stripes_user_select, (cellsSize*x), (cellsSize*y));
+          } else {
+            context.drawImage(stripes_user_select_red, (cellsSize*x), (cellsSize*y));
+          }
         }
+        
         y = y+1;
       }
       y = 0;
@@ -264,9 +305,13 @@ function updateCanvas(canvas_x, canvas_y, canvas, path) {
         new google.maps.Point((canvas_x * MERCATOR_RANGE) + (x * cellSize), (canvas_y * MERCATOR_RANGE) + ((y + 1) * cellSize))
       ];
 
-      if(polyIntersectsPath(poly, path)) {
+      if(polyIntersectsPath(poly, path) && ((poly_green && !checkCellType(canvas.tiles_data.mangroves, (canvas_x * 4) + x, (canvas_y * 4) + y)) || (!poly_green && checkCellType(canvas.tiles_data.mangroves, (canvas_x * 4) + x, (canvas_y * 4) + y)))) {
         context.clearRect(cellsSize*x, cellsSize*y, 64, 64);
-        context.drawImage(stripes_select, cellSize*x, cellSize*y);
+        if(poly_green) {
+          context.drawImage(stripes_green, cellSize*x, cellSize*y);
+        } else {
+          context.drawImage(stripes_red, cellSize*x, cellSize*y);
+        }
         polygon_points.push({debug: 3, x: (canvas_x * 4) + x, y: (canvas_y * 4) + y, value: poly_green});
       }
     }
