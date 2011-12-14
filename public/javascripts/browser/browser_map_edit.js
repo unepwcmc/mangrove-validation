@@ -223,7 +223,7 @@ function addMarker(event){
     for (var i = 0, I = markers.length; i < I && markers[i] != marker; ++i)
     ;
     path.setAt(i, marker.getPosition());
-    propagateChanges();
+    //propagateChanges();
   });
 }
 
@@ -315,7 +315,7 @@ function updateCanvas(canvas_x, canvas_y, canvas, path) {
         } else {
           context.drawImage(stripes_red, cellSize*x, cellSize*y);
         }
-        polygon_points.push({debug: 3, x: (canvas_x * 4) + x, y: (canvas_y * 4) + y, value: poly_green});
+        polygon_points.push({debug: 3, x: (canvas_x * 4) + x, y: (canvas_y * 4) + y, value: (poly_green ? true : false)});
       }
     }
   }

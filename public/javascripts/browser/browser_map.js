@@ -424,7 +424,7 @@ function updatedSelectedGrid(points) {
     y = Math.floor(points[i].y / 4);
     id = 'id-' + x + '-' + y + '-' + 15;
     document.getElementById(id).tiles_data.user_selections.push({
-      value: points[i].value,
+      value: (points[i].value ? true : false),
       x: points[i].x,
       y: points[i].y,
       z: 17
