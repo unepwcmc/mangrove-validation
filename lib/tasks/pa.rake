@@ -9,7 +9,7 @@ desc "generate test map"
 task :fake_map => :environment do
     (108500..109023).to_a.each do |x|
       (68550..68623).to_a.each do |y|
-        Cell.create({:x => x, :y => y, :z => 17, :mangroves => true}) if rand >= 0.5
+        Cell.create({:x => x, :y => y, :z => 17, :mangroves => true}) if rand >= 0.3
       end
     end
 end

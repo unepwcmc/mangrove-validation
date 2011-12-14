@@ -197,6 +197,7 @@ function changePolyColor(event) {
     poly.setOptions({fillColor: "#00FF00"});
     poly_green = 1;
   }
+  polygon_points = [];
   // Update Grid
   updateGrid();
 }
@@ -246,6 +247,8 @@ function pathChange() {
 
 function updateGrid(clear) {
   if (clear == null) clear = false;
+
+  polygon_points = [];
   
   // Path as to be at least a triangle
   if(path.length < 3 && !clear) {

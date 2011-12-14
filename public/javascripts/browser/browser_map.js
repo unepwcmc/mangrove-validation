@@ -237,6 +237,8 @@ function initialize() {
             $("#modal-send").click(function() {
               $.post("/classifications", {selection: polygon_points});
 
+              updatedSelectedGrid(polygon_points);
+
               // Clear path
               path.clear();
               // Update Grid
@@ -251,6 +253,9 @@ function initialize() {
               for(var i = 0; i < path.length; i++) {
                 path.removeAt(i);
               }
+
+              getGameRank();
+
               $('#my-modal').modal('hide');
             });
 
@@ -409,4 +414,20 @@ function getCellCenter(x,y,zoom) {
   latlngbounds.extend(new google.maps.LatLng(obj[2],obj[3]));
 
   return latlngbounds.getCenter();
+}
+
+function updatedSelectedGrid(points) {
+  var x, y, id;
+
+  for(var i = 0; i < points.length; i++) {
+    x = Math.floor(points[i].x / 4);
+    y = Math.floor(points[i].y / 4);
+    id = 'id-' + x + '-' + y + '-' + 15;
+    document.getElementById(id).tiles_data.user_selections.push({
+      value: points[i].value,
+      x: points[i].x,
+      y: points[i].y,
+      z: 17
+    });
+  }
 }
