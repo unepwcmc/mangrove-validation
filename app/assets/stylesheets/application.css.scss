@@ -1,0 +1,45 @@
+/*
+ *= require bootstrap-generators
+ */
+
+html {
+  height: 100%
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0
+}
+
+#map_canvas {
+  height: 100%
+}
+
+#main_menu {
+  .zoom-in {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    opacity: 1;
+  }
+
+  .actions {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 360px;
+
+    & > * {
+      float: right;
+    }
+
+    & > * + * {
+      margin-right: 5px;
+    }
+  }
+}
+
+.btn-warning .caret {
+  border-top-color: white;
+}

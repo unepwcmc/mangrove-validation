@@ -4,6 +4,9 @@
 
 
 jQuery ->
+  $('[href^=#]').click (e) ->
+    e.preventDefault()
+
   window.VALIDATION.initializeGoogleMaps()
   $('#landingModal').modal({backdrop: true, show: true})
 
