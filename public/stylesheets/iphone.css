@@ -1,6 +1,0 @@
-body {background: #333333;}
-
-div#layout form label {color:white;}
-
-div#layout div#map_canvas {position:absolute; left:0; right:0; top:0; bottom:80px;}
-div#layout div.buttons {position:absolute; left:0; right:0; bottom:0; height:80px;}

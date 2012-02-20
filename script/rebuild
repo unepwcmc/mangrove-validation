@@ -1,6 +1,0 @@
-rake db:drop
-rake db:create
-rake db:migrate
-script/runner "User.create :username => 'test', :email => 'test@test.com', :password => 'xxxxxx', :password_confirmation => 'xxxxxx'"
-rake fake_users
-script/server
