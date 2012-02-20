@@ -13,5 +13,5 @@
 //= require global
 //= require jquery
 //= require jquery_ujs
-//= require_tree validation
-//
+//= require bootstrap-generators
+//= require_tree ./validation
