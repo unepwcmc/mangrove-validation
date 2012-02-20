@@ -5,6 +5,8 @@
 jQuery ->
   window.initializeGoogleMaps()
 
+  $('#landingModal').modal({backdrop: true, show: true})
+
 window.initializeGoogleMaps = ->
   mapOptions =
     center: new google.maps.LatLng(-34.397, 150.644)
