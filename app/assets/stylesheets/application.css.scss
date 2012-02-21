@@ -17,7 +17,7 @@ body {
 }
 
 #main_menu {
-  .zoom-in {
+  .zoom {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -36,6 +36,11 @@ body {
 
     & > * + * {
       margin-right: 5px;
+    }
+
+    ul.dropdown-menu {
+      right: 0;
+      left: initial;
     }
   }
 }

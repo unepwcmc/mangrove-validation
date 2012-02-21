@@ -6,8 +6,8 @@ gem 'rails', '3.2.1'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'pg'
-gem 'bootstrap-generators', '~> 2.0'
-gem 'simple_form', '2.0.0.rc'
+gem 'bootstrap-generators', '~> 2.0', :git => 'git://github.com/decioferreira/bootstrap-generators.git', :branch => 'v2.0.1'
+gem 'simple_form', :git => 'git://github.com/plataformatec/simple_form.git'
 
 # Gems used only for assets and not required
 # in production environments by default.

@@ -1,6 +1,4 @@
-/*
- *= require bootstrap
-*/
+@import "bootstrap-variables";
 
 .page-header {
   a.btn {
@@ -11,3 +9,5 @@
     margin-right: 8px;
   }
 }
+
+@import "scss/bootstrap";
