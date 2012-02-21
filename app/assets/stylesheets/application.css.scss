@@ -40,6 +40,12 @@ body {
   }
 }
 
-.btn-warning .caret {
-  border-top-color: white;
+#map_menu {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+
+  .btn-group {
+    margin-bottom: 5px;
+  }
 }

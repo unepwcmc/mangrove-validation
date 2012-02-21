@@ -1,17 +1,27 @@
 <div id="map_canvas" style="width:100%; height:100%"></div>
 
+<div id="map_menu">
+  <div class="btn-group" data-toggle="buttons-radio">
+    <button class="btn active">Mangroves</button>
+    <button class="btn">Corals</button>
+  </div>
+  <a href="#" class="zoom-in btn"><i class="icon-plus"></i></a>
+  <a href="#" class="zoom-out btn"><i class="icon-minus"></i></a>
+  <a href="#" class="zoom-out btn" data-toggle="button">Hide data layers</a>
+</div>
+
 <div id="main_menu">
   <div class="actions">
     <div class="btn-group">
-      <a href="#" class="btn btn-warning btn-large dropdown-toggle" data-toggle="dropdown"><i class="icon-flag icon-white"></i> Spotted error? <span class="caret icon-white"></span></a>
+      <a href="#" class="btn btn-info dropdown-toggle" data-toggle="dropdown"><i class="icon-flag icon-white"></i> Spotted error? <span class="caret icon-white"></span></a>
       <ul class="dropdown-menu">
         <li><a href="#"><i class="icon-plus"></i> Add new area</a></li>
         <li><a href="#"><i class="icon-trash"></i> Delete area</a></li>
       </ul>
     </div>
-    <a href="#" class="validate btn btn-large" data-toggle="button"><i class="icon-ok"></i> Validate existing</a>
+    <a href="#" class="validate btn btn-primary" data-toggle="button"><i class="icon-ok icon-white"></i> Validate existing</a>
   </div>
-  <a href="#" class="zoom-in btn btn-large disabled">Zoom in to region to start editing</a>
+  <a href="#" class="zoom-in btn disabled">Zoom in to region to start editing</a>
 </div>
 
 <!-- Modal -->
