@@ -17,11 +17,24 @@ jQuery ->
     $('#main_menu .spotted-error').button('toggle') if $('#main_menu .spotted-error').hasClass('active')
     $('#main_menu .spotted-error, #main_menu .spotted-error-toggle').removeClass('btn-success btn-danger').addClass('btn-info')
 
+    # Google Maps Polygon
+    window.VALIDATION.mapPolygon.setMap(null) if window.VALIDATION.mapPolygon
+    if $(this).hasClass('active')
+      window.VALIDATION.mapPolygon = null
+    else
+      window.VALIDATION.mapPolygon = new google.maps.Polygon(_.extend(window.VALIDATION.mapPolygonOptions, {strokeColor: '#08c', fillColor: '#08c'}))
+      window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
+
   $('#main_menu .add-area').click ->
     $('#main_menu .spotted-error').html('<i class="icon-flag icon-white"></i> Add new area')
     $('#main_menu .spotted-error').button('toggle') unless $('#main_menu .spotted-error').hasClass('active')
     $('#main_menu .spotted-error, #main_menu .spotted-error-toggle').removeClass('btn-info btn-danger').addClass('btn-success')
     $('#main_menu .validate').button('toggle') if $('#main_menu .validate').hasClass('active')
+
+    # Google Maps Polygon
+    window.VALIDATION.mapPolygon.setMap(null) if window.VALIDATION.mapPolygon
+    window.VALIDATION.mapPolygon = new google.maps.Polygon(_.extend(window.VALIDATION.mapPolygonOptions, {strokeColor: '#46a546', fillColor: '#46a546'}))
+    window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
 
   $('#main_menu .delete-area').click ->
     $('#main_menu .spotted-error').html('<i class="icon-flag icon-white"></i> Delete area')
@@ -29,10 +42,18 @@ jQuery ->
     $('#main_menu .spotted-error, #main_menu .spotted-error-toggle').removeClass('btn-info btn-success').addClass('btn-danger')
     $('#main_menu .validate').button('toggle') if $('#main_menu .validate').hasClass('active')
 
+    # Google Maps Polygon
+    window.VALIDATION.mapPolygon.setMap(null) if window.VALIDATION.mapPolygon
+    window.VALIDATION.mapPolygon = new google.maps.Polygon(_.extend(window.VALIDATION.mapPolygonOptions, {strokeColor: '#9d261d', fillColor: '#9d261d'}))
+    window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
+
   $('#main_menu .spotted-error').click ->
     if $('#main_menu .spotted-error').hasClass('active')
       $('#main_menu .spotted-error').html('<i class="icon-flag icon-white"></i> Spotted error?').button('toggle')
       $('#main_menu .spotted-error, #main_menu .spotted-error-toggle').removeClass('btn-success btn-danger').addClass('btn-info')
+
+      window.VALIDATION.mapPolygon.setMap(null) if window.VALIDATION.mapPolygon
+      window.VALIDATION.mapPolygon = null
     else
       $('#helpModal').modal('show')
 
@@ -53,12 +74,18 @@ window.VALIDATION.initializeGoogleMaps = ->
     zoomControl: false
     rotateControl: false
 
-  window.VALIDATION.map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+  # Google Maps
+  window.VALIDATION.map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions)
 
   google.maps.event.addListener window.VALIDATION.map, 'zoom_changed', ->
-    if(window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom)
+    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom
       $('#main_menu .zoom').addClass('hide')
       $('#main_menu .actions').removeClass('hide')
     else
       $('#main_menu .zoom').removeClass('hide')
       $('#main_menu .actions').addClass('hide')
+
+  google.maps.event.addListener window.VALIDATION.map, 'click', (event) ->
+    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom && window.VALIDATION.mapPolygon
+      path = window.VALIDATION.mapPolygon.getPath()
+      path.push(event.latLng)

@@ -13,5 +13,6 @@
 //= require global
 //= require jquery
 //= require jquery_ujs
+//= require underscore
 //= require bootstrap-generators
 //= require_tree ./validation

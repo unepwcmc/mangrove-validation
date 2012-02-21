@@ -2,6 +2,11 @@
  *= require bootstrap-generators
  */
 
+/* (work-around) Bootstrap distorts some Google Maps Controls and Overlays: https://github.com/twitter/bootstrap/issues/1552 */
+img {
+  max-width: none;
+}
+
 html {
   height: 100%
 }
