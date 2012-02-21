@@ -9,6 +9,7 @@ gem 'pg'
 gem 'bootstrap-generators', '~> 2.0', :git => 'git://github.com/decioferreira/bootstrap-generators.git', :branch => 'v2.0.1'
 gem 'simple_form', :git => 'git://github.com/plataformatec/simple_form.git'
 gem 'underscore-rails'
+gem 'cartodb-rb-client', :git => 'git://github.com/decioferreira/cartodb-rb-client.git'
 
 # Gems used only for assets and not required
 # in production environments by default.

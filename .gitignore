@@ -14,8 +14,11 @@
 /log/*.log
 /tmp
 
-# Gems
-vendor/ruby
+# CartoDB login configurations
+/config/cartodb_config.yml
+
+# Ruby
+/vendor/ruby
 
 # VIM
 *.swp
