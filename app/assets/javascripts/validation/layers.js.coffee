@@ -2,7 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
-
 jQuery ->
   $('[href^=#]').click (e) ->
     e.preventDefault()
@@ -21,9 +20,11 @@ jQuery ->
     window.VALIDATION.mapPolygon.setMap(null) if window.VALIDATION.mapPolygon
     if $(this).hasClass('active')
       window.VALIDATION.mapPolygon = null
+      $('#main_menu .submit-polygon').addClass('disabled hide')
     else
       window.VALIDATION.mapPolygon = new google.maps.Polygon(_.extend(window.VALIDATION.mapPolygonOptions, {strokeColor: '#08c', fillColor: '#08c'}))
       window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
+      $('#main_menu .submit-polygon').removeClass('hide')
 
   $('#main_menu .add-area').click ->
     $('#main_menu .spotted-error').html('<i class="icon-flag icon-white"></i> Add new area')
@@ -36,6 +37,8 @@ jQuery ->
     window.VALIDATION.mapPolygon = new google.maps.Polygon(_.extend(window.VALIDATION.mapPolygonOptions, {strokeColor: '#46a546', fillColor: '#46a546'}))
     window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
 
+    $('#main_menu .submit-polygon').addClass('disabled').removeClass('hide')
+
   $('#main_menu .delete-area').click ->
     $('#main_menu .spotted-error').html('<i class="icon-flag icon-white"></i> Delete area')
     $('#main_menu .spotted-error').button('toggle') unless $('#main_menu .spotted-error').hasClass('active')
@@ -47,6 +50,8 @@ jQuery ->
     window.VALIDATION.mapPolygon = new google.maps.Polygon(_.extend(window.VALIDATION.mapPolygonOptions, {strokeColor: '#9d261d', fillColor: '#9d261d'}))
     window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
 
+    $('#main_menu .submit-polygon').addClass('disabled').removeClass('hide')
+
   $('#main_menu .spotted-error').click ->
     if $('#main_menu .spotted-error').hasClass('active')
       $('#main_menu .spotted-error').html('<i class="icon-flag icon-white"></i> Spotted error?').button('toggle')
@@ -54,8 +59,13 @@ jQuery ->
 
       window.VALIDATION.mapPolygon.setMap(null) if window.VALIDATION.mapPolygon
       window.VALIDATION.mapPolygon = null
+      $('#main_menu .submit-polygon').addClass('disabled hide')
     else
       $('#helpModal').modal('show')
+
+  $('#main_menu .submit-polygon').click ->
+    unless $(this).hasClass('disabled')
+      $('#submitModal').modal('show')
 
   # Map menu buttons
   $('#map_menu .zoom-in').click ->
@@ -64,28 +74,35 @@ jQuery ->
   $('#map_menu .zoom-out').click ->
     window.VALIDATION.map.setZoom(window.VALIDATION.map.getZoom() - 1)
 
-window.VALIDATION.initializeGoogleMaps = ->
-  mapOptions =
-    center: new google.maps.LatLng(-34.397, 150.644)
-    zoom: window.VALIDATION.defaultZoom
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-    mapTypeControl: false
-    panControl: false
-    zoomControl: false
-    rotateControl: false
+  # Submit modal
+  $('#submitModal .submit-data').click ->
+    $('#submitModal .modal-body .progress').removeClass('hide')
+    # Remove event for closing the modal
+    $('#submitModal').undelegate('[data-dismiss="modal"]', 'click.dismiss.modal').delegate '[data-dismiss="modal"]', 'click.dismiss.modal', (event) ->
+      event.preventDefault()
+    # Remove event for clicking on the backdrop
+    $('.modal-backdrop').unbind('click').click ->
+      event.preventDefault()
+    # Remove event for clicking on the keyboard ESC
+    $(document).off('keyup.dismiss.modal')
 
+window.VALIDATION.initializeGoogleMaps = ->
   # Google Maps
-  window.VALIDATION.map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions)
+  window.VALIDATION.map = new google.maps.Map(document.getElementById('map_canvas'), window.VALIDATION.mapOptions)
 
   google.maps.event.addListener window.VALIDATION.map, 'zoom_changed', ->
     if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom
       $('#main_menu .zoom').addClass('hide')
       $('#main_menu .actions').removeClass('hide')
+      window.VALIDATION.mapPolygon.setEditable(true) if window.VALIDATION.mapPolygon
     else
       $('#main_menu .zoom').removeClass('hide')
       $('#main_menu .actions').addClass('hide')
+      window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
 
   google.maps.event.addListener window.VALIDATION.map, 'click', (event) ->
     if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom && window.VALIDATION.mapPolygon
       path = window.VALIDATION.mapPolygon.getPath()
       path.push(event.latLng)
+      if path.length > 2
+        $('#main_menu .submit-polygon').removeClass('disabled')
