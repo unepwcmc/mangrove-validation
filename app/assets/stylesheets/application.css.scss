@@ -57,4 +57,7 @@ body {
   .btn-group {
     margin-bottom: 5px;
   }
+  .btn-group + .btn-group {
+    margin-left: 0
+  }
 }
