@@ -13,3 +13,5 @@ window.VALIDATION =
   mapPolygonOptions:
     editable: true
   minEditZoom: 10
+  mangroves: null # CartoDB Mangroves Layer
+  corals: null # CartoDB Corals Layer

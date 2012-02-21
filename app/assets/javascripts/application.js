@@ -15,4 +15,6 @@
 //= require jquery_ujs
 //= require underscore
 //= require bootstrap-generators
+//= require wax.g
+//= require cartodb-gmapsv3
 //= require_tree ./validation

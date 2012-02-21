@@ -74,6 +74,18 @@ jQuery ->
   $('#map_menu .zoom-out').click ->
     window.VALIDATION.map.setZoom(window.VALIDATION.map.getZoom() - 1)
 
+  $('#map_menu .hide-data-layers').click ->
+    window.VALIDATION.mangroves.hide()
+    window.VALIDATION.corals.hide()
+
+  $('#map_menu .show-mangroves').click ->
+    window.VALIDATION.mangroves.show()
+    window.VALIDATION.corals.hide()
+
+  $('#map_menu .show-corals').click ->
+    window.VALIDATION.mangroves.hide()
+    window.VALIDATION.corals.show()
+
   # Submit modal
   $('#submitModal .submit-data').click ->
     $('#submitModal .modal-body .progress').removeClass('hide')
@@ -99,6 +111,37 @@ window.VALIDATION.initializeGoogleMaps = ->
       $('#main_menu .zoom').removeClass('hide')
       $('#main_menu .actions').addClass('hide')
       window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
+
+  # CartoDB Layers
+  window.VALIDATION.mangroves = new google.maps.CartoDBLayer({
+    map_canvas: 'map_canvas',
+    map: window.VALIDATION.map,
+    user_name: "xavijam",
+    table_name: 'test',
+    query: "SELECT cartodb_id,the_geom_webmercator,description FROM test",
+    tile_style: "#test{line-color:#f00;line-width:1;line-opacity:0.6;polygon-opacity:0.6;}",
+    map_key: "6087bc5111352713a81a48491078f182a0541f6c",
+    map_style: true,
+    infowindow: "SELECT cartodb_id,the_geom_webmercator,description FROM test WHERE cartodb_id={{feature}}",
+    auto_bound: true,
+    debug: false
+  })
+
+  window.VALIDATION.corals = new google.maps.CartoDBLayer({
+    map_canvas: 'map_canvas',
+    map: window.VALIDATION.map,
+    user_name: "xavijam",
+    table_name: 'test',
+    query: "SELECT cartodb_id,the_geom_webmercator,description FROM test",
+    tile_style: "#test{line-color:#0f0;line-width:1;line-opacity:0.6;polygon-opacity:0.6;}",
+    map_key: "6087bc5111352713a81a48491078f182a0541f6c",
+    map_style: true,
+    infowindow: "SELECT cartodb_id,the_geom_webmercator,description FROM test WHERE cartodb_id={{feature}}",
+    auto_bound: true,
+    debug: false
+  })
+  # Default hidden
+  window.VALIDATION.corals.hide()
 
   google.maps.event.addListener window.VALIDATION.map, 'click', (event) ->
     if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom && window.VALIDATION.mapPolygon
