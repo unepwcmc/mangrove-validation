@@ -51,7 +51,7 @@ default_run_options[:pty] = true # Must be set for the password prompt from git 
 #
 # The shared area is prepared with 'deploy:setup' and all the shared
 # items are symlinked in when the code is updated.
-set :local_shared_files, %w(config/database.yml)
+set :local_shared_files, %w(config/database.yml config/cartodb_config.yml)
 set :local_shared_dirs, %w(public/system)
 
 task :setup_production_database_configuration do
@@ -59,14 +59,43 @@ task :setup_production_database_configuration do
   database_name = Capistrano::CLI.ui.ask("Database name: ")
   database_user = Capistrano::CLI.ui.ask("Database username: ")
   pg_password = Capistrano::CLI.password_prompt("Database user password: ")
+
   require 'yaml'
-  spec = { "production" => {
-    "adapter" => "postgresql",
-    "database" => database_name,
-    "username" => database_user,
-    "host" => the_host,
-    "password" => pg_password }}
-    run "mkdir -p #{shared_path}/config"
-    put(spec.to_yaml, "#{shared_path}/config/database.yml")
+
+  spec = {
+    "production" => {
+      "adapter" => "postgresql",
+      "database" => database_name,
+      "username" => database_user,
+      "host" => the_host,
+      "password" => pg_password
+    }
+  }
+
+  run "mkdir -p #{shared_path}/config"
+  put(spec.to_yaml, "#{shared_path}/config/database.yml")
 end
+
+task :setup_cartodb_configuration do
+  host = Capistrano::CLI.ui.ask("CartoDB host: ")
+  oauth_key = Capistrano::CLI.ui.ask("CartoDB key: ")
+  oauth_secret = Capistrano::CLI.ui.ask("CartoDB secret: ")
+  username = Capistrano::CLI.password_prompt("CartoDB username: ")
+  password = Capistrano::CLI.password_prompt("CartoDB password: ")
+
+  require 'yaml'
+
+  spec = {
+    "host" => host,
+    "oauth_key" => oauth_key,
+    "oauth_secret" => oauth_secret,
+    "username" => username,
+    "password" => password
+  }
+
+  run "mkdir -p #{shared_path}/config"
+  put(spec.to_yaml, "#{shared_path}/config/cartodb_config.yml")
+end
+
 after "deploy:setup", :setup_production_database_configuration
+after "deploy:setup", :setup_cartodb_configuration
