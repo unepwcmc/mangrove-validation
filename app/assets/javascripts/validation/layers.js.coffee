@@ -9,6 +9,7 @@ jQuery ->
 
   window.VALIDATION.initializeGoogleMaps()
   $('#landingModal').modal({backdrop: true, show: true})
+  $('#helpModal').modal({backdrop: true, show: false})
 
   # Main menu buttons
   $('#main_menu .validate').click ->
@@ -33,7 +34,7 @@ jQuery ->
       $('#main_menu .spotted-error').html('<i class="icon-flag icon-white"></i> Spotted error?').button('toggle')
       $('#main_menu .spotted-error, #main_menu .spotted-error-toggle').removeClass('btn-success btn-danger').addClass('btn-info')
     else
-      $('#landingModal').modal('show')
+      $('#helpModal').modal('show')
 
   # Map menu buttons
   $('#map_menu .zoom-in').click ->

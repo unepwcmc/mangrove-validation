@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/decioferreira/bootstrap-generators.git
-  revision: 896cf2dc6ecc8a59f75b6fecd6ab213d0610ac31
+  revision: 51bcc1706e2dd46ffe314045888af1001cdcf6ee
   branch: v2.0.1
   specs:
     bootstrap-generators (2.0.0)
