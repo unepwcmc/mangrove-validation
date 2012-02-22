@@ -1,9 +1,8 @@
 GIT
   remote: git://github.com/decioferreira/bootstrap-generators.git
-  revision: 51bcc1706e2dd46ffe314045888af1001cdcf6ee
-  branch: v2.0.1
+  revision: 97ef2a4063885cd43ef5955040d6a69842f28e1b
   specs:
-    bootstrap-generators (2.0.0)
+    bootstrap-generators (2.0.1)
       railties (~> 3.1)
 
 GIT

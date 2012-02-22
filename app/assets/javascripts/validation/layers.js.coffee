@@ -116,15 +116,15 @@ window.VALIDATION.initializeGoogleMaps = ->
   window.VALIDATION.mangroves = new google.maps.CartoDBLayer({
     map_canvas: 'map_canvas',
     map: window.VALIDATION.map,
-    user_name: "xavijam",
-    table_name: 'test',
-    query: "SELECT cartodb_id,the_geom_webmercator,description FROM test",
-    tile_style: "#test{line-color:#f00;line-width:1;line-opacity:0.6;polygon-opacity:0.6;}",
-    map_key: "6087bc5111352713a81a48491078f182a0541f6c",
-    map_style: true,
-    infowindow: "SELECT cartodb_id,the_geom_webmercator,description FROM test WHERE cartodb_id={{feature}}",
-    auto_bound: true,
-    debug: false
+    user_name: 'carbon-tool',
+    table_name: 'fake_coral_data',
+    #query: "SELECT cartodb_id,the_geom FROM test",
+    #tile_style: "#test{line-color:#f00;line-width:1;line-opacity:0.6;polygon-opacity:0.6;}",
+    #map_key: "6087bc5111352713a81a48491078f182a0541f6c",
+    #map_style: true,
+    #infowindow: "SELECT cartodb_id,the_geom_webmercator,description FROM test WHERE cartodb_id={{feature}}",
+    #auto_bound: true,
+    #debug: false
   })
 
   window.VALIDATION.corals = new google.maps.CartoDBLayer({

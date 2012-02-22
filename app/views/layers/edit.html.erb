@@ -1,0 +1,13 @@
+<div class="page-header">
+  <%= link_to layers_path, :class => 'btn' do %>
+    <i class="icon-list-alt"></i>
+    Back
+  <% end %>
+  <%= link_to @layer, :class => 'btn btn-primary' do %>
+    <i class="icon-info-sign icon-white"></i>
+    Show
+  <% end %>
+  <h1>Editing layer</h1>
+</div>
+
+<%= render 'form' %>
