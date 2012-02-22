@@ -80,7 +80,7 @@ task :setup_cartodb_configuration do
   host = Capistrano::CLI.ui.ask("CartoDB host: ")
   oauth_key = Capistrano::CLI.ui.ask("CartoDB key: ")
   oauth_secret = Capistrano::CLI.ui.ask("CartoDB secret: ")
-  username = Capistrano::CLI.password_prompt("CartoDB username: ")
+  username = Capistrano::CLI.ui.ask("CartoDB username: ")
   password = Capistrano::CLI.password_prompt("CartoDB password: ")
 
   require 'yaml'
