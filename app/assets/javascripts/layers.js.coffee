@@ -201,6 +201,7 @@ window.VALIDATION.initializeGoogleMaps = ->
     table_name: 'mangroves_to_validate'
     query: "SELECT cartodb_id,the_geom_webmercator FROM mangroves_to_validate"
     tile_style: "#mangroves_to_validate{polygon-fill:#37B35C;polygon-opacity:0.7;line-opacity:0}"
+    # map_style: true
   })
 
   window.VALIDATION.corals = new google.maps.CartoDBLayer({
@@ -210,6 +211,7 @@ window.VALIDATION.initializeGoogleMaps = ->
     table_name: 'mangroves_to_validate'
     query: "SELECT cartodb_id,the_geom_webmercator FROM mangroves_to_validate"
     tile_style: "#mangroves_to_validate{polygon-fill:#FF614D;polygon-opacity:0.7;line-opacity:1}"
+    # map_style: true
   })
   # Default hidden
   window.VALIDATION.corals.hide()

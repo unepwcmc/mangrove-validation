@@ -3,7 +3,7 @@ window.VALIDATION =
   mapOptions:
     center: new google.maps.LatLng(-6.140555, 24.433594)
     zoom: 4
-    mapTypeId: google.maps.MapTypeId.TERRAIN
+    mapTypeId: google.maps.MapTypeId.SATELLITE
     mapTypeControl: false
     panControl: false
     zoomControl: false
