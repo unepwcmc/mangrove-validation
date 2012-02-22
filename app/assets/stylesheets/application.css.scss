@@ -17,12 +17,18 @@ body {
   padding: 0
 }
 
+.modal {
+  form {
+    margin: 0;
+  }
+}
+
 #map_canvas {
   height: 100%
 }
 
 #main_menu {
-  .zoom {
+  .zoom, .select-layer {
     position: absolute;
     top: 5px;
     right: 5px;

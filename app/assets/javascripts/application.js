@@ -17,4 +17,4 @@
 //= require bootstrap-generators
 //= require wax.g
 //= require cartodb-gmapsv3
-//= require_tree ./validation
+//= require layers

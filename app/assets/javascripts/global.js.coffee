@@ -15,3 +15,6 @@ window.VALIDATION =
   minEditZoom: 10
   mangroves: null # CartoDB Mangroves Layer
   corals: null # CartoDB Corals Layer
+  currentAction: null # Current user action ['validate', 'add', 'delete']
+  submitModalEvents: {}
+  selectedLayer: 'mangrove'

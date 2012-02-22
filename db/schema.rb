@@ -14,6 +14,8 @@
 ActiveRecord::Schema.define(:version => 20120222101519) do
 
   create_table "layers", :force => true do |t|
+    t.string   "name"
+    t.string   "action"
     t.text     "polygon"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false

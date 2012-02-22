@@ -3,7 +3,7 @@
 <div id="map_menu">
   <div class="btn-group" data-toggle="buttons-radio">
     <a href="#" class="hide-data-layers btn" data-toggle="button"><i class="icon-eye-close"></i></a>
-    <button class="show-mangroves btn active">Mangroves</button>
+    <button class="show-mangroves btn btn-primary active">Mangroves</button>
     <button class="show-corals btn">Corals</button>
   </div>
   <div class="btn-group">
@@ -25,8 +25,12 @@
       </ul>
     </div>
     <a href="#" class="validate btn btn-primary" data-toggle="button"><i class="icon-ok icon-white"></i> Validate existing</a>
-    <a href="#" class="submit-polygon btn btn-inverse hide disabled"><i class="icon-check icon-white"></i> Submit</a>
+    <div class="submit-or-erase btn-group hide">
+      <a href="#" class="submit-polygon btn btn-inverse disabled"><i class="icon-check icon-white"></i> Submit</a>
+      <a href="#" class="erase-polygon btn btn-danger disabled"><i class="icon-repeat icon-white"></i> Erase</a>
+    </div>
   </div>
+  <a href="#" class="select-layer btn btn-inverse hide disabled">Select a layer to continue editing</a>
   <a href="#" class="zoom btn btn-inverse disabled">Zoom in to region to start editing</a>
 </div>
 
@@ -64,12 +68,5 @@
     <a class="close" data-dismiss="modal">×</a>
     <h3>Mangrove and Coral Validation Tool</h3>
   </div>
-  <div class="modal-body">
-    <p>Are you sure?</p>
-    <div class="progress progress-info progress-striped active hide"><div class="bar" style="width:10%;"></div></div>
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="btn" data-dismiss="modal">Cancel</a>
-    <a href="#" class="submit-data btn btn-primary">Submit</a>
-  </div>
+  <%= render 'form' %>
 </div>
