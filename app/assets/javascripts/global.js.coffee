@@ -1,8 +1,8 @@
 window.VALIDATION =
   map: null # Google Maps
   mapOptions:
-    center: new google.maps.LatLng(-34.397, 150.644)
-    zoom: 8
+    center: new google.maps.LatLng(-6.140555, 24.433594)
+    zoom: 4
     mapTypeId: google.maps.MapTypeId.TERRAIN
     mapTypeControl: false
     panControl: false
