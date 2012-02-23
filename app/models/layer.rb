@@ -12,7 +12,7 @@ class Layer < ActiveRecord::Base
       when 'validate'
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status)
-          (SELECT ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), #{NAMES.index(name)}, 1 FROM #{APP_CONFIG['cartodb_table']} WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)))
+          (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{NAMES.index(name)}, 1 FROM #{APP_CONFIG['cartodb_table']} WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)))
         SQL
       when 'add'
         sql = <<-SQL
