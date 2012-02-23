@@ -10,11 +10,13 @@ class Layer < ActiveRecord::Base
     # SQL CartoDB
     case self.action
       when 'add'
-        CartoDB::Connection.insert_row APP_CONFIG['cartodb_table'], the_geom: "ST_GeomFromTEXT('MULTIPOLYGON(((#{polygon})))', 4326)", name: NAMES.index(name), status: 1
-      when 'delete'
         sql = <<-SQL
+             INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status)
+             VALUES (ST_GeomFromText("MULTIPOLYGON(((#{self.polygon})))", 4326), #{NAMES.index(self.name)}, 1)
         SQL
+      when 'delete'
       when 'validate'
     end
+    CartoDB::Connection.query sql
   end
 end
