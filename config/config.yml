@@ -1,0 +1,11 @@
+development:
+  cartodb_table: 'mangrove_and_coral_validation_development'
+
+staging:
+  cartodb_table: 'mangrove_and_coral_validation_development'
+
+test:
+  cartodb_table: 'mangrove_and_coral_validation_development'
+
+production:
+  cartodb_table: 'mangrove_and_coral_validation'
