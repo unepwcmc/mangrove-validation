@@ -14,16 +14,13 @@ window.VALIDATION =
     editable: true
   minEditZoom: 10
   mangroves: null # CartoDB Mangroves Unverified Layer
+  mangroves_params: null
   mangroves_validated: null # CartoDB Mangroves Validated Layer
+  mangroves_validated_params: null
   corals: null # CartoDB Corals Unverified Layer
+  corals_params: null
   corals_validated: null # CartoDB Corals Validated Layer
+  corals_validated_params: null
   currentAction: null # Current user action ['validate', 'add', 'delete']
   submitModalEvents: {}
   selectedLayer: 'mangrove'
-  cartodb:
-    development:
-      table: 'mangrove_and_coral_validation_development'
-    staging:
-      table: 'mangrove_and_coral_validation_development'
-    production:
-      table: 'mangrove_and_coral_validation'

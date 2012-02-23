@@ -205,7 +205,7 @@ window.VALIDATION.initializeGoogleMaps = ->
 
   # CartoDB Layers
   # Mangroves unverified layer
-  window.VALIDATION.mangroves = new google.maps.CartoDBLayer({
+  window.VALIDATION.mangroves_params =
     map_canvas: 'map_canvas'
     map: window.VALIDATION.map
     user_name: 'carbon-tool'
@@ -213,10 +213,11 @@ window.VALIDATION.initializeGoogleMaps = ->
     query: "SELECT cartodb_id,the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=0 AND status=0"
     tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#790F5B;polygon-opacity:0.7;line-opacity:0}"
     # map_style: true
-  })
+
+  window.VALIDATION.mangroves = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION.mangroves_params)
 
   # Mangroves validated layer
-  window.VALIDATION.mangroves_validated = new google.maps.CartoDBLayer({
+  window.VALIDATION.mangroves_validated_params =
     map_canvas: 'map_canvas'
     map: window.VALIDATION.map
     user_name: 'carbon-tool'
@@ -224,10 +225,11 @@ window.VALIDATION.initializeGoogleMaps = ->
     query: "SELECT cartodb_id,the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=0 AND status=1"
     tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#460934;polygon-opacity:0.7;line-opacity:0}"
     # map_style: true
-  })
+
+  window.VALIDATION.mangroves_validated = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION.mangroves_validated_params)
 
   # Corals unverified layer
-  window.VALIDATION.corals = new google.maps.CartoDBLayer({
+  window.VALIDATION.corals_params =
     map_canvas: 'map_canvas'
     map: window.VALIDATION.map
     user_name: 'carbon-tool'
@@ -235,10 +237,12 @@ window.VALIDATION.initializeGoogleMaps = ->
     query: "SELECT cartodb_id,the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=1 AND status=0"
     tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#FF614D;polygon-opacity:0.7;line-opacity:1}"
     # map_style: true
-  })
+
+  window.VALIDATION.corals = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION.corals_params)
+  window.VALIDATION.corals.hide() # Default hidden
 
   # Corals validated layer
-  window.VALIDATION.corals_validated = new google.maps.CartoDBLayer({
+  window.VALIDATION.corals_validated_params =
     map_canvas: 'map_canvas'
     map: window.VALIDATION.map
     user_name: 'carbon-tool'
@@ -246,10 +250,9 @@ window.VALIDATION.initializeGoogleMaps = ->
     query: "SELECT cartodb_id,the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=1 AND status=1"
     tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#491C16;polygon-opacity:0.7;line-opacity:1}"
     # map_style: true
-  })
 
-  # Default hidden
-  window.VALIDATION.corals.hide()
+  window.VALIDATION.corals_validated = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION.corals_validated_params)
+  window.VALIDATION.corals_validated.hide() # Default hidden
 
   google.maps.event.addListener window.VALIDATION.map, 'click', (event) ->
     if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom && window.VALIDATION.mapPolygon && window.VALIDATION.selectedLayer

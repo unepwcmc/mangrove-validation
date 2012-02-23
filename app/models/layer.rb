@@ -1,7 +1,7 @@
 class Layer < ActiveRecord::Base
+  NAMES = %w(mangrove coral)
+  ACTIONS = %w(validate add delete)
 
-  NAMES = ['mangrove', 'coral']
-  ACTIONS = ['validate', 'add', 'delete']
   validates :name, presence: true, inclusion: { in: NAMES, message: "%{value} is not a valid name" }
   validates :action, presence: true, inclusion: { in: ACTIONS, message: "%{value} is not a valid action" }
   validates :polygon, presence: true
@@ -9,13 +9,20 @@ class Layer < ActiveRecord::Base
   before_create do
     # SQL CartoDB
     case self.action
+      when 'validate'
+        sql = <<-SQL
+          INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status)
+          (SELECT ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), #{NAMES.index(name)}, 1 FROM #{APP_CONFIG['cartodb_table']} WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)))
+        SQL
       when 'add'
         sql = <<-SQL
-             INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status)
-             VALUES (ST_GeomFromText('MULTIPOLYGON(((#{self.polygon})))', 4326), #{NAMES.index(self.name)}, 1)
+          INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status)
+          VALUES (ST_GeomFromText('MULTIPOLYGON(((#{polygon})))', 4326), #{NAMES.index(name)}, 1)
         SQL
       when 'delete'
-      when 'validate'
+        sql = <<-SQL
+          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))
+        SQL
     end
     CartoDB::Connection.query sql
   end
