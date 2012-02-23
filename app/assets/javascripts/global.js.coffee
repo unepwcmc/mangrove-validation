@@ -13,8 +13,10 @@ window.VALIDATION =
   mapPolygonOptions:
     editable: true
   minEditZoom: 10
-  mangroves: null # CartoDB Mangroves Layer
-  corals: null # CartoDB Corals Layer
+  mangroves: null # CartoDB Mangroves Unverified Layer
+  mangroves_validated: null # CartoDB Mangroves Validated Layer
+  corals: null # CartoDB Corals Unverified Layer
+  corals_validated: null # CartoDB Corals Validated Layer
   currentAction: null # Current user action ['validate', 'add', 'delete']
   submitModalEvents: {}
   selectedLayer: 'mangrove'

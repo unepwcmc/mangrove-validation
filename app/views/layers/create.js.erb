@@ -5,6 +5,16 @@ $('#submitModal').delegate('[data-dismiss="modal"]', 'click.dismiss.modal', wind
 $('.modal-backdrop').click(window.VALIDATION.submitModalEvents['modal-backdrop']);
 $(document).on('keyup.dismiss.modal', window.VALIDATION.submitModalEvents['document']);
 
+// Update layers
+if(window.VALIDATION.mangroves_validated.isVisible()) {
+  window.VALIDATION.mangroves_validated.update();
+}
+
+if(window.VALIDATION.corals_validated.isVisible()) {
+  window.VALIDATION.corals_validated.update();
+}
+
+
 <% if @layer.errors.any? %>
   $('#submitModal .submit-data').button('reset');
   $('#submitModal .modal-body').removeClass('alert-success').addClass('alert-error').find('.message').html('There was some error while trying to submit the data.')

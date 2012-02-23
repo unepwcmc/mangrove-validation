@@ -12,7 +12,7 @@ class Layer < ActiveRecord::Base
       when 'add'
         sql = <<-SQL
              INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status)
-             VALUES (ST_GeomFromText("MULTIPOLYGON(((#{self.polygon})))", 4326), #{NAMES.index(self.name)}, 1)
+             VALUES (ST_GeomFromText('MULTIPOLYGON(((#{self.polygon})))', 4326), #{NAMES.index(self.name)}, 1)
         SQL
       when 'delete'
       when 'validate'
