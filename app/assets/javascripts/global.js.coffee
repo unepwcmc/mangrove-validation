@@ -18,3 +18,10 @@ window.VALIDATION =
   currentAction: null # Current user action ['validate', 'add', 'delete']
   submitModalEvents: {}
   selectedLayer: 'mangrove'
+  cartodb:
+    development:
+      table: 'mangrove_and_coral_validation_development'
+    staging:
+      table: 'mangrove_and_coral_validation_development'
+    production:
+      table: 'mangrove_and_coral_validation'

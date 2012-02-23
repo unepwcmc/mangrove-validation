@@ -3,6 +3,9 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 jQuery ->
+  # Tooltips
+  $('#map_menu .btn').tooltip({placement: 'bottom'})
+
   $('[href^=#]').click (e) ->
     e.preventDefault()
 
@@ -152,8 +155,8 @@ jQuery ->
       coordinates = []
       path = window.VALIDATION.mapPolygon.getPath()
       path.forEach (coordinate) ->
-        coordinates.push([coordinate.lat(), coordinate.lng()])
-      "[#{coordinates.join('],[')}]"
+        coordinates.push("#{coordinate.lat()} #{coordinate.lng()}")
+      "#{coordinates.join(',')}"
 
     $("form#new_layer input#layer_name").val(window.VALIDATION.selectedLayer)
     $("form#new_layer input#layer_action").val(window.VALIDATION.currentAction)
@@ -198,9 +201,9 @@ window.VALIDATION.initializeGoogleMaps = ->
     map_canvas: 'map_canvas'
     map: window.VALIDATION.map
     user_name: 'carbon-tool'
-    table_name: 'mangroves_to_validate'
-    query: "SELECT cartodb_id,the_geom_webmercator FROM mangroves_to_validate"
-    tile_style: "#mangroves_to_validate{polygon-fill:#37B35C;polygon-opacity:0.7;line-opacity:0}"
+    table_name: window.VALIDATION.cartodb[window.ENVIRONMENT].table
+    query: "SELECT cartodb_id,the_geom_webmercator FROM #{window.VALIDATION.cartodb[window.ENVIRONMENT].table} WHERE name=0 AND status=0"
+    tile_style: "##{window.VALIDATION.cartodb[window.ENVIRONMENT].table}{polygon-fill:#790F5B;polygon-opacity:0.7;line-opacity:0}"
     # map_style: true
   })
 
@@ -208,9 +211,9 @@ window.VALIDATION.initializeGoogleMaps = ->
     map_canvas: 'map_canvas'
     map: window.VALIDATION.map
     user_name: 'carbon-tool'
-    table_name: 'mangroves_to_validate'
-    query: "SELECT cartodb_id,the_geom_webmercator FROM mangroves_to_validate"
-    tile_style: "#mangroves_to_validate{polygon-fill:#FF614D;polygon-opacity:0.7;line-opacity:1}"
+    table_name: window.VALIDATION.cartodb[window.ENVIRONMENT].table
+    query: "SELECT cartodb_id,the_geom_webmercator FROM #{window.VALIDATION.cartodb[window.ENVIRONMENT].table} WHERE name=1 AND status=0"
+    tile_style: "##{window.VALIDATION.cartodb[window.ENVIRONMENT].table}{polygon-fill:#FF614D;polygon-opacity:0.7;line-opacity:1}"
     # map_style: true
   })
   # Default hidden

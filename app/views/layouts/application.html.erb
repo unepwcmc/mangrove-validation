@@ -19,5 +19,6 @@
 </head>
 <body>
 <%= yield %>
+<%= javascript_tag "window.ENVIRONMENT = '#{Rails.env}';" %>
 </body>
 </html>
