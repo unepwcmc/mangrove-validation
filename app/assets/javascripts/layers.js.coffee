@@ -161,8 +161,8 @@ jQuery ->
       coordinates = []
       path = window.VALIDATION.mapPolygon.getPath()
       path.forEach (coordinate) ->
-        coordinates.push("#{coordinate.lat()} #{coordinate.lng()}")
-      coordinates.push("#{path.getAt(0).lat()} #{path.getAt(0).lng()}") # Close the polygon
+        coordinates.push("#{coordinate.lng()} #{coordinate.lat()}")
+      coordinates.push("#{path.getAt(0).lng()} #{path.getAt(0).lat()}") # Close the polygon
       "#{coordinates.join(',')}"
 
     $("form#new_layer input#layer_name").val(window.VALIDATION.selectedLayer)
