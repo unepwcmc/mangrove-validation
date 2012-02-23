@@ -63,7 +63,7 @@ task :setup_production_database_configuration do
   require 'yaml'
 
   spec = {
-    "production" => {
+    "#{rails_env}" => {
       "adapter" => "postgresql",
       "database" => database_name,
       "username" => database_user,
