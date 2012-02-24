@@ -39,6 +39,6 @@
 }
 
 .btn-corals {
-  $mangroves-color: #fdfd34;
-  @include buttonBackground($mangroves-color, adjust-hue($mangroves-color, 20));
+  $corals-color: #fdfd34;
+  @include buttonBackground($corals-color, adjust-hue($corals-color, 20));
 }
