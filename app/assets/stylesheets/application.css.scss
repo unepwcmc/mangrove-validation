@@ -77,6 +77,9 @@ body {
   }
 
   .validate, .edit-area {
+    i {
+      float: left;
+    }
     .caret {
       float: right;
     }
@@ -94,7 +97,7 @@ body {
 #map_menu {
   position: absolute;
   top: 5px;
-  left: 20px;
+  left: 5px;
 
   .btn-group {
     margin-bottom: 5px;
@@ -102,6 +105,15 @@ body {
   .btn-group + .btn-group {
     margin-left: 0
   }
+}
+
+#logo {
+  position: absolute;
+  background: image-url('unep_wcmc_logo.png');
+  bottom: 22px;
+  right: 125px;
+  width: 100px;
+  height: 51px;
 }
 
 .btn-warning .caret {
