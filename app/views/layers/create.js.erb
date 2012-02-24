@@ -5,18 +5,17 @@ $('#submitModal').delegate('[data-dismiss="modal"]', 'click.dismiss.modal', wind
 $('.modal-backdrop').click(window.VALIDATION.submitModalEvents['modal-backdrop']);
 $(document).on('keyup.dismiss.modal', window.VALIDATION.submitModalEvents['document']);
 
+var random_number = Math.floor(Math.random()*100);
 // Update layers
 if(window.VALIDATION.mangroves_validated.isVisible()) {
-  window.VALIDATION.mangroves_validated.update(window.VALIDATION.mangroves_validated_params.query);
-}
-
-if(window.VALIDATION.corals_validated.isVisible()) {
-  window.VALIDATION.corals_validated.update(window.VALIDATION.corals_validated_params.query);
+  window.VALIDATION.mangroves_validated.update(window.VALIDATION.mangroves_validated_params.query + " AND " + random_number + " = " + random_number);
+} else if(window.VALIDATION.corals_validated.isVisible()) {
+  window.VALIDATION.corals_validated.update(window.VALIDATION.corals_validated_params.query + " AND " + random_number + " = " + random_number);
 }
 
 
 <% if @layer.errors.any? %>
-  $('#submitModal .submit-data').button('reset');
+    $('#submitModal .submit-data').button('reset');
   $('#submitModal .modal-body').removeClass('alert-success').addClass('alert-error').find('.message').html('There was some error while trying to submit the data.')
 
   var errors = $('<ul></ul>');
@@ -25,7 +24,15 @@ if(window.VALIDATION.corals_validated.isVisible()) {
   <% end %>
   $('#submitModal .modal-body .message').append(errors);
 <% else %>
-  $('#submitModal .modal-body').removeClass('alert-error').addClass('alert-success').find('.message').html('Successfully submitted, thank you for your contribution.');
+    $('#submitModal .modal-body').removeClass('alert-error').addClass('alert-success').find('.message').html('Successfully submitted.');
+  $('#submitModal .modal-footer .submit-data').val('Submission completed')
+
+  $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled');
+  window.VALIDATION.mapPolygon.getPath().clear();
+<% end %>
+$('#submitModal .modal-body .message').append(errors);
+<% else %>
+    $('#submitModal .modal-body').removeClass('alert-error').addClass('alert-success').find('.message').html('Successfully submitted, thank you for your contribution.');
   $('#submitModal .modal-footer .submit-data').val('Submission completed')
 
   $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled');

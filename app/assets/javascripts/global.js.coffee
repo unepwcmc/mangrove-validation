@@ -9,6 +9,8 @@ window.VALIDATION =
     zoomControl: false
     rotateControl: false
     streetViewControl: false
+    overviewMapControl: true
+    overviewMapControlOptions: {opened: true}
   mapPolygon: null # Google Maps Polygon
   mapPolygonOptions:
     editable: true
