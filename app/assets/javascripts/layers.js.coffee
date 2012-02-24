@@ -14,6 +14,7 @@ jQuery ->
 
   # Main menu buttons
   $('#main_menu .help').click ->
+    $('#landingModal .modal-footer .btn').html('Continue')
     $('#landingModal').modal('show')
 
   $('#main_menu .zoom').click ->

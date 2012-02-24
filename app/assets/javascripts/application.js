@@ -18,7 +18,3 @@
 //= require wax.g
 //= require cartodb-gmapsv3
 //= require layers
-
-Tooltip.prototype.show = function() {
-  alert("hi!");
-}
