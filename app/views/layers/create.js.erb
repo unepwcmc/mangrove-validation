@@ -6,14 +6,12 @@ $(function(){
   $('.modal-backdrop').click(window.VALIDATION.submitModalEvents['modal-backdrop']);
   $(document).on('keyup.dismiss.modal', window.VALIDATION.submitModalEvents['document']);
 
+  var random_number = Math.floor(Math.random()*100);
   // Update layers
   if(window.VALIDATION.mangroves_validated.isVisible()) {
-    var random_number = Math.floor(Math.random()*100);
     window.VALIDATION.mangroves_validated.update(window.VALIDATION.mangroves_validated_params.query + " AND " + random_number + " = " + random_number);
-  }
-
-  if(window.VALIDATION.corals_validated.isVisible()) {
-    window.VALIDATION.corals_validated.update(window.VALIDATION.corals_validated_params.query);
+  } else if(window.VALIDATION.corals_validated.isVisible()) {
+    window.VALIDATION.corals_validated.update(window.VALIDATION.corals_validated_params.query + " AND " + random_number + " = " + random_number);
   }
 
 
