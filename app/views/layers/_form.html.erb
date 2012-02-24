@@ -1,8 +1,12 @@
 <%= simple_form_for(@layer, :remote => true, :defaults => { :input_html => { :class => 'input-xxlarge' } }) do |f| %>
   <div class="modal-body">
     <div class="message">
-      <p>Are you sure?</p>
+      <p>
+        Please enter your email address so we can attribute your contribution
+      </p>
     </div>
+
+    <%= f.input :email %>
 
     <%= f.input :polygon, :as => "hidden" %>
     <%= f.input :name, :as => "hidden" %>
