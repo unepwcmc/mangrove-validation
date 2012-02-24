@@ -11,3 +11,34 @@
 }
 
 @import "scss/bootstrap";
+
+.btn-group .dropdown-toggle.active {
+  background-image: none;
+  $shadow: inset 0 1px 6px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);
+  @include box-shadow($shadow);
+}
+
+.btn-mangroves,
+.btn-mangroves:hover,
+.btn-corals,
+.btn-corals:hover {
+  text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+  color: $white;
+}
+// Provide *some* extra contrast for those who can get it
+.btn-mangroves.active,
+.btn-corals.active {
+  color: $grayDark;
+}
+
+// Set the backgrounds
+// -------------------------
+.btn-mangroves {
+  $mangroves-color: #f80;
+  @include buttonBackground($mangroves-color, adjust-hue($mangroves-color, 20));
+}
+
+.btn-corals {
+  $mangroves-color: #fdfd34;
+  @include buttonBackground($mangroves-color, adjust-hue($mangroves-color, 20));
+}
