@@ -210,7 +210,7 @@ window.VALIDATION.initializeGoogleMaps = ->
     map: window.VALIDATION.map
     user_name: 'carbon-tool'
     table_name: window.CARTODB_TABLE
-    query: "SELECT ST_Union(the_geom_webmercator) AS the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=0 AND status=0"
+    query: "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=0 AND status=0"
     tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#790F5B;polygon-opacity:0.7;line-width:0}"
     # map_style: true
 
@@ -222,7 +222,7 @@ window.VALIDATION.initializeGoogleMaps = ->
     map: window.VALIDATION.map
     user_name: 'carbon-tool'
     table_name: window.CARTODB_TABLE
-    query: "SELECT ST_Union(the_geom_webmercator) AS the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=0 AND status=1"
+    query: "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=0 AND status=1"
     tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#460934;polygon-opacity:0.7;line-width:0}"
     # map_style: true
 
@@ -234,7 +234,7 @@ window.VALIDATION.initializeGoogleMaps = ->
     map: window.VALIDATION.map
     user_name: 'carbon-tool'
     table_name: window.CARTODB_TABLE
-    query: "SELECT ST_Union(the_geom_webmercator) AS the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=1 AND status=0"
+    query: "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=1 AND status=0"
     tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#FF614D;polygon-opacity:0.7;line-opacity:1}"
     # map_style: true
 
@@ -247,7 +247,7 @@ window.VALIDATION.initializeGoogleMaps = ->
     map: window.VALIDATION.map
     user_name: 'carbon-tool'
     table_name: window.CARTODB_TABLE
-    query: "SELECT ST_Union(the_geom_webmercator) AS the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=1 AND status=1"
+    query: "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=1 AND status=1"
     tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#491C16;polygon-opacity:0.7;line-opacity:1}"
     # map_style: true
 
