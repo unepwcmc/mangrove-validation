@@ -41,6 +41,18 @@ jQuery ->
 
       $('#main_menu .submit-or-erase').removeClass('hide').css('right', '183px')
       $('#main_menu .edit-area').html('<i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span>').removeClass('btn-success btn-danger active').addClass('btn-warning')
+      $('#main_menu ul.dropdown-menu li.divider').addClass('hide').next('li').addClass('hide')
+
+  $('#main_menu .cancel-edit-area').click ->
+    if($('#main_menu .edit-area').hasClass('active'))
+      window.VALIDATION.mapPolygon = null
+      
+      # Current action
+      window.VALIDATION.currentAction = null
+      
+      $('#main_menu .submit-or-erase').addClass('hide')
+      $('#main_menu .edit-area').html('<i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span>').removeClass('btn-success btn-danger active').addClass('btn-warning')
+      $(this).parent('li').addClass('hide').prev('li.divider').addClass('hide')
 
   $('#main_menu .add-area').click ->
     $('#main_menu .edit-area').html('<i class="icon-plus icon-white"></i> Add new area <span class="caret"></span>').removeClass('btn-warning btn-danger').addClass('btn-success')
@@ -57,6 +69,7 @@ jQuery ->
     $('#main_menu .submit-or-erase').removeClass('hide').css('right', '-5px')
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
     $('#main_menu .edit-area').addClass('active')
+    $('#main_menu ul.dropdown-menu li').removeClass('hide')
 
   $('#main_menu .delete-area').click ->
     $('#main_menu .edit-area').html('<i class="icon-trash icon-white"></i> Delete area <span class="caret"></span>').removeClass('btn-warning btn-success').addClass('btn-danger')
@@ -73,6 +86,7 @@ jQuery ->
     $('#main_menu .submit-or-erase').removeClass('hide').css('right', '-5px')
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
     $('#main_menu .edit-area').addClass('active')
+    $('#main_menu ul.dropdown-menu li').removeClass('hide')
 
   $('#main_menu .submit-polygon').click ->
     unless $(this).hasClass('disabled')
