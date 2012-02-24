@@ -6,7 +6,9 @@ class Layer < ActiveRecord::Base
   validates :action, presence: true, inclusion: { in: ACTIONS, message: "%{value} is not a valid action" }
   validates :polygon, presence: true
 
-  before_create do
+  before_create :cartodb
+
+  def cartodb
     # SQL CartoDB
     case self.action
       when 'validate'
@@ -24,6 +26,9 @@ class Layer < ActiveRecord::Base
           UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))
         SQL
     end
+
     CartoDB::Connection.query sql
+  rescue CartoDB::Client::Error
+    errors.add :base, 'There was an error trying to render the layers.'
   end
 end
