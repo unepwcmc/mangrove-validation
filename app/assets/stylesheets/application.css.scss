@@ -20,6 +20,24 @@ body {
 .modal {
   form {
     margin: 0;
+
+    .control-group {
+      margin-top: 10px;
+
+      label {
+        width:65px;
+        color: #999;
+      }
+      .controls{
+        margin-left: 70px;
+        input {
+          width: 300px;
+        }
+      }
+    }
+    .control-group.hidden {
+      display:none;
+    }
   }
 }
 

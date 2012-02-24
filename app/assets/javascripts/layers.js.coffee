@@ -75,7 +75,7 @@ jQuery ->
 
   $('#main_menu .submit-polygon').click ->
     unless $(this).hasClass('disabled')
-      $('#submitModal .modal-body').removeClass('alert-error alert-success').find('.message').html('Are you sure?')
+      $('#submitModal .modal-body').removeClass('alert-error alert-success').find('.message').html('Please enter your email so we can attribute your contribution')
       $('#submitModal .modal-footer .submit-data').button('reset')
       $('#submitModal').modal('show')
 
@@ -196,7 +196,7 @@ window.VALIDATION.initializeGoogleMaps = ->
     user_name: 'carbon-tool'
     table_name: window.CARTODB_TABLE
     query: "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=0 AND status=0"
-    tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#B855D0;polygon-opacity:0.35;line-width:0}"
+    tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#FF8800;polygon-opacity:0.35;line-width:0}"
     # map_style: true
 
   window.VALIDATION.mangroves = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION.mangroves_params)
@@ -208,7 +208,7 @@ window.VALIDATION.initializeGoogleMaps = ->
     user_name: 'carbon-tool'
     table_name: window.CARTODB_TABLE
     query: "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=0 AND status=1"
-    tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#B855D0;polygon-opacity:0.65;line-width:0}"
+    tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#FF8800;polygon-opacity:0.65;line-width:0}"
     # map_style: true
 
   window.VALIDATION.mangroves_validated = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION.mangroves_validated_params)
@@ -220,7 +220,7 @@ window.VALIDATION.initializeGoogleMaps = ->
     user_name: 'carbon-tool'
     table_name: window.CARTODB_TABLE
     query: "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=1 AND status=0"
-    tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#FF614D;polygon-opacity:0.7;line-opacity:1}"
+    tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#FDFD34;polygon-opacity:0.7;line-opacity:1}"
     # map_style: true
 
   window.VALIDATION.corals = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION.corals_params)
