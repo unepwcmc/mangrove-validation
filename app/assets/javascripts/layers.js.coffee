@@ -211,7 +211,7 @@ window.VALIDATION.initializeGoogleMaps = ->
     user_name: 'carbon-tool'
     table_name: window.CARTODB_TABLE
     query: "SELECT cartodb_id,the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=0 AND status=0"
-    tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#790F5B;polygon-opacity:0.7;line-width:0}"
+    tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#B855D0;polygon-opacity:0.35;line-width:0}"
     # map_style: true
 
   window.VALIDATION.mangroves = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION.mangroves_params)
@@ -223,7 +223,7 @@ window.VALIDATION.initializeGoogleMaps = ->
     user_name: 'carbon-tool'
     table_name: window.CARTODB_TABLE
     query: "SELECT cartodb_id,the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=0 AND status=1"
-    tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#460934;polygon-opacity:0.7;line-width:0}"
+    tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#B855D0;polygon-opacity:0.65;line-width:0}"
     # map_style: true
 
   window.VALIDATION.mangroves_validated = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION.mangroves_validated_params)
