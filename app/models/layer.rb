@@ -5,6 +5,7 @@ class Layer < ActiveRecord::Base
   validates :name, presence: true, inclusion: { in: NAMES, message: "%{value} is not a valid name" }
   validates :action, presence: true, inclusion: { in: ACTIONS, message: "%{value} is not a valid action" }
   validates :polygon, presence: true
+  validates :email, format: {with: /\A[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]+\z/, message: "is invalid" }
 
   before_create :cartodb
 

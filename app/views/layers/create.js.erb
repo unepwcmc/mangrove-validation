@@ -25,7 +25,7 @@ if(window.VALIDATION.corals_validated.isVisible()) {
   <% end %>
   $('#submitModal .modal-body .message').append(errors);
 <% else %>
-  $('#submitModal .modal-body').removeClass('alert-error').addClass('alert-success').find('.message').html('Successfully submitted.');
+  $('#submitModal .modal-body').removeClass('alert-error').addClass('alert-success').find('.message').html('Successfully submitted, thank you for your contribution.');
   $('#submitModal .modal-footer .submit-data').val('Submission completed')
 
   $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled');
