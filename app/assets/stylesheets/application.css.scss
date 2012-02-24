@@ -52,6 +52,30 @@ body {
       right: 0;
       left: initial;
     }
+
+    .submit-or-erase {
+      position: absolute;
+      top: 33px;
+      right: -5px;
+
+      .btn {
+        width: 70px;
+      }
+    }
+  }
+
+  .validate, .edit-area {
+    .caret {
+      float: right;
+    }
+  }
+
+  .validate {
+    width: 160px;
+  }
+
+  .edit-area {
+    width: 165px;
   }
 }
 
@@ -66,4 +90,10 @@ body {
   .btn-group + .btn-group {
     margin-left: 0
   }
+}
+
+.btn-warning .caret {
+  border-top-color: white;
+  opacity: 0.75;
+  filter: alpha(opacity=75);
 }

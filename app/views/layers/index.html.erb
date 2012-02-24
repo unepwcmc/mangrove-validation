@@ -3,7 +3,7 @@
 <div id="map_menu">
   <div class="btn-group" data-toggle="buttons-radio">
     <a href="#" class="hide-data-layers btn" data-toggle="button" title="Hide layers"><i class="icon-eye-close"></i></a>
-    <button class="show-mangroves btn btn-primary active" title="Show mangroves layer">Mangroves</button>
+    <button class="show-mangroves btn btn-mangroves active" title="Show mangroves layer">Mangroves</button>
     <button class="show-corals btn" title="Show mangroves layer">Corals</button>
   </div>
   <div class="btn-group">
@@ -15,23 +15,24 @@
 <div id="main_menu">
   <div class="actions hide">
     <div class="btn-group">
-      <a href="#" class="spotted-error btn btn-info"><i class="icon-flag icon-white"></i> Spotted error?</a>
-      <a href="#" class="spotted-error-toggle btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+      <a class="edit-area btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span></a>
       <ul class="dropdown-menu">
         <li><a href="#" class="add-area"><i class="icon-plus"></i> Add new area</a></li>
         <li><a href="#" class="delete-area"><i class="icon-trash"></i> Delete area</a></li>
-        <li class="divider"></li>
-        <li><a href="#" class="help"><i class="icon-info-sign"></i> Help</a></li>
       </ul>
     </div>
-    <a href="#" class="validate btn btn-primary" data-toggle="button"><i class="icon-ok icon-white"></i> Validate existing</a>
+    <a href="#" class="validate btn btn-primary" data-toggle="button"><i class="icon-ok icon-white"></i> Validate area</a>
+    <div class="help-and-logo btn-group">
+      <a href="#" class="help btn btn-info"><i class="icon-question-sign icon-white"></i></a>
+      <a href="#" class="logo btn btn-info disabled"><i class="icon-qrcode icon-white"></i></a>
+    </div>
     <div class="submit-or-erase btn-group hide">
       <a href="#" class="submit-polygon btn btn-inverse disabled"><i class="icon-check icon-white"></i> Submit</a>
       <a href="#" class="erase-polygon btn btn-danger disabled"><i class="icon-repeat icon-white"></i> Erase</a>
     </div>
   </div>
   <a href="#" class="select-layer btn btn-inverse hide disabled">Select a layer to continue editing</a>
-  <a href="#" class="zoom btn btn-inverse disabled">Zoom in to region to start editing</a>
+  <a href="#" class="zoom btn btn-inverse">Zoom in to region to start editing</a>
 </div>
 
 <!-- Modals -->
@@ -47,19 +48,6 @@
   </div>
   <div class="modal-footer">
     <a href="#" class="btn btn-primary" data-dismiss="modal">Get started</a>
-  </div>
-</div>
-
-<div class="modal hide" id="helpModal">
-  <div class="modal-header">
-    <a class="close" data-dismiss="modal">×</a>
-    <h3>Mangrove and Coral Validation Tool</h3>
-  </div>
-  <div class="modal-body">
-    <p>Spotted an error? Find here some information about this...</p>
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="btn btn-primary" data-dismiss="modal">Continue</a>
   </div>
 </div>
 

@@ -11,14 +11,16 @@ jQuery ->
 
   window.VALIDATION.initializeGoogleMaps()
   $('#landingModal').modal({backdrop: true, show: true})
-  $('#helpModal').modal({backdrop: true, show: false})
 
   # Main menu buttons
-  $('#main_menu .validate').click ->
-    $('#main_menu .spotted-error').html('<i class="icon-flag icon-white"></i> Spotted error?')
-    $('#main_menu .spotted-error').button('toggle') if $('#main_menu .spotted-error').hasClass('active')
-    $('#main_menu .spotted-error, #main_menu .spotted-error-toggle').removeClass('btn-success btn-danger').addClass('btn-info')
+  $('#main_menu .help').click ->
+    $('#landingModal').modal('show')
 
+  $('#main_menu .zoom').click ->
+    window.VALIDATION.map.panTo(window.VALIDATION.mapOptions.center)
+    window.VALIDATION.map.setZoom(window.VALIDATION.minEditZoom)
+
+  $('#main_menu .validate').click ->
     # Google Maps Polygon
     window.VALIDATION.mapPolygon.setMap(null) if window.VALIDATION.mapPolygon
     if $(this).hasClass('active')
@@ -36,12 +38,11 @@ jQuery ->
       # Current action
       window.VALIDATION.currentAction = 'validate'
 
-      $('#main_menu .submit-or-erase').removeClass('hide')
+      $('#main_menu .submit-or-erase').removeClass('hide').css('right', '183px')
+      $('#main_menu .edit-area').html('<i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span>').removeClass('btn-success btn-danger active').addClass('btn-warning')
 
   $('#main_menu .add-area').click ->
-    $('#main_menu .spotted-error').html('<i class="icon-flag icon-white"></i> Add new area')
-    $('#main_menu .spotted-error').button('toggle') unless $('#main_menu .spotted-error').hasClass('active')
-    $('#main_menu .spotted-error, #main_menu .spotted-error-toggle').removeClass('btn-info btn-danger').addClass('btn-success')
+    $('#main_menu .edit-area').html('<i class="icon-plus icon-white"></i> Add new area <span class="caret"></span>').removeClass('btn-warning btn-danger').addClass('btn-success')
     $('#main_menu .validate').button('toggle') if $('#main_menu .validate').hasClass('active')
 
     # Google Maps Polygon
@@ -52,13 +53,12 @@ jQuery ->
     # Current action
     window.VALIDATION.currentAction = 'add'
 
-    $('#main_menu .submit-or-erase').removeClass('hide')
+    $('#main_menu .submit-or-erase').removeClass('hide').css('right', '-5px')
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
+    $('#main_menu .edit-area').addClass('active')
 
   $('#main_menu .delete-area').click ->
-    $('#main_menu .spotted-error').html('<i class="icon-flag icon-white"></i> Delete area')
-    $('#main_menu .spotted-error').button('toggle') unless $('#main_menu .spotted-error').hasClass('active')
-    $('#main_menu .spotted-error, #main_menu .spotted-error-toggle').removeClass('btn-info btn-success').addClass('btn-danger')
+    $('#main_menu .edit-area').html('<i class="icon-trash icon-white"></i> Delete area <span class="caret"></span>').removeClass('btn-warning btn-success').addClass('btn-danger')
     $('#main_menu .validate').button('toggle') if $('#main_menu .validate').hasClass('active')
 
     # Google Maps Polygon
@@ -69,24 +69,9 @@ jQuery ->
     # Current action
     window.VALIDATION.currentAction = 'delete'
 
-    $('#main_menu .submit-or-erase').removeClass('hide')
+    $('#main_menu .submit-or-erase').removeClass('hide').css('right', '-5px')
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
-
-  $('#main_menu .spotted-error').click ->
-    if $('#main_menu .spotted-error').hasClass('active')
-      $('#main_menu .spotted-error').html('<i class="icon-flag icon-white"></i> Spotted error?').button('toggle')
-      $('#main_menu .spotted-error, #main_menu .spotted-error-toggle').removeClass('btn-success btn-danger').addClass('btn-info')
-
-      window.VALIDATION.mapPolygon.setMap(null) if window.VALIDATION.mapPolygon
-      window.VALIDATION.mapPolygon = null
-
-      # Current action
-      window.VALIDATION.currentAction = null
-
-      $('#main_menu .submit-or-erase').addClass('hide')
-      $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
-    else
-      $('#helpModal').modal('show')
+    $('#main_menu .edit-area').addClass('active')
 
   $('#main_menu .submit-polygon').click ->
     unless $(this).hasClass('disabled')
@@ -106,8 +91,8 @@ jQuery ->
     window.VALIDATION.map.setZoom(window.VALIDATION.map.getZoom() - 1)
 
   $('#map_menu .hide-data-layers').click ->
-    $(this).siblings().removeClass('btn-primary')
-    $(this).addClass('btn-danger')
+    $(this).addClass('btn-danger').siblings().removeClass('btn-mangroves btn-corals')
+    $(this).find('i').addClass('icon-white')
     window.VALIDATION.mangroves.hide()
     window.VALIDATION.mangroves_validated.hide()
     window.VALIDATION.corals.hide()
@@ -121,8 +106,8 @@ jQuery ->
       window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
 
   $('#map_menu .show-mangroves').click ->
-    $(this).siblings().removeClass('btn-primary btn-danger')
-    $(this).addClass('btn-primary')
+    $(this).addClass('btn-mangroves').siblings().removeClass('btn-corals btn-danger')
+    $('#map_menu .hide-data-layers i').removeClass('icon-white')
     window.VALIDATION.mangroves.show()
     window.VALIDATION.mangroves_validated.show()
     window.VALIDATION.corals.hide()
@@ -136,8 +121,8 @@ jQuery ->
       window.VALIDATION.mapPolygon.setEditable(true) if window.VALIDATION.mapPolygon
 
   $('#map_menu .show-corals').click ->
-    $(this).siblings().removeClass('btn-primary btn-danger')
-    $(this).addClass('btn-primary')
+    $(this).addClass('btn-corals').siblings().removeClass('btn-mangroves btn-danger')
+    $('#map_menu .hide-data-layers i').removeClass('icon-white')
     window.VALIDATION.mangroves.hide()
     window.VALIDATION.mangroves_validated.hide()
     window.VALIDATION.corals.show()

@@ -1,7 +1,7 @@
 window.VALIDATION =
   map: null # Google Maps
   mapOptions:
-    center: new google.maps.LatLng(-6.140555, 24.433594)
+    center: new google.maps.LatLng(-18.521283,36.650391)
     zoom: 4
     mapTypeId: google.maps.MapTypeId.SATELLITE
     mapTypeControl: false
