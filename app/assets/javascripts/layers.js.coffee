@@ -90,7 +90,7 @@ jQuery ->
 
   $('#main_menu .submit-polygon').click ->
     unless $(this).hasClass('disabled')
-      $('#submitModal .modal-body').removeClass('alert-error alert-success').find('.message').html('Are you sure?')
+      $('#submitModal .modal-body').removeClass('alert-error alert-success').find('.message').html('Please enter your email so we can attribute your contribution')
       $('#submitModal .modal-footer .submit-data').button('reset')
       $('#submitModal').modal('show')
 
