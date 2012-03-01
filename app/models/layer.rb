@@ -26,6 +26,10 @@ class Layer < ActiveRecord::Base
             (SELECT ST_Multi(ST_Union(ST_Difference(ST_GeomFromText('POLYGON((#{polygon}))', 4326), the_geom), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))), #{NAMES.index(name)}, 1
               FROM #{APP_CONFIG['cartodb_table']}
               WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND status = 1 AND name = #{NAMES.index(name)});
+              INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status)
+            (SELECT ST_Multi(ST_Union(ST_Intersection(ST_GeomFromText('POLYGON((#{polygon}))', 4326), the_geom), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))), #{NAMES.index(name)}, 1
+              FROM #{APP_CONFIG['cartodb_table']}
+              WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND status = 1 AND name = #{NAMES.index(name)});
           UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND status = 0 AND name = #{NAMES.index(name)};
         SQL
       when 'delete'
