@@ -10,6 +10,7 @@ class Layer < ActiveRecord::Base
   before_create :cartodb
 
   def cartodb
+    geom_sql = "ST_GeomFromText('MULTIPOLYGON(((#{polygon})))', 4326)"
     # SQL CartoDB
     case self.action
       when 'validate'
@@ -21,16 +22,23 @@ class Layer < ActiveRecord::Base
           UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND name = #{NAMES.index(name)} AND status = 0
         SQL
       when 'add'
+        # Add the difference
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status)
-            (SELECT ST_Multi(ST_Union(ST_Difference(ST_GeomFromText('POLYGON((#{polygon}))', 4326), the_geom), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))), #{NAMES.index(name)}, 1
+            (SELECT ST_Multi((ST_Difference(#{geom_sql}, the_geom))), #{NAMES.index(name)}, 1
               FROM #{APP_CONFIG['cartodb_table']}
-              WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND status = 1 AND name = #{NAMES.index(name)});
-              INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status)
-            (SELECT ST_Multi(ST_Union(ST_Intersection(ST_GeomFromText('POLYGON((#{polygon}))', 4326), the_geom), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))), #{NAMES.index(name)}, 1
+              WHERE ST_Intersects(#{geom_sql}, the_geom) AND status = 1 AND name = #{NAMES.index(name)});
+        SQL
+        # Add the intersection
+        sql = sql + <<-SQL
+          INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status)
+            (SELECT ST_Multi((ST_Intersection(#{geom_sql}, the_geom))), #{NAMES.index(name)}, 1
               FROM #{APP_CONFIG['cartodb_table']}
-              WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND status = 1 AND name = #{NAMES.index(name)});
-          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND status = 0 AND name = #{NAMES.index(name)};
+              WHERE ST_Intersects(#{geom_sql}, the_geom) AND status = 1 AND name = #{NAMES.index(name)});
+        SQL
+        # Remove validated area from base
+        sql = sql + <<-SQL
+          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = 0 AND name = #{NAMES.index(name)};
         SQL
       when 'delete'
         sql = <<-SQL
