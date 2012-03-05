@@ -28,6 +28,7 @@ class Layer < ActiveRecord::Base
             (#{geom_sql}, #{NAMES.index(name)}, 1);
         SQL
 =begin
+# This way should work, but we're having some carto db issues, revisit
         # Add the difference
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status)

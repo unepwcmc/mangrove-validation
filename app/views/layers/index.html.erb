@@ -43,6 +43,11 @@
     <h3>Mangrove and Coral Editing and Validation Tool</h3>
   </div>
   <div class="modal-body">
+    <div class="logos">
+      <%= link_to image_tag('icri_logo.gif'), 'http://www.icriforum.org/' %>
+      <%= link_to image_tag('usdos_seal_logo.png'), 'http://www.state.gov/' %>
+      <%= link_to image_tag('unep_wcmc_logo.png'), 'http://unep-wcmc.org/' %>
+    </div>
     <p>This portal is designed to allow you to provide basic editing and validation input into the USGS Global Distribution of Mangrove (2000) dataset and the Global Distribution of Coral Reefs (2010) datasets held by UNEP-WCMC. While this is an early version with limited functionality, it allows users to spatially edit or validate either datasets based on</p>
     <ul>
       <li>Local knowledge of the habitat in question</li>
@@ -62,11 +67,6 @@
       <li>View imagery with explicit dates to facilitate local habitat change mapping</li>
     </ol>
     <p>For any feedback or questions, please email <%= mail_to "niall.phelan@unep-wcmc.org" %>.</p>
-    <div class="logos">
-      <%= image_tag 'icri_logo.gif' %>
-      <%= image_tag 'usdos_seal_logo.png' %>
-      <%= image_tag 'unep_wcmc_logo.png' %>
-    </div>
   </div>
   <div class="modal-footer">
     <a href="#" class="btn btn-primary" data-dismiss="modal">Get started</a>
