@@ -18,6 +18,12 @@ body {
 }
 
 .modal {
+  .logos {
+    img + img {
+      margin-left: 6px;
+    }
+  }
+
   form {
     margin: 0;
 
@@ -32,6 +38,14 @@ body {
     .control-group.hidden {
       display:none;
     }
+  }
+}
+
+#landingModal {
+  overflow: hidden;
+  .modal-body {
+    max-height: 360px;
+    overflow: auto;
   }
 }
 
