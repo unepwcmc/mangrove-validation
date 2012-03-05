@@ -40,12 +40,33 @@
 <div class="modal" id="landingModal">
   <div class="modal-header">
     <a class="close" data-dismiss="modal">×</a>
-    <h3>Mangrove and Coral Validation Tool</h3>
+    <h3>Mangrove and Coral Editing and Validation Tool</h3>
   </div>
   <div class="modal-body">
-    <p>We're testing this tool to help improve the quality of the data.</p>
-    <p>Choose which data set you're interested in, find the area you know, and start clicking and editing.</p>
-    <p>Any problems, email us <%= mail_to "no-problems@unep-wcmc.org" %></p>
+    <p>This portal is designed to allow you to provide basic editing and validation input into the USGS Global Distribution of Mangrove (2000) dataset and the Global Distribution of Coral Reefs (2010) datasets held by UNEP-WCMC. While this is an early version with limited functionality, it allows users to spatially edit or validate either datasets based on</p>
+    <ul>
+      <li>Local knowledge of the habitat in question</li>
+      <li>Clearly viewable omission or commission errors in the data</li>
+      <li>Basic user interpretation of the underlying imagery</li>
+    </ul>
+    <p>The outcome of your input is a higher quality dataset with greater verification and validation.</p>
+    <p>Simply choose the dataset you're interested in, and zoom in to the desired area. Then click on the type of editing you want to undertake using the tool bar on the top right of the screen and start clicking.</p>
+    <h3>Editing limitations</h3>
+    <p>The temporal range of both the Coral reef and Mangrove the datasets will difficult to define as they will combine the temporal range of the baseline dataset and the added edits of the user community, which will be more difficult to define.</p>
+    <p>All edits should be based on clear errors/omissions in the data. Where there is any ambiguity, no edits/additions should be made. e.g. Mangrove and forest cover can be very hard to distinguish so it is not expected that users would undertake any differentiation between these two habitat types unless they had in-depth local knowledge.</p>
+    <p>Future functionalities could allow users to:</p>
+    <ol>
+      <li>Specify the type of editing they have undertaken based on the evidence they have used (e.g. a, b or c above)</li>
+      <li>Upload their own maps for integration into the community dataset</li>
+      <li>Download subsets of the dataset according to their defined area of interest</li>
+      <li>View imagery with explicit dates to facilitate local habitat change mapping</li>
+    </ol>
+    <p>For any feedback or questions, please email <%= mail_to "niall.phelan@unep-wcmc.org" %>.</p>
+    <div class="logos">
+      <%= image_tag 'icri_logo.gif' %>
+      <%= image_tag 'usdos_seal_logo.png' %>
+      <%= image_tag 'unep_wcmc_logo.png' %>
+    </div>
   </div>
   <div class="modal-footer">
     <a href="#" class="btn btn-primary" data-dismiss="modal">Get started</a>
