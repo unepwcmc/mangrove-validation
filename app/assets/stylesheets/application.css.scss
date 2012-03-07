@@ -114,11 +114,17 @@ body {
   top: 5px;
   left: 5px;
 
-  .btn-group {
+  a, .layers {
     margin-bottom: 5px;
+    float: left;
   }
-  .btn-group + .btn-group {
-    margin-left: 0
+  .layers {
+    margin-left: 5px;
+  }
+  .zoom-group {
+    margin-left: 0;
+    clear: left;
+    float: left;
   }
 }
 
@@ -136,6 +142,8 @@ body {
   opacity: 0.75;
   filter: alpha(opacity=75);
 }
+
+/* Scrollbars */
 
 ::-webkit-scrollbar {
     height: 7px;

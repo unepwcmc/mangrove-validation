@@ -106,27 +106,37 @@ jQuery ->
     window.VALIDATION.map.setZoom(window.VALIDATION.map.getZoom() - 1)
 
   $('#map_menu .hide-data-layers').click ->
-    $(this).addClass('btn-danger').siblings().removeClass('btn-mangroves btn-corals')
-    $(this).find('i').addClass('icon-white')
-    window.VALIDATION.mangroves.hide()
-    window.VALIDATION.mangroves_validated.hide()
-    window.VALIDATION.corals.hide()
-    window.VALIDATION.corals_validated.hide()
+    if($(this).hasClass('active'))
+      $(this).removeClass('btn-danger')
+      $(this).find('i').removeClass('icon-white')
 
-    window.VALIDATION.selectedLayer = null
+      if window.VALIDATION.selectedLayer == 'mangrove'
+        window.VALIDATION.mangroves.show()
+        window.VALIDATION.mangroves_validated.show()
+        window.VALIDATION.corals.hide()
+        window.VALIDATION.corals_validated.hide()
+      else
+        window.VALIDATION.mangroves.hide()
+        window.VALIDATION.mangroves_validated.hide()
+        window.VALIDATION.corals.show()
+        window.VALIDATION.corals_validated.show()
+    else
+      $(this).addClass('btn-danger')
+      $(this).find('i').addClass('icon-white')
 
-    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom
-      $('#main_menu .actions').addClass('hide')
-      $('#main_menu .select-layer').removeClass('hide')
-      window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
+      window.VALIDATION.mangroves.hide()
+      window.VALIDATION.mangroves_validated.hide()
+      window.VALIDATION.corals.hide()
+      window.VALIDATION.corals_validated.hide()
 
   $('#map_menu .show-mangroves').click ->
-    $(this).addClass('btn-mangroves').siblings().removeClass('btn-corals btn-danger')
-    $('#map_menu .hide-data-layers i').removeClass('icon-white')
-    window.VALIDATION.mangroves.show()
-    window.VALIDATION.mangroves_validated.show()
-    window.VALIDATION.corals.hide()
-    window.VALIDATION.corals_validated.hide()
+    $(this).addClass('btn-mangroves').siblings().removeClass('btn-corals')
+
+    unless $('#map_menu .hide-data-layers').hasClass('active')
+      window.VALIDATION.mangroves.show()
+      window.VALIDATION.mangroves_validated.show()
+      window.VALIDATION.corals.hide()
+      window.VALIDATION.corals_validated.hide()
 
     window.VALIDATION.selectedLayer = 'mangrove'
 
@@ -136,12 +146,13 @@ jQuery ->
       window.VALIDATION.mapPolygon.setEditable(true) if window.VALIDATION.mapPolygon
 
   $('#map_menu .show-corals').click ->
-    $(this).addClass('btn-corals').siblings().removeClass('btn-mangroves btn-danger')
-    $('#map_menu .hide-data-layers i').removeClass('icon-white')
-    window.VALIDATION.mangroves.hide()
-    window.VALIDATION.mangroves_validated.hide()
-    window.VALIDATION.corals.show()
-    window.VALIDATION.corals_validated.show()
+    $(this).addClass('btn-corals').siblings().removeClass('btn-mangroves')
+
+    unless $('#map_menu .hide-data-layers').hasClass('active')
+      window.VALIDATION.mangroves.hide()
+      window.VALIDATION.mangroves_validated.hide()
+      window.VALIDATION.corals.show()
+      window.VALIDATION.corals_validated.show()
 
     window.VALIDATION.selectedLayer = 'coral'
 
