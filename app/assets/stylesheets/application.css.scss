@@ -136,3 +136,19 @@ body {
   opacity: 0.75;
   filter: alpha(opacity=75);
 }
+
+::-webkit-scrollbar {
+    height: 7px;
+    width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.3);
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(0,0,0,.4);
+}
