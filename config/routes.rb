@@ -1,5 +1,9 @@
 MangroveValidation::Application.routes.draw do
-  resources :layers
+  resources :layers do
+    collection do
+      get 'user_edits'
+    end
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

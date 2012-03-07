@@ -59,4 +59,13 @@ class Layer < ActiveRecord::Base
     errors.add :base, 'There was an error trying to render the layers.'
     puts "There was an error trying to execute the following query:\n#{sql}"
   end
+
+  def self.user_edits_csv
+    CSV.generate do |csv|
+      csv << ["Email", "Action", "Polygon", "Date"]
+      Layer.order("created_at").each do |l|
+        csv << [l.email, l.action, l.polygon, l.created_at.strftime("%d/%b/%Y")]
+      end
+    end
+  end
 end
