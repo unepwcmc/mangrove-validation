@@ -61,6 +61,7 @@ class Layer < ActiveRecord::Base
   end
 
   def self.user_edits_csv
+    require 'csv'
     CSV.generate do |csv|
       csv << ["Email", "Action", "Polygon", "Date"]
       Layer.order("created_at").each do |l|
