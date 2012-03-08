@@ -14,8 +14,8 @@ You'll need to create a cartodb_config.yml file and place it into config directo
 
 Also, you'll need to create an http_auth_config.yml:
 
-development:
-  admins:
-    -
-      login: 'login'
-      password: 'password'
+        development:
+          admins:
+            -
+              login: 'login'
+              password: 'password'
