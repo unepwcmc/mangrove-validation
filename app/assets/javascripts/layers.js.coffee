@@ -161,6 +161,16 @@ jQuery ->
       $('#main_menu .select-layer').addClass('hide')
       window.VALIDATION.mapPolygon.setEditable(true) if window.VALIDATION.mapPolygon
 
+  $('#map_menu .use-satellite').click ->
+    $(this).addClass('btn-satellite').siblings().removeClass('btn-terrain')
+
+    window.VALIDATION.map.setOptions({mapTypeId: google.maps.MapTypeId.SATELLITE})
+
+  $('#map_menu .use-terrain').click ->
+    $(this).addClass('btn-terrain').siblings().removeClass('btn-satellite')
+
+    window.VALIDATION.map.setOptions({mapTypeId: google.maps.MapTypeId.TERRAIN})
+
   # Submit modal
   $('#submitModal .submit-data').click ->
     $(this).button('loading')
