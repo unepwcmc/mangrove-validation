@@ -1,5 +1,13 @@
-<h3>The admin side is here to serve you</h3>
-<p>Behold of amazing options</p>
+<h1>The admin side is here to serve you</h1>
+<p>Behold of amazing options:</p>
 <ul>
   <li><%= link_to "Get user edits (.csv)", user_edits_layers_path %></li>
+</ul>
+
+<p>There were <strong><%= pluralize(Layer.count, 'user edit') %></strong> by <strong><%= pluralize(@emails.length, 'diferent user') %></strong>.</p>
+<h2>Breakdown</h2>
+<ul>
+  <% @emails.each do |email| %>
+    <li><%= email.email %> did <strong><%= pluralize(Layer.where(:email => email.email).count, 'edit') %></strong></li>
+  <% end %>
 </ul>
