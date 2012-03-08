@@ -4,10 +4,11 @@
   <li><%= link_to "Get user edits (.csv)", admin_download_user_edits_path %></li>
 </ul>
 
-<p>There were <strong><%= pluralize(Layer.count, 'user edit') %></strong> by <strong><%= pluralize(@emails.length, 'diferent user') %></strong>.</p>
+<p>There were <strong><%= pluralize(Layer.count, 'user edit') %></strong> by <strong><%= pluralize(@layers.length, 'diferent user') %></strong>.</p>
+
 <h2>Breakdown</h2>
 <ul>
-  <% @emails.each do |email| %>
-    <li><%= email.email %> did <strong><%= pluralize(Layer.where(:email => email.email).count, 'edit') %></strong></li>
+  <% @layers.each do |layer| %>
+    <li><%= layer.email %> did <strong><%= pluralize(Layer.where(:email => layer.email).count, 'edit') %></strong></li>
   <% end %>
 </ul>

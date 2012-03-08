@@ -2,7 +2,7 @@ MangroveValidation::Application.routes.draw do
   match 'admin' => "admin#index"
   match 'admin/download_user_edits' => "admin#download_user_edits"
 
-  resources :layers
+  resources :layers, :only => [:index, :create]
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
