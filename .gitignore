@@ -16,6 +16,7 @@
 
 # CartoDB login configurations
 /config/cartodb_config.yml
+/config/http_auth_config.yml
 
 # Ruby
 /vendor/ruby
