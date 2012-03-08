@@ -66,6 +66,8 @@ body {
     top: 5px;
     right: 5px;
 
+    padding: 7px;
+
     & > * {
       float: right;
     }
@@ -92,16 +94,12 @@ body {
   }
 
   .validate, .edit-area {
-    i {
-      float: left;
-    }
     .caret {
       float: right;
     }
   }
 
   .validate {
-    width: 160px;
   }
 
   .edit-area {
