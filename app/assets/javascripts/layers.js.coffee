@@ -13,7 +13,7 @@ jQuery ->
   $('#landingModal').modal({backdrop: true, show: true})
 
   # Main menu buttons
-  $('#main_menu .help').click ->
+  $('#map_menu .help').click ->
     $('#landingModal .modal-footer .btn').html('Continue')
     $('#landingModal').modal('show')
 

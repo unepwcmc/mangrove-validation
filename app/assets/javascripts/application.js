@@ -19,6 +19,8 @@
 //= require cartodb-gmapsv3
 //= require layers
 
+/* Override Bootstrap Tooltip show function so the tooltip doesn't get out of the page */
+
 $(function() {
   $.fn.tooltip.Constructor.prototype.show = function() {
     var $tip
