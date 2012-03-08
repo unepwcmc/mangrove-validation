@@ -1,6 +1,5 @@
 @import "bootstrap-variables";
 
-
 .page-header {
   a.btn {
     float: right;
@@ -17,30 +16,29 @@
   background-image: none;
   $shadow: inset 0 1px 6px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);
   @include box-shadow($shadow);
- }
+}
 
 .btn-mangroves,
 .btn-mangroves:hover,
 .btn-corals,
 .btn-corals:hover {
- text-shadow: 0 -1px 0 rgba(0,0,0,.25);
- color: $white;
+  text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+  color: $white;
 }
 // Provide *some* extra contrast for those who can get it
 .btn-mangroves.active,
 .btn-corals.active {
- color: $grayDark;
+  color: $grayDark;
 }
 
 // Set the backgrounds
 // -------------------------
 .btn-mangroves {
- $mangroves-color: #f80;
- @include buttonBackground($mangroves-color, adjust-hue($mangroves-color, 20));
+  $mangroves-color: #f80;
+  @include buttonBackground($mangroves-color, adjust-hue($mangroves-color, 20));
 }
 
 .btn-corals {
- $corals-color: #fdfd34;
- @include buttonBackground($corals-color, adjust-hue($corals-color, 20));
+  $corals-color: #fdfd34;
+  @include buttonBackground($corals-color, adjust-hue($corals-color, 20));
 }
-

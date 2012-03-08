@@ -1,6 +1,6 @@
 MangroveValidation::Application.routes.draw do
-
   match 'admin/' => "admin#index"
+
   resources :layers do
     collection do
       get 'user_edits'

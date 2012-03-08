@@ -39,7 +39,7 @@ jQuery ->
       # Current action
       window.VALIDATION.currentAction = 'validate'
 
-      $('#main_menu .submit-or-erase').removeClass('hide').css('right', '183px')
+      $('#main_menu .submit-or-erase').removeClass('hide').css('right', '182px')
       $('#main_menu .edit-area').html('<i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span>').removeClass('btn-success btn-danger active').addClass('btn-warning')
       $('#main_menu ul.dropdown-menu li.divider').addClass('hide').next('li').addClass('hide')
 
