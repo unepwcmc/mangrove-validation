@@ -114,6 +114,18 @@ body {
   top: 5px;
   left: 5px;
 
+  .control-row {
+    margin-top: 8px;
+    overflow:hidden;
+  }
+  .control-row:first-child {
+    margin-top: 0;
+  }
+  .control-row.break {
+    padding-top: 8px;
+    border-top: 1px solid #DDD;
+  }
+
   a {
     margin-bottom: 5px;
     float: left;
@@ -121,6 +133,7 @@ body {
   #layers-box {
     overflow:hidden;
     padding: 7px;
+    margin-bottom: 5px;
 
     .layer-switcher {
       float:left;
@@ -128,21 +141,19 @@ body {
         width: 80px;
       }
     }
-    .layers {
-      margin-bottom:10px;
-    }
 
     a.hide-data-layers {
-      margin-left: 5px;
+      margin-left: 3px;
     }
   }
   .zoom-group {
+    clear:both;
     margin-left: 0;
-    clear: left;
     float: left;
   }
   .help {
     margin-left: 5px;
+    float:right;
   }
 }
 
