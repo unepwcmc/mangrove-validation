@@ -130,7 +130,7 @@ jQuery ->
       window.VALIDATION.corals_validated.hide()
 
   $('#map_menu .show-mangroves').click ->
-    $(this).addClass('btn-mangroves').siblings().removeClass('btn-corals')
+    $(this).addClass('btn-warning').siblings().removeClass('btn-success')
 
     unless $('#map_menu .hide-data-layers').hasClass('active')
       window.VALIDATION.mangroves.show()
@@ -146,7 +146,7 @@ jQuery ->
       window.VALIDATION.mapPolygon.setEditable(true) if window.VALIDATION.mapPolygon
 
   $('#map_menu .show-corals').click ->
-    $(this).addClass('btn-corals').siblings().removeClass('btn-mangroves')
+    $(this).addClass('btn-success').siblings().removeClass('btn-warning')
 
     unless $('#map_menu .hide-data-layers').hasClass('active')
       window.VALIDATION.mangroves.hide()
@@ -160,6 +160,16 @@ jQuery ->
       $('#main_menu .actions').removeClass('hide')
       $('#main_menu .select-layer').addClass('hide')
       window.VALIDATION.mapPolygon.setEditable(true) if window.VALIDATION.mapPolygon
+
+  $('#map_menu .use-satellite').click ->
+    $(this).addClass('btn-info').siblings().removeClass('btn-info')
+
+    window.VALIDATION.map.setOptions({mapTypeId: google.maps.MapTypeId.SATELLITE})
+
+  $('#map_menu .use-terrain').click ->
+    $(this).addClass('btn-info').siblings().removeClass('btn-info')
+
+    window.VALIDATION.map.setOptions({mapTypeId: google.maps.MapTypeId.TERRAIN})
 
   # Submit modal
   $('#submitModal .submit-data').click ->

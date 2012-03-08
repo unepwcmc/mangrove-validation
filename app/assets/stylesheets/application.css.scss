@@ -114,12 +114,27 @@ body {
   top: 5px;
   left: 5px;
 
-  a, .layers {
+  a {
     margin-bottom: 5px;
     float: left;
   }
-  .layers {
-    margin-left: 5px;
+  #layers-box {
+    overflow:hidden;
+    padding: 7px;
+
+    .layer-switcher {
+      float:left;
+      button {
+        width: 80px;
+      }
+    }
+    .layers {
+      margin-bottom:10px;
+    }
+
+    a.hide-data-layers {
+      margin-left: 5px;
+    }
   }
   .zoom-group {
     margin-left: 0;
