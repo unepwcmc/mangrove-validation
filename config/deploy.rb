@@ -121,3 +121,4 @@ end
 
 after "deploy:setup", :setup_production_database_configuration
 after "deploy:setup", :setup_cartodb_configuration
+after "deploy:setup", :setup_http_auth_configuration
