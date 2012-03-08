@@ -114,20 +114,46 @@ body {
   top: 5px;
   left: 5px;
 
-  a, .layers {
+  .control-row {
+    margin-top: 8px;
+    overflow:hidden;
+  }
+  .control-row:first-child {
+    margin-top: 0;
+  }
+  .control-row.break {
+    padding-top: 8px;
+    border-top: 1px solid #DDD;
+  }
+
+  a {
     margin-bottom: 5px;
     float: left;
   }
-  .layers {
-    margin-left: 5px;
+  #layers-box {
+    overflow:hidden;
+    padding: 7px;
+    margin-bottom: 5px;
+
+    .layer-switcher {
+      float:left;
+      button {
+        width: 80px;
+      }
+    }
+
+    a.hide-data-layers {
+      margin-left: 3px;
+    }
   }
   .zoom-group {
+    clear:both;
     margin-left: 0;
-    clear: left;
     float: left;
   }
   .help {
     margin-left: 5px;
+    float:right;
   }
 }
 
