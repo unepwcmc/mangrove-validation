@@ -1,11 +1,8 @@
 MangroveValidation::Application.routes.draw do
-  match 'admin/' => "admin#index"
+  match 'admin' => "admin#index"
+  match 'admin/download_user_edits' => "admin#download_user_edits"
 
-  resources :layers do
-    collection do
-      get 'user_edits'
-    end
-  end
+  resources :layers
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
