@@ -115,19 +115,18 @@ body {
   left: 5px;
 
   .control-row {
-    margin-top: 8px;
+    margin-top: 6px;
     overflow:hidden;
   }
   .control-row:first-child {
     margin-top: 0;
   }
   .control-row.break {
-    padding-top: 8px;
+    padding-top: 6px;
     border-top: 1px solid #DDD;
   }
 
   a {
-    margin-bottom: 5px;
     float: left;
   }
   #layers-box {
