@@ -97,5 +97,27 @@ task :setup_cartodb_configuration do
   put(spec.to_yaml, "#{shared_path}/config/cartodb_config.yml")
 end
 
+task :setup_http_auth_configuration do
+  admins = []
+  more_users = true
+  while more_users do
+    login = Capistrano::CLI.ui.ask("Admin username: ")
+    password = Capistrano::CLI.password_prompt("Admin password: ")
+    admins<< {"login" => login, "password" => password}
+    more_users = (Capistrano::CLI.ui.ask("More admin users? (Y/n)") == "Y")
+  end
+
+  require 'yaml'
+
+  spec = {
+    "#{rails_env}" => {
+      "admins" => admins
+    }
+  }
+
+  run "mkdir -p #{shared_path}/config"
+  put(spec.to_yaml, "#{shared_path}/config/http_auth_config.yml")
+end
+
 after "deploy:setup", :setup_production_database_configuration
 after "deploy:setup", :setup_cartodb_configuration
