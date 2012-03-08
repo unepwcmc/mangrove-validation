@@ -2,25 +2,27 @@
 
 <a href="http://www.unep-wcmc.org" target="_blank" id="logo"></a>
 
-<div id="map_menu">
-  <div>
-    <div class="btn-group layer-switcher layers" data-toggle="buttons-radio">
-      <button class="show-mangroves btn btn-warning active" title="Show mangroves layer">Mangroves</button>
-      <button class="show-corals btn" title="Show corals layer">Corals</button>
+<div id="map_menu" >
+  <div id='layers-box' class='well'>
+    <div>
+      <div class="btn-group layer-switcher layers" data-toggle="buttons-radio">
+        <button class="show-mangroves btn btn-warning active" title="Show mangroves layer">Mangroves</button>
+        <button class="show-corals btn" title="Show corals layer">Corals</button>
+      </div>
+      <a href="#" class="hide-data-layers btn" data-toggle="button" title="Hide layers"><i class="icon-eye-close"></i></a>
     </div>
-    <a href="#" class="hide-data-layers btn" data-toggle="button" title="Hide layers"><i class="icon-eye-close"></i></a>
+
+    <div class="btn-group layer-switcher " data-toggle="buttons-radio">
+      <button class="use-satellite btn btn-info active" title="Use satellite base layer">Satellite</button>
+      <button class="use-terrain btn" title="Use terrain base layer">Terrain</button>
+    </div>
   </div>
 
-  <div class="btn-group layer-switcher base-layers" data-toggle="buttons-radio">
-    <button class="use-satellite btn btn-info active" title="Use satellite base layer">Satellite</button>
-    <button class="use-terrain btn" title="Use terrain base layer">Terrain</button>
-  </div>
-
-  <a href="#" class="help btn btn-info"><i class="icon-question-sign icon-white"></i></a>
   <div class="btn-group zoom-group">
     <a href="#" class="zoom-in btn" title="Zoom in"><i class="icon-plus"></i></a>
     <a href="#" class="zoom-out btn" title="Zoom out"><i class="icon-minus"></i></a>
   </div>
+  <a href="#" class="help btn btn-info"><i class="icon-question-sign icon-white"></i></a>
 </div>
 
 <div id="main_menu">
