@@ -84,8 +84,8 @@ class Layer < ActiveRecord::Base
     end
     zip_name = "/#{email ? email+"_" : ""}#{Status.key_for(layer_name).to_s}_#{Status.key_for(layer_status).to_s}.zip"
     email_query = layer_status != Status::USER_EDITS ? "" : ( email.present? ? sanitize_sql_array(["AND email like ?", email]) : "AND email IS NOT NULL" )
-    name_query = sanitize_sql_array(["name = ", layer_name])
-    status_query = sanitize_sql_array(["status = ", layer_status])
+    name_query = sanitize_sql_array(["name = ?", layer_name])
+    status_query = sanitize_sql_array(["status = ?", layer_status])
     query = "SELECT * FROM #{APP_CONFIG['cartodb_table']} WHERE #{name_query} AND #{status_query} #{email_query} LIMIT #{USER_EDITS_LIMIT}&format=geojson"
     url = URI.escape "http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}"
     uri = URI.parse url
