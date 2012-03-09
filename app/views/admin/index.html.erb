@@ -1,8 +1,7 @@
 <h1>The admin side is here to serve you</h1>
 <p>Behold of amazing options:</p>
 <ul>
-  <li><%= link_to "Get user edits (.csv)", admin_download_user_edits_path %></li>
-  <li><%= link_to "Get user edits (.shp)", admin_download_user_edits_path(:output_format => 'shp') %></li>
+  <li><%= link_to "Get user edits (.shp)", admin_download_user_edits_path %></li>
 </ul>
 
 <p>There were <strong><%= pluralize(Layer.count, 'user edit') %></strong> by <strong><%= pluralize(@layers.length, 'diferent user') %></strong>.</p>

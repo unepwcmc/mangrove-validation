@@ -1,6 +1,7 @@
 class Layer < ActiveRecord::Base
   NAMES = %w(mangrove coral)
   ACTIONS = %w(validate add delete)
+  USER_EDITS_LIMIT = 20
 
   validates :name, presence: true, inclusion: { in: NAMES, message: "%{value} is not a valid name" }
   validates :action, presence: true, inclusion: { in: ACTIONS, message: "%{value} is not a valid action" }
@@ -64,15 +65,7 @@ class Layer < ActiveRecord::Base
     puts "There was an error trying to execute the following query:\n#{sql}"
   end
 
-  def self.user_edits format
-    if format && format == "shp"
-      self.user_edits_shp
-    else
-      self.user_edits_csv
-    end
-  end
-
-  def self.user_edits_shp
+  def self.user_edits
     require 'net/http'
     require 'uri'
     #create folder if it doesn't exist
@@ -88,7 +81,7 @@ class Layer < ActiveRecord::Base
     if !File.exists?(zip_path)
       FileUtils.mkdir_p zip_path
     end
-    query = "SELECT * FROM #{APP_CONFIG['cartodb_table']} WHERE email IS NOT NULL LIMIT 20&format=geojson"
+    query = "SELECT * FROM #{APP_CONFIG['cartodb_table']} WHERE email IS NOT NULL LIMIT #{USER_EDITS_LIMIT}&format=geojson"
     url = URI.escape "http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}"
     uri = URI.parse url
     res = Net::HTTP.get_response(uri)
@@ -96,15 +89,5 @@ class Layer < ActiveRecord::Base
     system ogr_command
     system "zip -j #{zip_path}/user_edits.zip #{files_path}/*"
     zip_path+"/user_edits.zip"
-  end
-
-  def self.user_edits_csv
-    require 'csv'
-    CSV.generate do |csv|
-      csv << ["Email", "Action", "Polygon", "Date"]
-      Layer.order("created_at").each do |l|
-        csv << [l.email, l.action, l.polygon, l.created_at.strftime("%d/%b/%Y")]
-      end
-    end
   end
 end
