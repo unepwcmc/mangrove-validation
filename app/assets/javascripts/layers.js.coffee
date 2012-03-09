@@ -166,10 +166,10 @@ jQuery ->
 
     window.VALIDATION.map.setOptions({mapTypeId: google.maps.MapTypeId.SATELLITE})
 
-  $('#map_menu .use-terrain').click ->
+  $('#map_menu .use-hybrid').click ->
     $(this).addClass('btn-info').siblings().removeClass('btn-info')
 
-    window.VALIDATION.map.setOptions({mapTypeId: google.maps.MapTypeId.TERRAIN})
+    window.VALIDATION.map.setOptions({mapTypeId: google.maps.MapTypeId.HYBRID})
 
   # Submit modal
   $('#submitModal .submit-data').click ->
