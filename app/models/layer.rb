@@ -1,7 +1,4 @@
 class Layer < ActiveRecord::Base
-  NAMES = %w(mangrove coral)
-  LAYERS = %w(base community user_edits)
-  ACTIONS = %w(validate add delete)
   USER_EDITS_LIMIT = 20
 
   validates :name, presence: true, inclusion: { in: Names.list, message: "%{value} is not a valid name" }
