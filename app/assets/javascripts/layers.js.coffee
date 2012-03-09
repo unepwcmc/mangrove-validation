@@ -37,7 +37,7 @@ jQuery ->
       window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
 
       # Current action
-      window.VALIDATION.currentAction = 'validate'
+      window.VALIDATION.currentAction = 0#'validate' (check app/models/enumerations/actions.rb)
 
       $('#main_menu .submit-or-erase').removeClass('hide').css('right', '182px')
       $('#main_menu .edit-area').html('<i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span>').removeClass('btn-success btn-danger active').addClass('btn-warning')
@@ -64,7 +64,7 @@ jQuery ->
     window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
 
     # Current action
-    window.VALIDATION.currentAction = 'add'
+    window.VALIDATION.currentAction = 1#'add' (check app/models/enumerations/actions.rb)
 
     $('#main_menu .submit-or-erase').removeClass('hide').css('right', '-5px')
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
@@ -81,7 +81,7 @@ jQuery ->
     window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
 
     # Current action
-    window.VALIDATION.currentAction = 'delete'
+    window.VALIDATION.currentAction = 2 #'delete' (check app/models/enumerations/actions.rb)
 
     $('#main_menu .submit-or-erase').removeClass('hide').css('right', '-5px')
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
@@ -110,7 +110,7 @@ jQuery ->
       $(this).removeClass('btn-danger')
       $(this).find('i').removeClass('icon-white')
 
-      if window.VALIDATION.selectedLayer == 'mangrove'
+      if window.VALIDATION.selectedLayer == 0 #'mangrove' (check app/models/enumerations/names.rb)
         window.VALIDATION.mangroves.show()
         window.VALIDATION.mangroves_validated.show()
         window.VALIDATION.corals.hide()
@@ -138,7 +138,7 @@ jQuery ->
       window.VALIDATION.corals.hide()
       window.VALIDATION.corals_validated.hide()
 
-    window.VALIDATION.selectedLayer = 'mangrove'
+    window.VALIDATION.selectedLayer = 0 #'mangrove' (check app/models/enumerations/names.rb)
 
     if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom
       $('#main_menu .actions').removeClass('hide')
@@ -154,7 +154,7 @@ jQuery ->
       window.VALIDATION.corals.show()
       window.VALIDATION.corals_validated.show()
 
-    window.VALIDATION.selectedLayer = 'coral'
+    window.VALIDATION.selectedLayer = 1 #'coral' (check app/models/enumerations/names.rb)
 
     if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom
       $('#main_menu .actions').removeClass('hide')

@@ -15,46 +15,46 @@ class Layer < ActiveRecord::Base
       when 'validate'
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email)
-            (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{Names.values_for(name.upcase)}, #{Status::COMMUNITY}, #{Actions.values_for(action.upcase)}, '#{email}'
+            (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{name}, #{Status::VALIDATED}, #{action}, '#{email}'
               FROM #{APP_CONFIG['cartodb_table']}
-              WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)) AND status = #{Status::ORIGINAL} AND name = #{Names.values_for(name.upcase)});
-          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND name = #{NAMES.index(name)} AND status = #{Status::ORIGINAL}
+              WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)) AND status = #{Status::ORIGINAL} AND name = #{name});
+          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND name = #{name} AND status = #{Status::ORIGINAL}
         SQL
       when 'add'
         # Add with a hammer
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email) VALUES
-            (#{geom_sql}, #{NAMES.index(name)}, #{Status::VALIDATED}, #{ACTIONS.index(action)}, '#{email}');
+            (#{geom_sql}, #{name}, #{Status::VALIDATED}, #{action}, '#{email}');
         SQL
 =begin
 # This way should work, but we're having some carto db issues, revisit
         # Add the difference
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status)
-            (SELECT ST_Multi((ST_Difference(#{geom_sql}, the_geom))), #{NAMES.index(name)}, 1
+            (SELECT ST_Multi((ST_Difference(#{geom_sql}, the_geom))), #{name}, 1
               FROM #{APP_CONFIG['cartodb_table']}
-              WHERE ST_Intersects(#{geom_sql}, the_geom) AND status = 1 AND name = #{NAMES.index(name)});
+              WHERE ST_Intersects(#{geom_sql}, the_geom) AND status = 1 AND name = #{name});
         SQL
         # Add the intersection
         sql = sql + <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status)
-            (SELECT ST_Multi((ST_Intersection(#{geom_sql}, the_geom))), #{NAMES.index(name)}, 1
+            (SELECT ST_Multi((ST_Intersection(#{geom_sql}, the_geom))), #{name}, 1
               FROM #{APP_CONFIG['cartodb_table']}
-              WHERE ST_Intersects(#{geom_sql}, the_geom) AND status = 1 AND name = #{NAMES.index(name)});
+              WHERE ST_Intersects(#{geom_sql}, the_geom) AND status = 1 AND name = #{name});
         SQL
 =end
         # Remove validated area from base
         sql = sql + <<-SQL
-          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = #{Status::ORIGINAL} AND name = #{Names.value_for(name.upcase)};
+          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = #{Status::ORIGINAL} AND name = #{name};
         SQL
         puts "Hammer Add: #{sql}"
       when 'delete'
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email)
-            (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{Names.value_for(name.upcase)}, NULL, #{Actions.value_for(action.upcase)}, '#{email}'
+            (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{name}, NULL, #{action}, '#{email}'
               FROM #{APP_CONFIG['cartodb_table']}
-              WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)) AND status IS NOT NULL AND name = #{Names.value_for(name.upcase)});
-          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND name = #{Names.value_for(name.upcase)} AND status IS NOT NULL
+              WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)) AND status IS NOT NULL AND name = #{name});
+          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND name = #{name} AND status IS NOT NULL
         SQL
     end
     CartoDB::Connection.query sql
