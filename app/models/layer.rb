@@ -65,7 +65,7 @@ class Layer < ActiveRecord::Base
     puts "There was an error trying to execute the following query:\n#{sql}"
   end
 
-  def self.user_edits
+  def self.user_edits email
     require 'net/http'
     require 'uri'
     #create folder if it doesn't exist
@@ -81,11 +81,12 @@ class Layer < ActiveRecord::Base
     if !File.exists?(zip_path)
       FileUtils.mkdir_p zip_path
     end
-    query = "SELECT * FROM #{APP_CONFIG['cartodb_table']} WHERE email IS NOT NULL LIMIT #{USER_EDITS_LIMIT}&format=geojson"
+    email_query = email.present? ? sanitize_sql_array(["like ?", email]) : "IS NOT NULL"
+    query = "SELECT * FROM #{APP_CONFIG['cartodb_table']} WHERE email #{email_query} LIMIT #{USER_EDITS_LIMIT}&format=geojson"
     url = URI.escape "http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}"
     uri = URI.parse url
     res = Net::HTTP.get_response(uri)
-    ogr_command = "ogr2ogr -f 'ESRI Shapefile' #{files_path} '#{res.body}'"
+    ogr_command = "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{files_path} '#{res.body}'"
     system ogr_command
     system "zip -j #{zip_path}/user_edits.zip #{files_path}/*"
     zip_path+"/user_edits.zip"

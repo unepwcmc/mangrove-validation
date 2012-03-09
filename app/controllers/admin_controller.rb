@@ -6,7 +6,7 @@ class AdminController < ApplicationController
   end
 
   def download_user_edits
-    output = Layer.user_edits
+    output = Layer.user_edits(params[:email])
     send_file output, :filename => "user_edits.zip", :type => "application/zip"
   end
 

@@ -9,6 +9,6 @@
 <h2>Breakdown</h2>
 <ul>
   <% @layers.each do |layer| %>
-    <li><%= layer.email %> did <strong><%= pluralize(Layer.where(:email => layer.email).count, 'edit') %></strong></li>
+    <li><%= layer.email.presence||"Anonymous" %> did <strong><%= pluralize(Layer.where(:email => layer.email).count, 'edit') %></strong> (<%= link_to "Download edits (.shp)", admin_download_user_edits_path(:email => layer.email)%>)</li>
   <% end %>
 </ul>
