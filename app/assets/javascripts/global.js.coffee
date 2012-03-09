@@ -25,4 +25,4 @@ window.VALIDATION =
   corals_validated_params: null
   currentAction: null # Current user action ['validate', 'add', 'delete']
   submitModalEvents: {}
-  selectedLayer: 'mangrove'
+  selectedLayer: 0 #'mangrove' (check app/models/enumerations/names.rb)

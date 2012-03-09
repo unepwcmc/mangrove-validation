@@ -208,7 +208,7 @@ window.VALIDATION.initializeGoogleMaps = ->
   window.VALIDATION.map = new google.maps.Map(document.getElementById('map_canvas'), window.VALIDATION.mapOptions)
 
   google.maps.event.addListener window.VALIDATION.map, 'zoom_changed', ->
-    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom && window.VALIDATION.selectedLayer
+    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom && window.VALIDATION.selectedLayer >= 0
       $('#main_menu .zoom').addClass('hide')
       $('#main_menu .select-layer').addClass('hide')
       $('#main_menu .actions').removeClass('hide')
@@ -276,7 +276,7 @@ window.VALIDATION.initializeGoogleMaps = ->
   window.VALIDATION.corals_validated.hide() # Default hidden
 
   google.maps.event.addListener window.VALIDATION.map, 'click', (event) ->
-    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom && window.VALIDATION.mapPolygon && window.VALIDATION.selectedLayer
+    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom && window.VALIDATION.mapPolygon && window.VALIDATION.selectedLayer >= 0
       path = window.VALIDATION.mapPolygon.getPath()
       path.push(event.latLng)
       if path.length > 0

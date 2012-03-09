@@ -12,7 +12,7 @@ class Layer < ActiveRecord::Base
     geom_sql = "ST_GeomFromText('MULTIPOLYGON(((#{polygon})))', 4326)"
     # SQL CartoDB
     case self.action
-      when 'validate'
+      when Actions::VALIDATE
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email)
             (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{name}, #{Status::VALIDATED}, #{action}, '#{email}'
@@ -20,7 +20,7 @@ class Layer < ActiveRecord::Base
               WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)) AND status = #{Status::ORIGINAL} AND name = #{name});
           UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND name = #{name} AND status = #{Status::ORIGINAL}
         SQL
-      when 'add'
+      when Actions::ADD
         # Add with a hammer
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email) VALUES
@@ -48,7 +48,7 @@ class Layer < ActiveRecord::Base
           UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = #{Status::ORIGINAL} AND name = #{name};
         SQL
         puts "Hammer Add: #{sql}"
-      when 'delete'
+      when Actions::DELETE
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email)
             (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{name}, NULL, #{action}, '#{email}'
