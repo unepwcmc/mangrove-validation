@@ -1,10 +1,11 @@
 class Layer < ActiveRecord::Base
   NAMES = %w(mangrove coral)
+  LAYERS = %w(base community user_edits)
   ACTIONS = %w(validate add delete)
   USER_EDITS_LIMIT = 20
 
-  validates :name, presence: true, inclusion: { in: NAMES, message: "%{value} is not a valid name" }
-  validates :action, presence: true, inclusion: { in: ACTIONS, message: "%{value} is not a valid action" }
+  validates :name, presence: true, inclusion: { in: Names.list, message: "%{value} is not a valid name" }
+  validates :action, presence: true, inclusion: { in: Actions.list, message: "%{value} is not a valid action" }
   validates :polygon, presence: true
   validates :email, presence: true, format: {with: /\A[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]+\z/ }
 
@@ -17,16 +18,16 @@ class Layer < ActiveRecord::Base
       when 'validate'
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email)
-            (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{NAMES.index(name)}, 1, #{ACTIONS.index(action)}, '#{email}'
+            (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{Names.values_for(name.upcase)}, #{Status::COMMUNITY}, #{Actions.values_for(action.upcase)}, '#{email}'
               FROM #{APP_CONFIG['cartodb_table']}
-              WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)) AND status = 0 AND name = #{NAMES.index(name)});
-          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND name = #{NAMES.index(name)} AND status = 0
+              WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)) AND status = #{Status::ORIGINAL} AND name = #{Names.values_for(name.upcase)});
+          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND name = #{NAMES.index(name)} AND status = #{Status::ORIGINAL}
         SQL
       when 'add'
         # Add with a hammer
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email) VALUES
-            (#{geom_sql}, #{NAMES.index(name)}, 1, #{ACTIONS.index(action)}, '#{email}');
+            (#{geom_sql}, #{NAMES.index(name)}, #{Status::VALIDATED}, #{ACTIONS.index(action)}, '#{email}');
         SQL
 =begin
 # This way should work, but we're having some carto db issues, revisit
@@ -47,16 +48,16 @@ class Layer < ActiveRecord::Base
 =end
         # Remove validated area from base
         sql = sql + <<-SQL
-          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = 0 AND name = #{NAMES.index(name)};
+          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = #{Status::ORIGINAL} AND name = #{Names.value_for(name.upcase)};
         SQL
         puts "Hammer Add: #{sql}"
       when 'delete'
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email)
-            (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{NAMES.index(name)}, NULL, #{ACTIONS.index(action)}, '#{email}'
+            (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{Names.value_for(name.upcase)}, NULL, #{Actions.value_for(action.upcase)}, '#{email}'
               FROM #{APP_CONFIG['cartodb_table']}
-              WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)) AND status IS NOT NULL AND name = #{NAMES.index(name)});
-          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND name = #{NAMES.index(name)} AND status IS NOT NULL
+              WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)) AND status IS NOT NULL AND name = #{Names.value_for(name.upcase)});
+          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND name = #{Names.value_for(name.upcase)} AND status IS NOT NULL
         SQL
     end
     CartoDB::Connection.query sql
@@ -65,7 +66,7 @@ class Layer < ActiveRecord::Base
     puts "There was an error trying to execute the following query:\n#{sql}"
   end
 
-  def self.user_edits email
+  def self.get_from_cartodb layer_name, layer_status, email
     require 'net/http'
     require 'uri'
     #create folder if it doesn't exist
@@ -81,14 +82,17 @@ class Layer < ActiveRecord::Base
     if !File.exists?(zip_path)
       FileUtils.mkdir_p zip_path
     end
-    email_query = email.present? ? sanitize_sql_array(["like ?", email]) : "IS NOT NULL"
-    query = "SELECT * FROM #{APP_CONFIG['cartodb_table']} WHERE email #{email_query} LIMIT #{USER_EDITS_LIMIT}&format=geojson"
+    zip_name = "/#{email ? email+"_" : ""}#{Status.key_for(layer_name).to_s}_#{Status.key_for(layer_status).to_s}.zip"
+    email_query = layer_status != Status::USER_EDITS ? "" : ( email.present? ? sanitize_sql_array(["AND email like ?", email]) : "AND email IS NOT NULL" )
+    name_query = sanitize_sql_array(["name = ", layer_name])
+    status_query = sanitize_sql_array(["status = ", layer_status])
+    query = "SELECT * FROM #{APP_CONFIG['cartodb_table']} WHERE #{name_query} AND #{status_query} #{email_query} LIMIT #{USER_EDITS_LIMIT}&format=geojson"
     url = URI.escape "http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}"
     uri = URI.parse url
     res = Net::HTTP.get_response(uri)
     ogr_command = "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{files_path} '#{res.body}'"
     system ogr_command
-    system "zip -j #{zip_path}/user_edits.zip #{files_path}/*"
-    zip_path+"/user_edits.zip"
+    system "zip -j #{zip_path+zip_name} #{files_path}/*"
+    zip_path+zip_name
   end
 end

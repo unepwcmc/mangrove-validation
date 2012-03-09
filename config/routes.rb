@@ -1,6 +1,6 @@
 MangroveValidation::Application.routes.draw do
   match 'admin' => "admin#index"
-  match 'admin/download_user_edits' => "admin#download_user_edits"
+  match 'admin/download_from_cartodb' => "admin#download_from_cartodb"
 
   resources :layers, :only => [:index, :create]
 

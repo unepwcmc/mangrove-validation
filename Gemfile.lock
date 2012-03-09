@@ -75,6 +75,8 @@ GEM
       execjs
     coffee-script-source (1.2.0)
     columnize (0.3.5)
+    enumerate_it (0.7.12)
+      activesupport (>= 2.3.2)
     erubis (2.7.0)
     execjs (1.3.0)
       multi_json (~> 1.0)
@@ -178,6 +180,7 @@ DEPENDENCIES
   capistrano-ext
   cartodb-rb-client!
   coffee-rails (~> 3.2.1)
+  enumerate_it
   jquery-rails
   pg
   rails (= 3.2.1)

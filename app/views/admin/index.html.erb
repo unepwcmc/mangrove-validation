@@ -1,7 +1,10 @@
 <h1>The admin side is here to serve you</h1>
 <p>Behold of amazing options:</p>
 <ul>
-  <li><%= link_to "Get user edits (.shp)", admin_download_user_edits_path %></li>
+  <li><%= link_to "Download Mangroves community layer (.shp)", admin_download_from_cartodb_path(:status => Status::VALIDATED, :name => Names::MANGROVE) %></li>
+  <li><%= link_to "Download Corals community layer (.shp)", admin_download_from_cartodb_path(:status => Status::VALIDATED, :name => Names::CORAL) %></li>
+  <li><%= link_to "Download Mangroves user edits (.shp)", admin_download_from_cartodb_path(:status => Status::USER_EDITS, :name => Names::MANGROVE) %></li>
+  <li><%= link_to "Download Corals user edits (.shp)", admin_download_from_cartodb_path(:status => Status::USER_EDITS, :name => Names::MANGROVE) %></li>
 </ul>
 
 <p>There were <strong><%= pluralize(Layer.count, 'user edit') %></strong> by <strong><%= pluralize(@layers.length, 'diferent user') %></strong>.</p>
@@ -9,6 +12,10 @@
 <h2>Breakdown</h2>
 <ul>
   <% @layers.each do |layer| %>
-    <li><%= layer.email.presence||"Anonymous" %> did <strong><%= pluralize(Layer.where(:email => layer.email).count, 'edit') %></strong> (<%= link_to "Download edits (.shp)", admin_download_user_edits_path(:email => layer.email)%>)</li>
+    <li>
+      <%= layer.email.presence||"Anonymous" %> did <strong><%= pluralize(Layer.where(:email => layer.email).count, 'edit') %></strong>
+      (<%= link_to "Download Mangroves edits (.shp)", admin_download_from_cartodb_path(:email => layer.email, :status => Status::USER_EDITS, :name => Names::MANGROVE)%>)
+      (<%= link_to "Download Corals edits (.shp)", admin_download_from_cartodb_path(:email => layer.email, :status => Status::USER_EDITS, :name => Names::CORAL)%>)
+    </li>
   <% end %>
 </ul>
