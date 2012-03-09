@@ -6,7 +6,12 @@ class AdminController < ApplicationController
   end
 
   def download_user_edits
-    send_data Layer.user_edits_csv, :filename => "validation_user_edits.csv", :type => "application/csv"
+    output = Layer.user_edits(params[:output_format])
+    if params[:output_format] && params[:output_format] == "shp"
+      send_file output, :filename => "user_edits.zip", :type => "application/zip"
+    else
+      send_data output, :filename => "user_edits.csv", :type => "application/csv"
+    end
   end
 
   private

@@ -64,6 +64,40 @@ class Layer < ActiveRecord::Base
     puts "There was an error trying to execute the following query:\n#{sql}"
   end
 
+  def self.user_edits format
+    if format && format == "shp"
+      self.user_edits_shp
+    else
+      self.user_edits_csv
+    end
+  end
+
+  def self.user_edits_shp
+    require 'net/http'
+    require 'uri'
+    #create folder if it doesn't exist
+    base_path = "#{Rails.root}/tmp/exports/user_edits"
+    if !File.exists?(base_path)
+      FileUtils.mkdir_p base_path
+    end
+    files_path = base_path + "/files"
+    if !File.exists?(files_path)
+      FileUtils.mkdir_p files_path
+    end
+    zip_path = base_path + "/zip"
+    if !File.exists?(zip_path)
+      FileUtils.mkdir_p zip_path
+    end
+    query = "SELECT * FROM #{APP_CONFIG['cartodb_table']} WHERE email IS NOT NULL LIMIT 20&format=geojson"
+    url = URI.escape "http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}"
+    uri = URI.parse url
+    res = Net::HTTP.get_response(uri)
+    ogr_command = "ogr2ogr -f 'ESRI Shapefile' #{files_path} '#{res.body}'"
+    system ogr_command
+    system "zip -j #{zip_path}/user_edits.zip #{files_path}/*"
+    zip_path+"/user_edits.zip"
+  end
+
   def self.user_edits_csv
     require 'csv'
     CSV.generate do |csv|
