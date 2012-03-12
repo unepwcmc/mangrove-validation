@@ -55,12 +55,17 @@ class Layer < ActiveRecord::Base
         SQL
 
       when Actions::DELETE
+        # Insert deleted area
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email)
             (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{name}, NULL, #{action}, '#{email}'
               FROM #{APP_CONFIG['cartodb_table']}
               WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)) AND status IS NOT NULL AND name = #{name});
-          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND name = #{name} AND status IS NOT NULL
+        SQL
+
+        # Remove all intersecting area
+        sql = sql + <<-SQL
+          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status IS NOT NULL AND name = #{name};
         SQL
     end
     CartoDB::Connection.query sql
