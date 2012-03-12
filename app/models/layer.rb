@@ -13,15 +13,21 @@ class Layer < ActiveRecord::Base
     # SQL CartoDB
     case self.action
       when Actions::VALIDATE
+        # Insert validated area polygon
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email)
-            (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{name}, #{Status::VALIDATED}, #{action}, '#{email}'
+            (SELECT ST_Multi(ST_Intersection(the_geom, #{geom_sql})), #{name}, #{Status::VALIDATED}, #{action}, '#{email}'
               FROM #{APP_CONFIG['cartodb_table']}
-              WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)) AND status = #{Status::ORIGINAL} AND name = #{name});
-          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326)) AND name = #{name} AND status = #{Status::ORIGINAL}
+              WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = #{Status::ORIGINAL} AND name = #{name});
         SQL
+
+        # Remove validated area from base
+        sql = sql + <<-SQL
+          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = #{Status::ORIGINAL} AND name = #{name};
+        SQL
+
       when Actions::ADD
-        # Add with a hammer
+        # Just add the new polygon (don't worry about overlapping)
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email) VALUES
             (#{geom_sql}, #{name}, #{Status::VALIDATED}, #{action}, '#{email}');
@@ -47,7 +53,7 @@ class Layer < ActiveRecord::Base
         sql = sql + <<-SQL
           UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = #{Status::ORIGINAL} AND name = #{name};
         SQL
-        puts "Hammer Add: #{sql}"
+
       when Actions::DELETE
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email)
