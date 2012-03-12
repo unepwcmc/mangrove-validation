@@ -18,8 +18,8 @@ jQuery ->
     $('#landingModal').modal('show')
 
   $('#main_menu .zoom').click ->
-    window.VALIDATION.map.panTo(window.VALIDATION.mapOptions.center)
     window.VALIDATION.map.setZoom(window.VALIDATION.minEditZoom)
+    #window.VALIDATION.map.panTo(window.VALIDATION.mapOptions.center)
 
   $('#main_menu .validate').click ->
     # Google Maps Polygon
