@@ -1,6 +1,6 @@
 namespace :generate_layer_files do
   desc 'Generate community layer files for download'
-  task :all => [:generate_mangrove_layer_files, :generate_coral_layer_files] do
+  task :all => [:"generate_layer_files:mangrove", :"generate_layer_files:coral"] do
   end
   desc 'Generate mangrove community layer files for download'
   task :mangrove => :environment do
