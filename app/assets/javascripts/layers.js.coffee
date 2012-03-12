@@ -21,17 +21,23 @@ jQuery ->
     window.VALIDATION.map.setZoom(window.VALIDATION.minEditZoom)
 
   $('#main_menu .validate').click ->
-    # Google Maps Polygon
+    # Add button clicked
+
     window.VALIDATION.mapPolygon.setMap(null) if window.VALIDATION.mapPolygon
+
     if $(this).hasClass('active')
       window.VALIDATION.mapPolygon = null
       
       # Current action
       window.VALIDATION.currentAction = null
       
+      $('#tools .btn').removeClass('active')
       $('#main_menu .submit-or-erase').slideUp()
       $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
     else
+      $('#tools .btn').removeClass('active')
+      $(this).addClass('active')
+
       window.VALIDATION.mapPolygon = new google.maps.Polygon(_.extend(window.VALIDATION.mapPolygonOptions, {strokeColor: '#08c', fillColor: '#08c'}))
       window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
 
@@ -42,50 +48,60 @@ jQuery ->
       $('#main_menu .edit-area').html('<i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span>').removeClass('btn-success btn-danger active').addClass('btn-warning')
       $('#main_menu ul.dropdown-menu li.divider').addClass('hide').next('li').addClass('hide')
 
-  $('#main_menu .cancel-edit-area').click ->
-    if($('#main_menu .edit-area').hasClass('active'))
-      window.VALIDATION.mapPolygon = null
-      
-      # Current action
-      window.VALIDATION.currentAction = null
-      
-      $('#main_menu .submit-or-erase').slideUp()
-      $('#main_menu .edit-area').html('<i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span>').removeClass('btn-success btn-danger active').addClass('btn-warning')
-      $(this).parent('li').addClass('hide').prev('li.divider').addClass('hide')
-
   $('#main_menu .add-area').click ->
+    # Add button clicked
     $('#main_menu .edit-area').html('<i class="icon-plus icon-white"></i> Add new area <span class="caret"></span>').removeClass('btn-warning btn-danger').addClass('btn-success')
-    $('#main_menu .validate').button('toggle') if $('#main_menu .validate').hasClass('active')
 
-    # Google Maps Polygon
-    window.VALIDATION.mapPolygon.setMap(null) if window.VALIDATION.mapPolygon
-    window.VALIDATION.mapPolygon = new google.maps.Polygon(_.extend(window.VALIDATION.mapPolygonOptions, {strokeColor: '#46a546', fillColor: '#46a546'}))
-    window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
+    if $(this).hasClass('active')
+      window.VALIDATION.mapPolygon.getPath().clear()
+      window.VALIDATION.currentAction = null
 
-    # Current action
-    window.VALIDATION.currentAction = 1#'add' (check app/models/enumerations/actions.rb)
+      # Deactivate button, hide submit/erase
+      $('#tools .btn').removeClass('active')
+      $('#main_menu .submit-or-erase').slideUp()
+    else
+      $('#tools .btn').removeClass('active')
+      $(this).addClass('active')
 
-    $('#main_menu .submit-or-erase').slideDown()
-    $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
-    $('#main_menu .edit-area').addClass('active')
-    $('#main_menu ul.dropdown-menu li').removeClass('hide')
+      # Google Maps Polygon
+      window.VALIDATION.mapPolygon.setMap(null) if window.VALIDATION.mapPolygon
+      window.VALIDATION.mapPolygon = new google.maps.Polygon(_.extend(window.VALIDATION.mapPolygonOptions, {strokeColor: '#46a546', fillColor: '#46a546'}))
+      window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
+
+      # Current action
+      window.VALIDATION.currentAction = 1#'add' (check app/models/enumerations/actions.rb)
+
+      $('#main_menu .submit-or-erase').slideDown()
+      $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
+      $('#main_menu .edit-area').addClass('active')
+      $('#main_menu ul.dropdown-menu li').removeClass('hide')
 
   $('#main_menu .delete-area').click ->
     $('#main_menu .edit-area').html('<i class="icon-trash icon-white"></i> Delete area <span class="caret"></span>').removeClass('btn-warning btn-success').addClass('btn-danger')
-    $('#main_menu .validate').button('toggle') if $('#main_menu .validate').hasClass('active')
 
-    # Google Maps Polygon
-    window.VALIDATION.mapPolygon.setMap(null) if window.VALIDATION.mapPolygon
-    window.VALIDATION.mapPolygon = new google.maps.Polygon(_.extend(window.VALIDATION.mapPolygonOptions, {strokeColor: '#9d261d', fillColor: '#9d261d'}))
-    window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
+    if $(this).hasClass('active')
+      window.VALIDATION.mapPolygon.getPath().clear()
+      window.VALIDATION.currentAction = null
 
-    # Current action
-    window.VALIDATION.currentAction = 2 #'delete' (check app/models/enumerations/actions.rb)
+      # Deactivate button, hide submit/erase
+      $('#tools .btn').removeClass('active')
+      $('#main_menu .submit-or-erase').slideUp()
+    else
+      $('#tools .btn').removeClass('active')
+      $(this).addClass('active')
 
-    $('#main_menu .submit-or-erase').slideDown();
-    $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
-    $('#main_menu .edit-area').addClass('active')
-    $('#main_menu ul.dropdown-menu li').removeClass('hide')
+      # Google Maps Polygon
+      window.VALIDATION.mapPolygon.setMap(null) if window.VALIDATION.mapPolygon
+      window.VALIDATION.mapPolygon = new google.maps.Polygon(_.extend(window.VALIDATION.mapPolygonOptions, {strokeColor: '#9d261d', fillColor: '#9d261d'}))
+      window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
+
+      # Current action
+      window.VALIDATION.currentAction = 2 #'delete' (check app/models/enumerations/actions.rb)
+
+      $('#main_menu .submit-or-erase').slideDown();
+      $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
+      $('#main_menu .edit-area').addClass('active')
+      $('#main_menu ul.dropdown-menu li').removeClass('hide')
 
   $('#main_menu .submit-polygon').click ->
     unless $(this).hasClass('disabled')
