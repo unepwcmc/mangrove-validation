@@ -5,9 +5,14 @@ class AdminController < ApplicationController
     @layers = Layer.select("DISTINCT(email) AS email").order(:email)
   end
 
-  def download_from_cartodb
+  def generate_from_cartodb
     output = Layer.get_from_cartodb(params[:name].to_i, params[:status].to_i, params[:email])
-    send_file output, :filename => "#{params[:email] ? params[:email]+"_" : ""}#{Names.key_for(params[:name].to_i).to_s}_#{Status.key_for(params[:status].to_i).to_s}.zip", :type => "application/zip"
+    send_file output, :filename => Layer.zip_file_name(params[:name].to_i, params[:status].to_i, params[:email]), :type => "application/zip"
+  end
+
+  def download_from_cartodb
+    output = Layer.zip_file_path(params[:name].to_i, params[:status].to_i, params[:email])
+    send_file output, :filename => Layer.zip_file_name(params[:name].to_i, params[:status].to_i, params[:email]), :type => "application/zip"
   end
 
  private

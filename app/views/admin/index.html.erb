@@ -1,10 +1,10 @@
 <h1>The admin side is here to serve you</h1>
-<p>Behold of amazing download options <u>(these downloads are currently limited to 200 polygons each, for testing)</u>:</p>
+<p>Behold of amazing download options:</p>
 <ul>
   <li><%= link_to "Download Mangroves community layer (.shp)", admin_download_from_cartodb_path(:status => Status::VALIDATED, :name => Names::MANGROVE) %></li>
   <li><%= link_to "Download Corals community layer (.shp)", admin_download_from_cartodb_path(:status => Status::VALIDATED, :name => Names::CORAL) %></li>
-  <li><%= link_to "Download Mangroves user edits (.shp)", admin_download_from_cartodb_path(:status => Status::USER_EDITS, :name => Names::MANGROVE) %></li>
-  <li><%= link_to "Download Corals user edits (.shp)", admin_download_from_cartodb_path(:status => Status::USER_EDITS, :name => Names::MANGROVE) %></li>
+  <li><%= link_to "Download Mangroves user edits (.shp)", admin_generate_from_cartodb_path(:status => Status::USER_EDITS, :name => Names::MANGROVE) %></li>
+  <li><%= link_to "Download Corals user edits (.shp)", admin_generate_from_cartodb_path(:status => Status::USER_EDITS, :name => Names::MANGROVE) %></li>
 </ul>
 
 <p>There were <strong><%= pluralize(Layer.count, 'user edit') %></strong> by <strong><%= pluralize(@layers.length, 'diferent user') %></strong>.</p>
@@ -14,8 +14,8 @@
   <% @layers.each do |layer| %>
     <li>
       <%= layer.email.presence||"Anonymous" %> did <strong><%= pluralize(Layer.where(:email => layer.email).count, 'edit') %></strong>
-      (<%= link_to "Download Mangroves edits (.shp)", admin_download_from_cartodb_path(:email => layer.email, :status => Status::USER_EDITS, :name => Names::MANGROVE)%>)
-      (<%= link_to "Download Corals edits (.shp)", admin_download_from_cartodb_path(:email => layer.email, :status => Status::USER_EDITS, :name => Names::CORAL)%>)
+      (<%= link_to "Download Mangroves edits (.shp)", admin_generate_from_cartodb_path(:email => layer.email, :status => Status::USER_EDITS, :name => Names::MANGROVE)%>)
+      (<%= link_to "Download Corals edits (.shp)", admin_generate_from_cartodb_path(:email => layer.email, :status => Status::USER_EDITS, :name => Names::CORAL)%>)
     </li>
   <% end %>
 </ul>

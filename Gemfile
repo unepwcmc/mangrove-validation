@@ -43,8 +43,10 @@ gem 'enumerate_it'
 gem 'capistrano'
 gem 'brightbox'
 gem 'capistrano-ext'
+gem 'whenever'
 
 group :development, :test do
   # To use debugger
   gem 'ruby-debug19'#, :require => 'ruby-debug'
 end
+
