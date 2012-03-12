@@ -75,6 +75,8 @@ body {
     padding: 7px;
 
     #tools {
+      overflow:hidden;
+
       .validate {
         margin-right: 5px;
         float:left; 
@@ -83,9 +85,19 @@ body {
       div.btn-group {
         float:left;
       }
+
+      .btn {
+        width: 60px;
+      }
     }
 
     .submit-or-erase {
+      margin-top: 5px;
+      padding-top: 5px;
+      padding-left: 96px;
+      border-top: 1px solid #DDD;
+      overflow:hidden
+
       .btn {
         width: 70px;
       }
