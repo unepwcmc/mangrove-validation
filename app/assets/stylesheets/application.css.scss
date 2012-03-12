@@ -46,6 +46,12 @@ body {
   .modal-body {
     max-height: 360px;
     overflow: auto;
+    ol.letters {
+      list-style-type: lower-alpha;
+    }
+    ol.roman {
+      list-style-type: lower-roman;
+    }
   }
 }
 

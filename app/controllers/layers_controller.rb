@@ -16,8 +16,4 @@ class LayersController < ApplicationController
     @layer.save
     respond_with @layer
   end
-
-  def user_edits
-    send_data Layer.user_edits_csv, :filename => "validation_user_edits.csv", :type => "application/csv"
-  end
 end

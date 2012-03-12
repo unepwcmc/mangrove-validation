@@ -18,7 +18,6 @@ jQuery ->
     $('#landingModal').modal('show')
 
   $('#main_menu .zoom').click ->
-    window.VALIDATION.map.panTo(window.VALIDATION.mapOptions.center)
     window.VALIDATION.map.setZoom(window.VALIDATION.minEditZoom)
 
   $('#main_menu .validate').click ->
@@ -37,7 +36,7 @@ jQuery ->
       window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
 
       # Current action
-      window.VALIDATION.currentAction = 'validate'
+      window.VALIDATION.currentAction = 0#'validate' (check app/models/enumerations/actions.rb)
 
       $('#main_menu .submit-or-erase').removeClass('hide').css('right', '182px')
       $('#main_menu .edit-area').html('<i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span>').removeClass('btn-success btn-danger active').addClass('btn-warning')
@@ -64,7 +63,7 @@ jQuery ->
     window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
 
     # Current action
-    window.VALIDATION.currentAction = 'add'
+    window.VALIDATION.currentAction = 1#'add' (check app/models/enumerations/actions.rb)
 
     $('#main_menu .submit-or-erase').removeClass('hide').css('right', '-5px')
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
@@ -81,7 +80,7 @@ jQuery ->
     window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
 
     # Current action
-    window.VALIDATION.currentAction = 'delete'
+    window.VALIDATION.currentAction = 2 #'delete' (check app/models/enumerations/actions.rb)
 
     $('#main_menu .submit-or-erase').removeClass('hide').css('right', '-5px')
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
@@ -110,7 +109,7 @@ jQuery ->
       $(this).removeClass('btn-danger')
       $(this).find('i').removeClass('icon-white')
 
-      if window.VALIDATION.selectedLayer == 'mangrove'
+      if window.VALIDATION.selectedLayer == 0 #'mangrove' (check app/models/enumerations/names.rb)
         window.VALIDATION.mangroves.show()
         window.VALIDATION.mangroves_validated.show()
         window.VALIDATION.corals.hide()
@@ -138,7 +137,7 @@ jQuery ->
       window.VALIDATION.corals.hide()
       window.VALIDATION.corals_validated.hide()
 
-    window.VALIDATION.selectedLayer = 'mangrove'
+    window.VALIDATION.selectedLayer = 0 #'mangrove' (check app/models/enumerations/names.rb)
 
     if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom
       $('#main_menu .actions').removeClass('hide')
@@ -154,7 +153,7 @@ jQuery ->
       window.VALIDATION.corals.show()
       window.VALIDATION.corals_validated.show()
 
-    window.VALIDATION.selectedLayer = 'coral'
+    window.VALIDATION.selectedLayer = 1 #'coral' (check app/models/enumerations/names.rb)
 
     if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom
       $('#main_menu .actions').removeClass('hide')
@@ -166,10 +165,10 @@ jQuery ->
 
     window.VALIDATION.map.setOptions({mapTypeId: google.maps.MapTypeId.SATELLITE})
 
-  $('#map_menu .use-terrain').click ->
+  $('#map_menu .use-hybrid').click ->
     $(this).addClass('btn-info').siblings().removeClass('btn-info')
 
-    window.VALIDATION.map.setOptions({mapTypeId: google.maps.MapTypeId.TERRAIN})
+    window.VALIDATION.map.setOptions({mapTypeId: google.maps.MapTypeId.HYBRID})
 
   # Submit modal
   $('#submitModal .submit-data').click ->
@@ -208,7 +207,7 @@ window.VALIDATION.initializeGoogleMaps = ->
   window.VALIDATION.map = new google.maps.Map(document.getElementById('map_canvas'), window.VALIDATION.mapOptions)
 
   google.maps.event.addListener window.VALIDATION.map, 'zoom_changed', ->
-    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom && window.VALIDATION.selectedLayer
+    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom && window.VALIDATION.selectedLayer >= 0
       $('#main_menu .zoom').addClass('hide')
       $('#main_menu .select-layer').addClass('hide')
       $('#main_menu .actions').removeClass('hide')
@@ -276,7 +275,7 @@ window.VALIDATION.initializeGoogleMaps = ->
   window.VALIDATION.corals_validated.hide() # Default hidden
 
   google.maps.event.addListener window.VALIDATION.map, 'click', (event) ->
-    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom && window.VALIDATION.mapPolygon && window.VALIDATION.selectedLayer
+    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom && window.VALIDATION.mapPolygon && window.VALIDATION.selectedLayer >= 0
       path = window.VALIDATION.mapPolygon.getPath()
       path.push(event.latLng)
       if path.length > 0

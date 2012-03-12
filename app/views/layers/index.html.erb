@@ -15,7 +15,7 @@
     <div class='control-row'>
       <div class="btn-group layer-switcher " data-toggle="buttons-radio">
         <button class="use-satellite btn btn-info active" title="Use satellite base layer">Satellite</button>
-        <button class="use-terrain btn" title="Use terrain base layer">Terrain</button>
+        <button class="use-hybrid btn" title="Use hybrid base layer">Hybrid</button>
       </div>
     </div>
 
@@ -60,23 +60,23 @@
       <%= link_to image_tag('cclme.png'), 'http://www.canarycurrent.org/' %>
       <%= link_to image_tag('unep_wcmc_logo.png'), 'http://unep-wcmc.org/' %>
     </div>
-    <p>This portal is designed to allow you to provide basic editing and validation input into the USGS Global Distribution of Mangrove (2000) dataset and the Global Distribution of Coral Reefs (2010) datasets held by UNEP-WCMC. While this is an early version with limited functionality, it allows users to spatially edit or validate either datasets based on</p>
-    <ul>
+    <p>This portal is designed to allow basic editing and validation of the Global Distribution of Coral Reefs (2010) and the African subset of the USGS Global Distribution of Mangrove (2000) datasets held by UNEP-WCMC. This is a beta version with limited functionality as yet but allows users to edit the spatial data and/or validate the datasets based on:</p>
+    <ol class="letters">
       <li>Local knowledge of the habitat in question</li>
-      <li>Clearly viewable omission or commission errors in the data</li>
+      <li>Obvious omission/commission errors in the data</li>
       <li>Basic user interpretation of the underlying imagery</li>
-    </ul>
-    <p>The outcome of your input is a higher quality dataset with greater verification and validation.</p>
-    <p>Simply choose the dataset you're interested in, and zoom in to the desired area. Then click on the type of editing you want to undertake using the tool bar on the top right of the screen and start clicking.</p>
+    </ol>
+    <p>The outcome of this input will be more reliable African mangrove and coral reef habitat spatial data through increased data validation and verification.</p>
+    <p>Simply choose the dataset you wish to edit and zoom in to the desired area. Select the type of editing that you want to undertake: Validate (agree with existing areas), Add or Delete, using the tool bar on the top right of the screen, and then start editing.</p>
     <h3>Editing limitations</h3>
-    <p>The temporal range of both the Coral reef and Mangrove the datasets will difficult to define as they will combine the temporal range of the baseline dataset and the added edits of the user community, which will be more difficult to define.</p>
-    <p>All edits should be based on clear errors/omissions in the data. Where there is any ambiguity, no edits/additions should be made. e.g. Mangrove and forest cover can be very hard to distinguish so it is not expected that users would undertake any differentiation between these two habitat types unless they had in-depth local knowledge.</p>
-    <p>Future functionalities could allow users to:</p>
-    <ol>
-      <li>Specify the type of editing they have undertaken based on the evidence they have used (e.g. a, b or c above)</li>
-      <li>Upload their own maps for integration into the community dataset</li>
-      <li>Download subsets of the dataset according to their defined area of interest</li>
-      <li>View imagery with explicit dates to facilitate local habitat change mapping</li>
+    <p>The temporal resolution of the edited Coral reef and Mangrove datasets will difficult to define as they will combine the temporal range of the baseline dataset and the added edits of the user community.</p>
+    <p>All edits should be based on clear errors/omissions in the data. Where there is any ambiguity, no edits/additions should be made. e.g. mangrove forests and terrestrial forest cover can be very hard to distinguish without viewing the region in a satellite image band combination suitable for mangrove identification, so it is not expected that users would undertake any differentiation between these two habitat types unless they had in-depth local knowledge.</p>
+    <p>Future functionalities will allow users to:</p>
+    <ol class="roman">
+      <li>Specify the type of editing they have undertaken (e.g. a, b or c above).</li>
+      <li>Upload their own spatial data for integration into the community dataset.</li>
+      <li>Download subsets of the dataset according to their own defined area of interest.</li>
+      <li>View imagery with explicit dates to facilitate local habitat change detection analyses.</li>
     </ol>
     <p>For any feedback or questions, please email <%= mail_to "niall.phelan@unep-wcmc.org" %>.</p>
   </div>
