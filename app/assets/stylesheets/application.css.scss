@@ -74,25 +74,18 @@ body {
 
     padding: 7px;
 
-    & > * {
-      float: right;
-    }
+    #tools {
+      .validate {
+        margin-right: 5px;
+        float:left; 
+      }
 
-    & > * + * {
-      margin-right: 5px;
-    }
-
-    ul.dropdown-menu {
-      right: 0;
-      left: initial;
-      min-width: 183px;
+      div.btn-group {
+        float:left;
+      }
     }
 
     .submit-or-erase {
-      position: absolute;
-      top: 33px;
-      right: -5px;
-
       .btn {
         width: 70px;
       }

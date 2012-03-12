@@ -29,7 +29,7 @@ jQuery ->
       # Current action
       window.VALIDATION.currentAction = null
       
-      $('#main_menu .submit-or-erase').addClass('hide')
+      $('#main_menu .submit-or-erase').slideUp()
       $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
     else
       window.VALIDATION.mapPolygon = new google.maps.Polygon(_.extend(window.VALIDATION.mapPolygonOptions, {strokeColor: '#08c', fillColor: '#08c'}))
@@ -38,7 +38,7 @@ jQuery ->
       # Current action
       window.VALIDATION.currentAction = 0#'validate' (check app/models/enumerations/actions.rb)
 
-      $('#main_menu .submit-or-erase').removeClass('hide').css('right', '182px')
+      $('#main_menu .submit-or-erase').slideDown()
       $('#main_menu .edit-area').html('<i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span>').removeClass('btn-success btn-danger active').addClass('btn-warning')
       $('#main_menu ul.dropdown-menu li.divider').addClass('hide').next('li').addClass('hide')
 
@@ -49,7 +49,7 @@ jQuery ->
       # Current action
       window.VALIDATION.currentAction = null
       
-      $('#main_menu .submit-or-erase').addClass('hide')
+      $('#main_menu .submit-or-erase').slideUp()
       $('#main_menu .edit-area').html('<i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span>').removeClass('btn-success btn-danger active').addClass('btn-warning')
       $(this).parent('li').addClass('hide').prev('li.divider').addClass('hide')
 
@@ -65,7 +65,7 @@ jQuery ->
     # Current action
     window.VALIDATION.currentAction = 1#'add' (check app/models/enumerations/actions.rb)
 
-    $('#main_menu .submit-or-erase').removeClass('hide').css('right', '-5px')
+    $('#main_menu .submit-or-erase').slideDown()
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
     $('#main_menu .edit-area').addClass('active')
     $('#main_menu ul.dropdown-menu li').removeClass('hide')
@@ -82,7 +82,7 @@ jQuery ->
     # Current action
     window.VALIDATION.currentAction = 2 #'delete' (check app/models/enumerations/actions.rb)
 
-    $('#main_menu .submit-or-erase').removeClass('hide').css('right', '-5px')
+    $('#main_menu .submit-or-erase').slideDown();
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
     $('#main_menu .edit-area').addClass('active')
     $('#main_menu ul.dropdown-menu li').removeClass('hide')
