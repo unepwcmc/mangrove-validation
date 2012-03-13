@@ -50,3 +50,4 @@ group :development, :test do
   gem 'ruby-debug19'#, :require => 'ruby-debug'
 end
 
+gem 'rake', '0.9.2'
