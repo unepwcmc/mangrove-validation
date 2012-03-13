@@ -32,13 +32,13 @@ class Layer < ActiveRecord::Base
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, email) 
             SELECT
-               CASE WHEN existing_validations.the_geom IS NOT NULL THEN 
+              ST_Multi(CASE WHEN existing_validations.the_geom IS NOT NULL THEN 
                 ST_Difference(
                   #{geom_sql},
                   ST_Multi(existing_validations.the_geom))
               ELSE
                 #{geom_sql}
-              END
+              END)
               ,#{name}, #{Status::VALIDATED}, '#{email}' FROM (
               SELECT ST_Union(the_geom) as the_geom
               FROM #{APP_CONFIG['cartodb_table']}
