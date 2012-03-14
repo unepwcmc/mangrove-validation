@@ -14,34 +14,30 @@ set :application, "validation-background-staging"
 ## List of servers
 server 'ec2-107-22-142-254.compute-1.amazonaws.com', :app, :web, :db, :primary => true, :jobs => true
 
-namespace :resque do
-  def rails_env
-    fetch(:rails_env, false) ? "RAILS_ENV=#{fetch(:rails_env)}" : ''
-  end
+after "deploy:symlink", "deploy:restart_workers"
+after "deploy:restart_workers", "deploy:restart_scheduler"
 
-  desc "Start resque scheduler, workers"
-  task :start, :roles => :app, :only => { :jobs => true } do
-    run "cd #{current_path};#{rails_env} script/resque_scheduler_daemon start"
-    run "cd #{current_path};#{rails_env} script/resque_worker_daemon start"
-    run "cd #{current_path};RESQUE_THIN_ENV=#{stage} bundle exec thin -d -P /tmp/thin.pid -p 9292 -R config/resque_config.ru start; true"
-  end
-
-  # test commit for nohup
-  desc "Stop resque workers"
-  task :stop, :roles => :app, :only => { :jobs => true } do
-    run "cd #{current_path};#{rails_env} script/resque_scheduler_daemon stop"
-    run "cd #{current_path};#{rails_env} script/resque_worker_daemon stop"
-    run "cd #{current_path};RESQUE_THIN_ENV=#{stage} bundle exec thin -d -P /tmp/thin.pid -p 9292 -R config/resque_config.ru stop; true"
-  end
-
-  desc "Restart resque workers"
-  task :restart, :roles => :app, :only => { :jobs => true } do
-    run "cd #{current_path};#{rails_env} script/resque_scheduler_daemon restart"
-    run "cd #{current_path};#{rails_env} script/resque_worker_daemon restart"
-    [:stop, :start].each { |cmd| run "cd #{current_path};RESQUE_THIN_ENV=#{stage} bundle exec thin -d -P /tmp/thin.pid -p 9001 -R config/resque_config.ru #{cmd}; true"}
-  end
+##
+# Rake helper task.
+# http://pastie.org/255489
+# http://geminstallthat.wordpress.com/2008/01/27/rake-tasks-through-capistrano/
+# http://ananelson.com/said/on/2007/12/30/remote-rake-tasks-with-capistrano/
+def run_remote_rake(rake_cmd)
+  rake_args = ENV['RAKE_ARGS'].to_s.split(',')
+  cmd = "cd #{fetch(:latest_release)} && #{fetch(:rake, "rake")} RAILS_ENV=#{fetch(:rails_env, "production")} #{rake_cmd}"
+  cmd += "['#{rake_args.join("','")}']" unless rake_args.empty?
+  run cmd
+  set :rakefile, nil if exists?(:rakefile)
 end
 
-after "deploy:stop", "resque:stop"
-after "deploy:start", "resque:start"
-after "deploy:restart", "resque:restart"
+namespace :deploy do
+  desc "Restart Resque Workers"
+  task :restart_workers, :roles => :db, :only => { :jobs => true } do
+    run_remote_rake "resque:restart_workers"
+  end
+
+  desc "Restart Resque scheduler"
+  task :restart_scheduler, :roles => :db, :only => { :jobs => true } do
+    run_remote_rake "resque:restart_scheduler"
+  end
+end
