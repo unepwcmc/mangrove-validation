@@ -1,6 +1,7 @@
 class LayerFile
   USER_EDITS_LIMIT = 500
   attr_reader :cartodb_table, :zip_name, :zip_path, :zip_ctime, :layer_name, :layer_status
+  attr_accessor :job_id
   def initialize(cartodb_table, layer_name, layer_status, email=nil)
     @cartodb_table = cartodb_table
     @layer_name = layer_name

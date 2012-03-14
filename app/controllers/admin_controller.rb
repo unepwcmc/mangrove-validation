@@ -10,6 +10,19 @@ class AdminController < ApplicationController
       LayerFile.new(APP_CONFIG['cartodb_table'], Names::MANGROVE, Status::USER_EDITS),
       LayerFile.new(APP_CONFIG['cartodb_table'], Names::CORAL, Status::USER_EDITS)
     ]
+    current_jobs = Resque.peek('statused', 0, 20)
+    current_jobs.each do |cj|
+      job_parameters = cj['args'].last
+      puts job_parameters.inspect
+      @generated_layer_files.each do |glf|
+        if glf.cartodb_table == job_parameters['cartodb_table'] &&
+          glf.layer_name == job_parameters['layer_name'] &&
+          glf.layer_status == job_parameters['layer_status']
+          glf.job_id = cj['args'].first
+          next
+        end
+      end
+    end
   end
 
   def generate_from_cartodb
@@ -20,10 +33,7 @@ class AdminController < ApplicationController
       :email => params[:email]
     }
     job_id = LayerFileJob.create(job_params)
-    redirect_to({:action => :index, :job_id => job_id}.merge job_params)
-    #output = LayerFile.new(APP_CONFIG['cartodb_table'], params[:name].to_i, params[:status].to_i, params[:email])
-    #output.generate
-    #send_file output.zip_path, :filename => output.zip_name, :type => "application/zip"
+    redirect_to({:action => :index, :job_id => job_id})
   end
 
   def download_from_cartodb

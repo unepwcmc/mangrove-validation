@@ -9,7 +9,15 @@
   <tbody>
   <% @generated_layer_files.each do |clf| %>
     <tr>
-      <td><%= clf.title %> </td><td><%= clf.zip_ctime %></td><td><%= layer_download_link(clf) %> <%= layer_generate_link(clf) %></td>
+      <td><%= clf.title %> </td>
+      <td>
+        <% if clf.job_id %>
+          <span id="<%= clf.job_id %>" class="job_in_progress">in progress</span>
+        <% else %>
+          <%= clf.zip_ctime %>
+        <% end %>
+      </td>
+      <td><%= layer_download_link(clf) %> <%= layer_generate_link(clf) %></td>
     </tr>
   <% end %>
   </tbody>
