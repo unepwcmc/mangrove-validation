@@ -35,3 +35,18 @@
     </li>
   <% end %>
 </ul>
+
+<script>
+/* poll for file generation status */
+$('.job_in_progress').each(function(i){
+  var job_id = this.id;
+  setInterval(function(){
+    $.ajax({ url: "/admin/get_job_status?job_id="+job_id, success: function(data){
+      if(data['status'] == 'completed'){
+        alert(data['message']);
+        window.location.reload();
+      }
+    }, dataType: "json"});
+  }, 30000);
+});
+</script>

@@ -25,6 +25,10 @@ class AdminController < ApplicationController
     end
   end
 
+  def get_job_status
+    render :json => Resque::Plugins::Status::Hash.get(params[:job_id])
+  end
+
   def generate_from_cartodb
     job_params = {
       :cartodb_table => APP_CONFIG['cartodb_table'],
@@ -46,8 +50,6 @@ class AdminController < ApplicationController
       authenticate_with_http_basic { |u, p| !APP_CONFIG['admins'].select{ |a| a['login'] == u && a['password'] == p }.empty? } || request_http_basic_authentication
     end
     def ensure_background_machine
-      puts request.host_with_port
-      puts APP_CONFIG['background_machine']
       unless request.host_with_port == APP_CONFIG['background_machine']
         redirect_to "http://#{APP_CONFIG['background_machine']}/admin"
       end
