@@ -1,6 +1,6 @@
 class AdminController < ApplicationController
-  before_filter :authenticate, :except => [:generate_from_cartodb, :download_from_cartodb]
-  before_filter :ensure_background_machine, :only => [:generate_from_cartodb, :download_from_cartodb]
+  before_filter :authenticate
+  before_filter :ensure_background_machine
 
   def index
     @layers = Layer.select("DISTINCT(email) AS email").order(:email)
@@ -30,8 +30,8 @@ class AdminController < ApplicationController
     def ensure_background_machine
       puts request.host_with_port
       puts APP_CONFIG['background_machine']
-      #unless request.host_with_port == APP_CONFIG['background_machine']
-      #  redirect_to :action => :index, :error => 'Operation not permitted on this machine'
-      #end
+      unless request.host_with_port == APP_CONFIG['background_machine']
+        redirect_to "http://#{APP_CONFIG['background_machine']}/admin"
+      end
     end
 end
