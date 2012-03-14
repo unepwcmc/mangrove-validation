@@ -1,15 +1,23 @@
 <h1>The admin side is here to serve you</h1>
 <p>Behold of amazing download options:</p>
-<ul>
-  <li><%= link_to "Download Mangroves community layer (.shp)", admin_download_from_cartodb_path(:status => Status::VALIDATED, :name => Names::MANGROVE) %></li>
-  <li><%= link_to "Download Corals community layer (.shp)", admin_download_from_cartodb_path(:status => Status::VALIDATED, :name => Names::CORAL) %></li>
-  <li><%= link_to "Download Mangroves user edits (.shp)", admin_generate_from_cartodb_path(:status => Status::USER_EDITS, :name => Names::MANGROVE) %></li>
-  <li><%= link_to "Download Corals user edits (.shp)", admin_generate_from_cartodb_path(:status => Status::USER_EDITS, :name => Names::MANGROVE) %></li>
-</ul>
 
-<p>There were <strong><%= pluralize(Layer.count, 'user edit') %></strong> by <strong><%= pluralize(@layers.length, 'diferent user') %></strong>.</p>
+<h2>Community layer files</h2>
+<table>
+  <thead>
+    <tr><th>File</th><th>Generated at</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+  <% @generated_layer_files.each do |clf| %>
+    <tr>
+      <td><%= clf.title %> </td><td><%= clf.zip_ctime %></td><td><%= layer_download_link(clf) %> <%= layer_generate_link(clf) %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
 
 <h2>Breakdown</h2>
+<p>There were <strong><%= pluralize(Layer.count, 'user edit') %></strong> by <strong><%= pluralize(@layers.length, 'diferent user') %></strong>.</p>
 <ul>
   <% @layers.each do |layer| %>
     <li>

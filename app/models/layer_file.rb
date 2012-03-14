@@ -1,7 +1,7 @@
 class LayerFile
   USER_EDITS_LIMIT = 500
-  attr_reader :zip_name, :zip_path, :zip_ctime
-  def initialize(layer_name, layer_status, email)
+  attr_reader :zip_name, :zip_path, :zip_ctime, :layer_name, :layer_status
+  def initialize(layer_name, layer_status, email=nil)
     @layer_name = layer_name
     @layer_status = layer_status
     @email = email
@@ -15,6 +15,12 @@ class LayerFile
     if File.exists?(@zip_path)
       @zip_ctime = File.ctime(@zip_path)
     end
+  end
+
+  def title
+    layer_name = Names.key_for(@layer_name).capitalize.to_s.pluralize
+    layer_type = (@layer_status == Status::VALIDATED ? 'community layer' : 'user edits')
+    [layer_name, layer_type, '(.shp)'].join(' ')
   end
 
   def generate
