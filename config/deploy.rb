@@ -1,7 +1,6 @@
+set :stages, %w(staging production background-staging)
 set :default_stage, 'staging'
 require 'capistrano/ext/multistage'
-set :whenever_environment, defer { stage }
-require 'whenever/capistrano'
 
 ## Generated with 'brightbox' on Thu Apr 21 11:12:49 +0100 2011
 gem 'brightbox', '>=2.3.8'
