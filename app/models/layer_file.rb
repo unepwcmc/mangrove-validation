@@ -1,7 +1,8 @@
 class LayerFile
   USER_EDITS_LIMIT = 500
-  attr_reader :zip_name, :zip_path, :zip_ctime, :layer_name, :layer_status
-  def initialize(layer_name, layer_status, email=nil)
+  attr_reader :cartodb_table, :zip_name, :zip_path, :zip_ctime, :layer_name, :layer_status
+  def initialize(cartodb_table, layer_name, layer_status, email=nil)
+    @cartodb_table = cartodb_table
     @layer_name = layer_name
     @layer_status = layer_status
     @email = email
@@ -30,7 +31,7 @@ class LayerFile
     name_query = ActiveRecord::Base.send(:sanitize_sql_array, ["name = ?", @layer_name])
     status_query = ActiveRecord::Base.send(:sanitize_sql_array, ["status = ?", @layer_status])
     #get total count of records
-    count_query = "SELECT COUNT(*) FROM #{APP_CONFIG['cartodb_table']} WHERE #{name_query} AND #{status_query}"
+    count_query = "SELECT COUNT(*) FROM #{@cartodb_table} WHERE #{name_query} AND #{status_query}"
     url = URI.escape "http://carbon-tool.cartodb.com/api/v1/sql?q=#{count_query}"
     uri = URI.parse url
     res = Net::HTTP.get_response(uri)
@@ -39,7 +40,7 @@ class LayerFile
     tmp_path = @base_path + "/tmp.json"
     File.open(tmp_path, "w+") do |f|
       0.upto (count/USER_EDITS_LIMIT).round do |i|
-        query = "SELECT * FROM #{APP_CONFIG['cartodb_table']} WHERE #{name_query} AND #{status_query} #{email_query} LIMIT #{USER_EDITS_LIMIT} OFFSET #{i}&format=geojson"
+        query = "SELECT * FROM #{@cartodb_table} WHERE #{name_query} AND #{status_query} #{email_query} LIMIT #{USER_EDITS_LIMIT} OFFSET #{i}&format=geojson"
         url = URI.escape "http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}"
         uri = URI.parse url
         res = Net::HTTP.get_response(uri)
