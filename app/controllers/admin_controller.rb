@@ -6,13 +6,14 @@ class AdminController < ApplicationController
   end
 
   def generate_from_cartodb
-    output = Layer.get_from_cartodb(params[:name].to_i, params[:status].to_i, params[:email])
-    send_file output, :filename => Layer.zip_file_name(params[:name].to_i, params[:status].to_i, params[:email]), :type => "application/zip"
+    output = LayerFile.new(params[:name].to_i, params[:status].to_i, params[:email])
+    output.generate
+    send_file output.zip_path, :filename => output.zip_name, :type => "application/zip"
   end
 
   def download_from_cartodb
-    output = Layer.zip_file_path(params[:name].to_i, params[:status].to_i, params[:email])
-    send_file output, :filename => Layer.zip_file_name(params[:name].to_i, params[:status].to_i, params[:email]), :type => "application/zip"
+    output = LayerFile.new(params[:name].to_i, params[:status].to_i, params[:email])
+    send_file output.zip_path, :filename => output.zip_name, :type => "application/zip"
   end
 
  private
