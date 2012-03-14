@@ -13,9 +13,17 @@ class AdminController < ApplicationController
   end
 
   def generate_from_cartodb
-    output = LayerFile.new(APP_CONFIG['cartodb_table'], params[:name].to_i, params[:status].to_i, params[:email])
-    output.generate
-    send_file output.zip_path, :filename => output.zip_name, :type => "application/zip"
+    job_params = {
+      :cartodb_table => APP_CONFIG['cartodb_table'],
+      :layer_name => params[:name].to_i,
+      :layer_status => params[:status].to_i,
+      :email => params[:email]
+    }
+    job_id = LayerFileJob.create(job_params)
+    redirect_to({:action => :index, :job_id => job_id}.merge job_params)
+    #output = LayerFile.new(APP_CONFIG['cartodb_table'], params[:name].to_i, params[:status].to_i, params[:email])
+    #output.generate
+    #send_file output.zip_path, :filename => output.zip_name, :type => "application/zip"
   end
 
   def download_from_cartodb

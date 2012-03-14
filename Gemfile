@@ -28,7 +28,8 @@ gem 'enumerate_it'
 
 #Handle background jobs
 #gem 'redis'
-#gem 'resque'
+gem 'resque'
+gem 'resque-status'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
