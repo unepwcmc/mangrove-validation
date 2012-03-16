@@ -23,9 +23,9 @@ jQuery ->
   $('#main_menu .validate').click ->
     # Add button clicked
 
-    window.VALIDATION.mapPolygon.setMap(null) if window.VALIDATION.mapPolygon
 
     if $(this).hasClass('active')
+      window.VALIDATION.mapPolygon.setMap(null)
       window.VALIDATION.mapPolygon = null
       
       # Current action
@@ -54,6 +54,7 @@ jQuery ->
 
     if $(this).hasClass('active')
       window.VALIDATION.mapPolygon.getPath().clear()
+      window.VALIDATION.mapPolygon.setMap(null)
       window.VALIDATION.currentAction = null
 
       # Deactivate button, hide submit/erase
@@ -81,6 +82,7 @@ jQuery ->
 
     if $(this).hasClass('active')
       window.VALIDATION.mapPolygon.getPath().clear()
+      window.VALIDATION.mapPolygon.setMap(null)
       window.VALIDATION.currentAction = null
 
       # Deactivate button, hide submit/erase
