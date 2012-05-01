@@ -158,6 +158,11 @@ jQuery ->
       $('#main_menu .actions').removeClass('hide')
       $('#main_menu .select-layer').addClass('hide')
       window.VALIDATION.mapPolygon.setEditable(true) if window.VALIDATION.mapPolygon
+    else
+      $('#main_menu .zoom').removeClass('hide')
+      $('#main_menu .select-layer').addClass('hide')
+      $('#main_menu .actions').addClass('hide')
+      window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
 
   $('#map_menu .use-satellite').click ->
     $(this).addClass('btn-info').siblings().removeClass('btn-info')
