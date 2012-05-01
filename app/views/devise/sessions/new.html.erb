@@ -1,0 +1,17 @@
+<%= simple_form_for(resource, :remote => true, :as => resource_name, :url => session_path(resource_name), :html => {:id => 'form_sign_in'}, :defaults => { :input_html => { :class => 'input-xlarge' } }) do |f| %>
+  <div class="modal-header">
+    <a class="close">×</a>
+    <h3>Sign in</h3>
+  </div>
+  <div class="modal-body">
+    <div class="inputs">
+      <%= f.input :email, :required => false, :autofocus => true %>
+      <%= f.input :password, :required => false %>
+      <%= f.input :remember_me, :as => :boolean if devise_mapping.rememberable? %>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <%= f.button :submit, "Sign in", class: 'btn-primary' %>
+    <%= render "links" %>
+  </div>
+<% end %>

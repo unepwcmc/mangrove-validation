@@ -113,7 +113,7 @@ jQuery ->
         console.log(arguments)
       error: (jqXHR, settings, exception) ->
         if jqXHR.status == 401 || jqXHR.status == 403 # Unauthorized OR Forbidden
-          $('#authModal').modal('show')
+          $.fancybox.open('/users/sign_in', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 360, closeBtn: false})
         else
           #FIXME
           console.log(arguments)
@@ -121,6 +121,19 @@ jQuery ->
     return false
 
   $('#main_menu .submit-polygon').click ->
+    # Fill form
+    $("form#new_layer input#layer_polygon").val ->
+      coordinates = []
+      path = window.VALIDATION.mapPolygon.getPath()
+      path.forEach (coordinate) ->
+        coordinates.push("#{coordinate.lng()} #{coordinate.lat()}")
+      coordinates.push("#{path.getAt(0).lng()} #{path.getAt(0).lat()}") # Close the polygon
+      "#{coordinates.join(',')}"
+
+    $("form#new_layer input#layer_name").val(window.VALIDATION.layers[window.VALIDATION.selectedLayer].id)
+    $("form#new_layer input#layer_action").val(window.VALIDATION.currentAction)
+
+    # Submit form
     $('form.new_layer').submit()
 
   $('#main_menu .erase-polygon').click ->
@@ -192,38 +205,6 @@ jQuery ->
     $(this).addClass('btn-info').siblings().removeClass('btn-info')
 
     window.VALIDATION.map.setOptions({mapTypeId: google.maps.MapTypeId.HYBRID})
-
-  # Submit modal
-  $('#submitModal .submit-data').click ->
-    $(this).button('loading')
-    $('#submitModal .modal-footer .close-modal').addClass('disabled')
-    $('#submitModal .modal-header .close').addClass('hide')
-
-    # Fill form
-    $("form#new_layer input#layer_polygon").val ->
-      coordinates = []
-      path = window.VALIDATION.mapPolygon.getPath()
-      path.forEach (coordinate) ->
-        coordinates.push("#{coordinate.lng()} #{coordinate.lat()}")
-      coordinates.push("#{path.getAt(0).lng()} #{path.getAt(0).lat()}") # Close the polygon
-      "#{coordinates.join(',')}"
-
-    $("form#new_layer input#layer_name").val(window.VALIDATION.layers[window.VALIDATION.selectedLayer].id)
-    $("form#new_layer input#layer_action").val(window.VALIDATION.currentAction)
-
-    # Remove event for closing the modal
-    window.VALIDATION.submitModalEvents['submitModal'] = $('#submitModal').data('events').click[0]
-    $('#submitModal').undelegate('[data-dismiss="modal"]', 'click.dismiss.modal', window.VALIDATION.submitModalEvents['submitModal']).delegate '[data-dismiss="modal"]', 'click.dismiss.modal', (event) ->
-      event.preventDefault()
-
-    # Remove event for clicking on the backdrop
-    window.VALIDATION.submitModalEvents['modal-backdrop'] = $('.modal-backdrop').data('events').click[0]
-    $('.modal-backdrop').unbind('click', window.VALIDATION.submitModalEvents['modal-backdrop']).click ->
-      event.preventDefault()
-    
-    # Remove event for clicking on the keyboard ESC
-    window.VALIDATION.submitModalEvents['document'] = $(document).data('events').keyup[0]
-    $(document).off('keyup.dismiss.modal', window.VALIDATION.submitModalEvents['document'])
 
 window.VALIDATION.initializeGoogleMaps = ->
   # Google Maps

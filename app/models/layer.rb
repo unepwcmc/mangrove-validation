@@ -1,10 +1,12 @@
 class Layer < ActiveRecord::Base
   USER_EDITS_LIMIT = 200
 
+  belongs_to :user
+
   validates :name, presence: true, inclusion: { in: Names.list, message: "%{value} is not a valid name" }
   validates :action, presence: true, inclusion: { in: Actions.list, message: "%{value} is not a valid action" }
   validates :polygon, presence: true
-  validates :email, presence: true, format: {with: /\A[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]+\z/ }
+  validates :user, presence: true
 
   before_create :cartodb
 
@@ -16,7 +18,7 @@ class Layer < ActiveRecord::Base
         # Insert validated area polygon
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email)
-            (SELECT ST_Multi(ST_Intersection(the_geom, #{geom_sql})), #{name}, #{Status::VALIDATED}, #{action}, '#{email}'
+            (SELECT ST_Multi(ST_Intersection(the_geom, #{geom_sql})), #{name}, #{Status::VALIDATED}, #{action}, '#{user.email}'
               FROM #{APP_CONFIG['cartodb_table']}
               WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = #{Status::ORIGINAL} AND name = #{name});
         SQL
@@ -39,7 +41,7 @@ class Layer < ActiveRecord::Base
               ELSE
                 #{geom_sql}
               END)
-              ,#{name}, #{Status::VALIDATED}, #{action}, '#{email}' FROM (
+              ,#{name}, #{Status::VALIDATED}, #{action}, '#{user.email}' FROM (
               SELECT ST_Union(the_geom) as the_geom
               FROM #{APP_CONFIG['cartodb_table']}
               WHERE ST_Intersects(#{geom_sql}, the_geom) AND status = #{Status::VALIDATED} AND name = #{name}
@@ -55,7 +57,7 @@ class Layer < ActiveRecord::Base
         # Insert deleted area
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email)
-            (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{name}, NULL, #{action}, '#{email}'
+            (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{name}, NULL, #{action}, '#{user.email}'
               FROM #{APP_CONFIG['cartodb_table']}
               WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)) AND status IS NOT NULL AND name = #{name});
         SQL
@@ -87,8 +89,8 @@ class Layer < ActiveRecord::Base
     if !File.exists?(zip_path)
       FileUtils.mkdir_p zip_path
     end
-    zip_name = "/#{email ? email+"_" : ""}#{Status.key_for(layer_name).to_s}_#{Status.key_for(layer_status).to_s}.zip"
-    email_query = layer_status != Status::USER_EDITS ? "" : ( email.present? ? sanitize_sql_array(["AND email like ?", email]) : "AND email IS NOT NULL" )
+    zip_name = "/#{user.email ? user.email+"_" : ""}#{Status.key_for(layer_name).to_s}_#{Status.key_for(layer_status).to_s}.zip"
+    email_query = layer_status != Status::USER_EDITS ? "" : ( user.email.present? ? sanitize_sql_array(["AND email like ?", email]) : "AND email IS NOT NULL" )
     name_query = sanitize_sql_array(["name = ?", layer_name])
     status_query = sanitize_sql_array(["status = ?", layer_status])
     query = "SELECT * FROM #{APP_CONFIG['cartodb_table']} WHERE #{name_query} AND #{status_query} #{email_query} LIMIT #{USER_EDITS_LIMIT}&format=geojson"
