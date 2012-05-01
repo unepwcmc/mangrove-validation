@@ -30,7 +30,7 @@ class Layer < ActiveRecord::Base
 
         # Add the user geometry, minus existing validations (using ST_Difference if any polys intersect)
         sql = <<-SQL
-          INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, email) 
+          INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, name, status, action, email) 
             SELECT
               ST_Multi(CASE WHEN existing_validations.the_geom IS NOT NULL THEN 
                 ST_Difference(
@@ -39,7 +39,7 @@ class Layer < ActiveRecord::Base
               ELSE
                 #{geom_sql}
               END)
-              ,#{name}, #{Status::VALIDATED}, '#{email}' FROM (
+              ,#{name}, #{Status::VALIDATED}, #{action}, '#{email}' FROM (
               SELECT ST_Union(the_geom) as the_geom
               FROM #{APP_CONFIG['cartodb_table']}
               WHERE ST_Intersects(#{geom_sql}, the_geom) AND status = #{Status::VALIDATED} AND name = #{name}

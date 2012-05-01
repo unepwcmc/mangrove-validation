@@ -7,13 +7,15 @@ $(document).on('keyup.dismiss.modal', window.VALIDATION.submitModalEvents['docum
 
 var random_number = Math.floor(Math.random()*100);
 // Update layers
-if(window.VALIDATION.mangroves_validated.isVisible()) {
-  window.VALIDATION.mangroves_validated.update(window.VALIDATION.mangroves_validated_params.query + " AND " + random_number + " = " + random_number);
-  window.VALIDATION.mangroves.update(window.VALIDATION.mangroves_params.query + " AND " + random_number + " = " + random_number);
-} else if(window.VALIDATION.corals_validated.isVisible()) {
-  window.VALIDATION.corals_validated.update(window.VALIDATION.corals_validated_params.query + " AND " + random_number + " = " + random_number);
-  window.VALIDATION.corals.update(window.VALIDATION.corals_params.query + " AND " + random_number + " = " + random_number);
-}
+var name = '';
+_.each(window.VALIDATION.layers, function(layer, layer_name) {
+  _.each(layer.editions, function(edition_properties, edition) {
+    name = (edition == 'base' ? layer_name : layer_name + '_' + edition);
+    if(window.VALIDATION[name].isVisible()) {
+      window.VALIDATION[name].update(window.VALIDATION[name + '_params'].query + " AND " + random_number + " = " + random_number);
+    }
+  });
+});
 
 <% if @layer.errors.any? %>
   $('#submitModal .submit-data').button('reset');

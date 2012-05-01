@@ -129,9 +129,11 @@ jQuery ->
         if layer == window.VALIDATION.selectedLayer
           window.VALIDATION[layer].show()
           window.VALIDATION["#{layer}_validated"].show()
+          window.VALIDATION["#{layer}_added"].show()
         else
           window.VALIDATION[layer].hide()
           window.VALIDATION["#{layer}_validated"].hide()
+          window.VALIDATION["#{layer}_added"].hide()
     else
       $(this).addClass('btn-danger')
       $(this).find('i').addClass('icon-white')
@@ -139,6 +141,7 @@ jQuery ->
       _.each window.VALIDATION.layers, (id, layer) ->
         window.VALIDATION[layer].hide()
         window.VALIDATION["#{layer}_validated"].hide()
+        window.VALIDATION["#{layer}_added"].hide()
 
   $('#map_menu .layer-switcher .dropdown-menu a').click ->
     $(this).parents('.layer-switcher').find('#selected-layer').html($(this).html())
@@ -150,9 +153,11 @@ jQuery ->
         if name == window.VALIDATION.selectedLayer
           window.VALIDATION[name].show()
           window.VALIDATION["#{name}_validated"].show()
+          window.VALIDATION["#{name}_added"].show()
         else
           window.VALIDATION[name].hide()
           window.VALIDATION["#{name}_validated"].hide()
+          window.VALIDATION["#{name}_added"].hide()
 
     if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]
       $('#main_menu .actions').removeClass('hide')
@@ -229,19 +234,27 @@ window.VALIDATION.initializeGoogleMaps = ->
 
   # CartoDB Layers
   _.each window.VALIDATION.layers, (layer, layer_name) ->
-    _.each layer.status, (status_properties, status_id) ->
-      name = `(status_id == 0 ? layer_name : layer_name + "_validated")`
+    _.each layer.editions, (edition_properties, edition) ->
+      name = switch edition
+        when 'base' then layer_name
+        when 'validated' then "#{layer_name}_validated"
+        when 'added' then "#{layer_name}_added"
+
+      if edition_properties.action?
+        query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=#{layer.id} AND status=#{edition_properties.status} AND action=#{edition_properties.action}"
+      else
+        query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=#{layer.id} AND status=#{edition_properties.status}"
 
       window.VALIDATION["#{name}_params"] =
         map_canvas: 'map_canvas'
         map: window.VALIDATION.map
         user_name: 'carbon-tool'
         table_name: window.CARTODB_TABLE
-        query: "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=#{layer.id} AND status=#{status_id}"
-        tile_style: "##{window.CARTODB_TABLE}{#{status_properties.style}}"
+        query: query
+        tile_style: "##{window.CARTODB_TABLE}{#{edition_properties.style}}"
 
       window.VALIDATION[name] = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION["#{name}_params"])
-      window.VALIDATION[name].hide() if status_properties.hide
+      window.VALIDATION[name].hide() if edition_properties.hide
 
   google.maps.event.addListener window.VALIDATION.map, 'click', (event) ->
     if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer] && window.VALIDATION.mapPolygon && window.VALIDATION.selectedLayer != 'hide'
