@@ -1,16 +1,14 @@
 class LayersController < ApplicationController
+  before_filter :authenticate_user!, :only => :create
+
   respond_to :html, :only => :index
   respond_to :js, :only => :create
 
-  # GET /layers
-  # GET /layers.json
   def index
     @layer = Layer.new
     respond_with @layer
   end
 
-  # POST /layers
-  # POST /layers.json
   def create
     @layer = Layer.new(params[:layer])
     @layer.name = params[:layer][:name].to_i

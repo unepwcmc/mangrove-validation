@@ -31,7 +31,7 @@
         <a href="#" class="zoom-in btn" title="Zoom in"><i class="icon-plus"></i></a>
         <a href="#" class="zoom-out btn" title="Zoom out"><i class="icon-minus"></i></a>
       </div>
-      <a href="#" class="help btn btn-info"><i class="icon-question-sign icon-white"></i></a>
+      <a href="#" class="help btn btn-info" title="Information"><i class="icon-question-sign icon-white"></i></a>
     </div>
   </div>
 
@@ -96,10 +96,12 @@
   </div>
 </div>
 
-<div class="modal hide" id="submitModal">
+<div class="modal hide" id="authModal">
   <div class="modal-header">
     <a class="close" data-dismiss="modal">×</a>
     <h3>Mangrove and Coral Validation Tool</h3>
   </div>
-  <%= render 'form' %>
+  <%= render 'auth_form' %>
 </div>
+
+<div style="display: none;"><%= render 'form' %></div>

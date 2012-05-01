@@ -103,11 +103,25 @@ jQuery ->
       $('#main_menu .edit-area').addClass('active')
       $('#main_menu ul.dropdown-menu li').removeClass('hide')
 
+  $('form.new_layer').submit ->
+    $.ajax
+      type: 'POST'
+      url: $(this).attr('action')
+      data: $(this).serialize()
+      dataType: 'json'
+      success: ->
+        console.log(arguments)
+      error: (jqXHR, settings, exception) ->
+        if jqXHR.status == 401 || jqXHR.status == 403 # Unauthorized OR Forbidden
+          $('#authModal').modal('show')
+        else
+          #FIXME
+          console.log(arguments)
+
+    return false
+
   $('#main_menu .submit-polygon').click ->
-    unless $(this).hasClass('disabled')
-      $('#submitModal .modal-body').removeClass('alert-error alert-success').find('.message').html('Please enter your email so we can attribute your contribution')
-      $('#submitModal .modal-footer .submit-data').button('reset')
-      $('#submitModal').modal('show')
+    $('form.new_layer').submit()
 
   $('#main_menu .erase-polygon').click ->
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')

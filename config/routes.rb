@@ -1,4 +1,6 @@
 MangroveValidation::Application.routes.draw do
+  devise_for :users
+
   match 'admin' => "admin#index"
   match 'admin/download_from_cartodb' => "admin#download_from_cartodb"
 

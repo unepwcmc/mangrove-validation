@@ -96,5 +96,5 @@ window.VALIDATION =
   saltmarshes_added_params: null
 
   currentAction: null # User actions: ['validate', 'add', 'delete']
-  submitModalEvents: {}
+  authModalEvents: {}
   selectedLayer: 'mangroves' # Name of the layer or 'hide'

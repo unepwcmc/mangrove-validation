@@ -25,6 +25,7 @@ end
 
 gem 'jquery-rails'
 gem 'enumerate_it'
+gem 'devise'
 
 #Handle background jobs
 #gem 'redis'
