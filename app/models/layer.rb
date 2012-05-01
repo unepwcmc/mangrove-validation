@@ -51,8 +51,6 @@ class Layer < ActiveRecord::Base
           UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = #{Status::ORIGINAL} AND name = #{name};
         SQL
 
-        puts "Add query: #{sql}"
-
       when Actions::DELETE
         # Insert deleted area
         sql = <<-SQL

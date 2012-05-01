@@ -18,12 +18,10 @@ jQuery ->
     $('#landingModal').modal('show')
 
   $('#main_menu .zoom').click ->
-    window.VALIDATION.map.setZoom(window.VALIDATION.minEditZoom)
+    window.VALIDATION.map.setZoom(window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer])
 
   $('#main_menu .validate').click ->
     # Add button clicked
-
-
     if $(this).hasClass('active')
       window.VALIDATION.mapPolygon.setMap(null)
       window.VALIDATION.mapPolygon = null
@@ -42,7 +40,7 @@ jQuery ->
       window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
 
       # Current action
-      window.VALIDATION.currentAction = 0#'validate' (check app/models/enumerations/actions.rb)
+      window.VALIDATION.currentAction = window.VALIDATION.actions['validate']
 
       $('#main_menu .submit-or-erase').slideDown()
       $('#main_menu .edit-area').html('<i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span>').removeClass('btn-success btn-danger active').addClass('btn-warning')
@@ -70,7 +68,7 @@ jQuery ->
       window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
 
       # Current action
-      window.VALIDATION.currentAction = 1#'add' (check app/models/enumerations/actions.rb)
+      window.VALIDATION.currentAction = window.VALIDATION.actions['add']
 
       $('#main_menu .submit-or-erase').slideDown()
       $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
@@ -98,7 +96,7 @@ jQuery ->
       window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
 
       # Current action
-      window.VALIDATION.currentAction = 2 #'delete' (check app/models/enumerations/actions.rb)
+      window.VALIDATION.currentAction = window.VALIDATION.actions['delete']
 
       $('#main_menu .submit-or-erase').slideDown();
       $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
@@ -127,53 +125,36 @@ jQuery ->
       $(this).removeClass('btn-danger')
       $(this).find('i').removeClass('icon-white')
 
-      if window.VALIDATION.selectedLayer == 0 #'mangrove' (check app/models/enumerations/names.rb)
-        window.VALIDATION.mangroves.show()
-        window.VALIDATION.mangroves_validated.show()
-        window.VALIDATION.corals.hide()
-        window.VALIDATION.corals_validated.hide()
-      else
-        window.VALIDATION.mangroves.hide()
-        window.VALIDATION.mangroves_validated.hide()
-        window.VALIDATION.corals.show()
-        window.VALIDATION.corals_validated.show()
+      _.each window.VALIDATION.layers, (id, layer) ->
+        if layer == window.VALIDATION.selectedLayer
+          window.VALIDATION[layer].show()
+          window.VALIDATION["#{layer}_validated"].show()
+        else
+          window.VALIDATION[layer].hide()
+          window.VALIDATION["#{layer}_validated"].hide()
     else
       $(this).addClass('btn-danger')
       $(this).find('i').addClass('icon-white')
 
-      window.VALIDATION.mangroves.hide()
-      window.VALIDATION.mangroves_validated.hide()
-      window.VALIDATION.corals.hide()
-      window.VALIDATION.corals_validated.hide()
+      _.each window.VALIDATION.layers, (id, layer) ->
+        window.VALIDATION[layer].hide()
+        window.VALIDATION["#{layer}_validated"].hide()
 
-  $('#map_menu .show-mangroves').click ->
-    $(this).addClass('btn-warning').siblings().removeClass('btn-success')
+  $('#map_menu .layer-switcher .dropdown-menu a').click ->
+    $(this).parents('.layer-switcher').find('#selected-layer').html($(this).html())
 
-    unless $('#map_menu .hide-data-layers').hasClass('active')
-      window.VALIDATION.mangroves.show()
-      window.VALIDATION.mangroves_validated.show()
-      window.VALIDATION.corals.hide()
-      window.VALIDATION.corals_validated.hide()
+    unless window.VALIDATION.selectedLayer == $(this).data('layer')
+      window.VALIDATION.selectedLayer = $(this).data('layer')
 
-    window.VALIDATION.selectedLayer = 0 #'mangrove' (check app/models/enumerations/names.rb)
+      _.each window.VALIDATION.layers, (layer, name) ->
+        if name == window.VALIDATION.selectedLayer
+          window.VALIDATION[name].show()
+          window.VALIDATION["#{name}_validated"].show()
+        else
+          window.VALIDATION[name].hide()
+          window.VALIDATION["#{name}_validated"].hide()
 
-    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom
-      $('#main_menu .actions').removeClass('hide')
-      $('#main_menu .select-layer').addClass('hide')
-      window.VALIDATION.mapPolygon.setEditable(true) if window.VALIDATION.mapPolygon
-
-  $('#map_menu .show-corals').click ->
-    $(this).addClass('btn-success').siblings().removeClass('btn-warning')
-
-    unless $('#map_menu .hide-data-layers').hasClass('active')
-      window.VALIDATION.mangroves.hide()
-      window.VALIDATION.mangroves_validated.hide()
-      window.VALIDATION.corals.show()
-      window.VALIDATION.corals_validated.show()
-
-    window.VALIDATION.selectedLayer = 1 #'coral' (check app/models/enumerations/names.rb)
-
-    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom
+    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]
       $('#main_menu .actions').removeClass('hide')
       $('#main_menu .select-layer').addClass('hide')
       window.VALIDATION.mapPolygon.setEditable(true) if window.VALIDATION.mapPolygon
@@ -203,7 +184,7 @@ jQuery ->
       coordinates.push("#{path.getAt(0).lng()} #{path.getAt(0).lat()}") # Close the polygon
       "#{coordinates.join(',')}"
 
-    $("form#new_layer input#layer_name").val(window.VALIDATION.selectedLayer)
+    $("form#new_layer input#layer_name").val(window.VALIDATION.layers[window.VALIDATION.selectedLayer].id)
     $("form#new_layer input#layer_action").val(window.VALIDATION.currentAction)
 
     # Remove event for closing the modal
@@ -225,12 +206,12 @@ window.VALIDATION.initializeGoogleMaps = ->
   window.VALIDATION.map = new google.maps.Map(document.getElementById('map_canvas'), window.VALIDATION.mapOptions)
 
   google.maps.event.addListener window.VALIDATION.map, 'zoom_changed', ->
-    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom && window.VALIDATION.selectedLayer >= 0
+    if window.VALIDATION.selectedLayer != 'hide' && window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]
       $('#main_menu .zoom').addClass('hide')
       $('#main_menu .select-layer').addClass('hide')
       $('#main_menu .actions').removeClass('hide')
       window.VALIDATION.mapPolygon.setEditable(true) if window.VALIDATION.mapPolygon
-    else if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom
+    else if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]
       $('#main_menu .zoom').addClass('hide')
       $('#main_menu .select-layer').removeClass('hide')
       $('#main_menu .actions').addClass('hide')
@@ -242,58 +223,23 @@ window.VALIDATION.initializeGoogleMaps = ->
       window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
 
   # CartoDB Layers
-  # Mangroves unverified layer
-  window.VALIDATION.mangroves_params =
-    map_canvas: 'map_canvas'
-    map: window.VALIDATION.map
-    user_name: 'carbon-tool'
-    table_name: window.CARTODB_TABLE
-    query: "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=0 AND status=0"
-    tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#B15F00;polygon-opacity:0.7;line-width:0}"
-    # map_style: true
+  _.each window.VALIDATION.layers, (layer, layer_name) ->
+    _.each layer.status, (status_properties, status_id) ->
+      name = `(status_id == 0 ? layer_name : layer_name + "_validated")`
 
-  window.VALIDATION.mangroves = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION.mangroves_params)
+      window.VALIDATION["#{name}_params"] =
+        map_canvas: 'map_canvas'
+        map: window.VALIDATION.map
+        user_name: 'carbon-tool'
+        table_name: window.CARTODB_TABLE
+        query: "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=#{layer.id} AND status=#{status_id}"
+        tile_style: "##{window.CARTODB_TABLE}{#{status_properties.style}}"
 
-  # Mangroves validated layer
-  window.VALIDATION.mangroves_validated_params =
-    map_canvas: 'map_canvas'
-    map: window.VALIDATION.map
-    user_name: 'carbon-tool'
-    table_name: window.CARTODB_TABLE
-    query: "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=0 AND status=1"
-    tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#FF8800;polygon-opacity:0.7;line-width:0}"
-    # map_style: true
-
-  window.VALIDATION.mangroves_validated = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION.mangroves_validated_params)
-
-  # Corals unverified layer
-  window.VALIDATION.corals_params =
-    map_canvas: 'map_canvas'
-    map: window.VALIDATION.map
-    user_name: 'carbon-tool'
-    table_name: window.CARTODB_TABLE
-    query: "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=1 AND status=0"
-    tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#A1A121;polygon-opacity:0.7;line-width:0}"
-    # map_style: true
-
-  window.VALIDATION.corals = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION.corals_params)
-  window.VALIDATION.corals.hide() # Default hidden
-
-  # Corals validated layer
-  window.VALIDATION.corals_validated_params =
-    map_canvas: 'map_canvas'
-    map: window.VALIDATION.map
-    user_name: 'carbon-tool'
-    table_name: window.CARTODB_TABLE
-    query: "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=1 AND status=1"
-    tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#fdfd34;polygon-opacity:0.7;line-width:0}"
-    # map_style: true
-
-  window.VALIDATION.corals_validated = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION.corals_validated_params)
-  window.VALIDATION.corals_validated.hide() # Default hidden
+      window.VALIDATION[name] = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION["#{name}_params"])
+      window.VALIDATION[name].hide() if status_properties.hide
 
   google.maps.event.addListener window.VALIDATION.map, 'click', (event) ->
-    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom && window.VALIDATION.mapPolygon && window.VALIDATION.selectedLayer >= 0
+    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer] && window.VALIDATION.mapPolygon && window.VALIDATION.selectedLayer != 'hide'
       path = window.VALIDATION.mapPolygon.getPath()
       path.push(event.latLng)
       if path.length > 0

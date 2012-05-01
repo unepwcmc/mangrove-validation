@@ -13,6 +13,8 @@ class LayersController < ApplicationController
   # POST /layers.json
   def create
     @layer = Layer.new(params[:layer])
+    @layer.name = params[:layer][:name].to_i
+    @layer.action = params[:layer][:action].to_i
     @layer.save
     respond_with @layer
   end

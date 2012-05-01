@@ -5,9 +5,16 @@
 <div id="map_menu" >
   <div id='layers-box' class='well'>
     <div class='control-row'>
-      <div class="btn-group layer-switcher layers" data-toggle="buttons-radio">
-        <button class="show-mangroves btn btn-warning active" title="Show mangroves layer">Mangroves</button>
-        <button class="show-corals btn" title="Show corals layer">Corals</button>
+      <div class="btn-group layer-switcher">
+        <a class="btn dropdown-toggle layers-selection" data-toggle="dropdown" href="#">
+          <span id="selected-layer">Mangroves</span>
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="#" data-layer="mangroves">Mangroves</a></li>
+          <li><a href="#" data-layer="corals">Corals</a></li>
+          <li><a href="#" data-layer="saltmarshes">Salt marshes</a></li>
+        </ul>
       </div>
       <a href="#" class="hide-data-layers btn" data-toggle="button" title="Hide layers"><i class="icon-eye-close"></i></a>
     </div>

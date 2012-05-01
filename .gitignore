@@ -27,3 +27,6 @@
 
 # OS X
 *.DS_Store
+
+# Netbeans
+/nbproject

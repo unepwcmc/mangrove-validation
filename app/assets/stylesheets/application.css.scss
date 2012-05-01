@@ -125,7 +125,9 @@ body {
 
   .control-row {
     margin-top: 6px;
-    overflow:hidden;
+    clear: both;
+    float: left;
+    width: 100%;
   }
   .control-row:first-child {
     margin-top: 0;
@@ -135,23 +137,24 @@ body {
     border-top: 1px solid #DDD;
   }
 
-  a {
-    float: left;
-  }
   #layers-box {
-    overflow:hidden;
     padding: 7px;
     margin-bottom: 5px;
+    float: left;
 
     .layer-switcher {
       float:left;
+      .layers-selection {
+        width: 122px;
+      }
       button {
-        width: 80px;
+        width: 90px;
       }
     }
 
     a.hide-data-layers {
       margin-left: 3px;
+      float: right;
     }
   }
   .zoom-group {
@@ -169,7 +172,7 @@ body {
   position: absolute;
   background: image-url('unep_wcmc_logo.png');
   bottom: 22px;
-  right: 125px;
+  right: 5px;
   width: 100px;
   height: 51px;
 }
