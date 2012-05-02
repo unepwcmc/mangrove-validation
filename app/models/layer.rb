@@ -7,6 +7,7 @@ class Layer < ActiveRecord::Base
   validates :action, presence: true, inclusion: { in: Actions.list, message: "%{value} is not a valid action" }
   validates :polygon, presence: true
   validates :user, presence: true
+  validates :knowledge, presence: true
 
   before_create :cartodb
 

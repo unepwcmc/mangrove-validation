@@ -95,12 +95,22 @@ body {
     .submit-or-erase {
       margin-top: 5px;
       padding-top: 5px;
-      padding-left: 96px;
+      padding-left: 0;
       border-top: 1px solid #DDD;
       overflow:hidden
 
       .btn {
         width: 70px;
+      }
+      
+      select.knowledge {
+        float: right;
+        width: 250px;
+      }
+      
+      .buttons {
+        float: right;
+        clear: both;
       }
     }
   }
@@ -197,6 +207,7 @@ body {
   .alert {
     margin: 0 auto;
     max-width: 350px;
+    text-align: center;
   }
 }
 
