@@ -1,21 +1,52 @@
 <h1>The admin side is here to serve you</h1>
-<p>Behold of amazing download options <u>(these downloads are currently limited to 200 polygons each, for testing)</u>:</p>
-<ul>
-  <li><%= link_to "Download Mangroves community layer (.shp)", admin_download_from_cartodb_path(:status => Status::VALIDATED, :name => Names::MANGROVE) %></li>
-  <li><%= link_to "Download Corals community layer (.shp)", admin_download_from_cartodb_path(:status => Status::VALIDATED, :name => Names::CORAL) %></li>
-  <li><%= link_to "Download Mangroves user edits (.shp)", admin_download_from_cartodb_path(:status => Status::USER_EDITS, :name => Names::MANGROVE) %></li>
-  <li><%= link_to "Download Corals user edits (.shp)", admin_download_from_cartodb_path(:status => Status::USER_EDITS, :name => Names::MANGROVE) %></li>
-</ul>
+<p>Behold of amazing download options:</p>
 
-<p>There were <strong><%= pluralize(Layer.count, 'user edit') %></strong> by <strong><%= pluralize(@layers.length, 'diferent user') %></strong>.</p>
+<h2>Community layer files</h2>
+<table>
+  <thead>
+    <tr><th>File</th><th>Generated at</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+  <% @generated_layer_files.each do |clf| %>
+    <tr>
+      <td><%= clf.title %> </td>
+      <td>
+        <% if clf.job_id %>
+          <span id="<%= clf.job_id %>" class="job_in_progress">in progress</span>
+        <% else %>
+          <%= clf.zip_ctime %>
+        <% end %>
+      </td>
+      <td><%= layer_download_link(clf) %> <%= layer_generate_link(clf) %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
 
 <h2>Breakdown</h2>
+<p>There were <strong><%= pluralize(Layer.count, 'user edit') %></strong> by <strong><%= pluralize(@layers.length, 'diferent user') %></strong>.</p>
 <ul>
   <% @layers.each do |layer| %>
     <li>
       <%= layer.email.presence||"Anonymous" %> did <strong><%= pluralize(Layer.where(:email => layer.email).count, 'edit') %></strong>
-      (<%= link_to "Download Mangroves edits (.shp)", admin_download_from_cartodb_path(:email => layer.email, :status => Status::USER_EDITS, :name => Names::MANGROVE)%>)
-      (<%= link_to "Download Corals edits (.shp)", admin_download_from_cartodb_path(:email => layer.email, :status => Status::USER_EDITS, :name => Names::CORAL)%>)
+      (<%= link_to "Download Mangroves edits (.shp)", admin_generate_from_cartodb_path(:email => layer.email, :status => Status::USER_EDITS, :name => Names::MANGROVE)%>)
+      (<%= link_to "Download Corals edits (.shp)", admin_generate_from_cartodb_path(:email => layer.email, :status => Status::USER_EDITS, :name => Names::CORAL)%>)
     </li>
   <% end %>
 </ul>
+
+<script>
+/* poll for file generation status */
+$('.job_in_progress').each(function(i){
+  var job_id = this.id;
+  setInterval(function(){
+    $.ajax({ url: "/admin/get_job_status?job_id="+job_id, success: function(data){
+      if(data['status'] == 'completed'){
+        alert(data['message']);
+        window.location.reload();
+      }
+    }, dataType: "json"});
+  }, 30000);
+});
+</script>

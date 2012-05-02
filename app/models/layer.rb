@@ -1,6 +1,4 @@
 class Layer < ActiveRecord::Base
-  USER_EDITS_LIMIT = 200
-
   validates :name, presence: true, inclusion: { in: Names.list, message: "%{value} is not a valid name" }
   validates :action, presence: true, inclusion: { in: Actions.list, message: "%{value} is not a valid action" }
   validates :polygon, presence: true
@@ -73,33 +71,4 @@ class Layer < ActiveRecord::Base
     puts "There was an error trying to execute the following query:\n#{sql}"
   end
 
-  def self.get_from_cartodb layer_name, layer_status, email
-    require 'net/http'
-    require 'uri'
-    #create folder if it doesn't exist
-    base_path = "#{Rails.root}/tmp/exports/user_edits"
-    if !File.exists?(base_path)
-      FileUtils.mkdir_p base_path
-    end
-    files_path = base_path + "/files"
-    if !File.exists?(files_path)
-      FileUtils.mkdir_p files_path
-    end
-    zip_path = base_path + "/zip"
-    if !File.exists?(zip_path)
-      FileUtils.mkdir_p zip_path
-    end
-    zip_name = "/#{email ? email+"_" : ""}#{Status.key_for(layer_name).to_s}_#{Status.key_for(layer_status).to_s}.zip"
-    email_query = layer_status != Status::USER_EDITS ? "" : ( email.present? ? sanitize_sql_array(["AND email like ?", email]) : "AND email IS NOT NULL" )
-    name_query = sanitize_sql_array(["name = ?", layer_name])
-    status_query = sanitize_sql_array(["status = ?", layer_status])
-    query = "SELECT * FROM #{APP_CONFIG['cartodb_table']} WHERE #{name_query} AND #{status_query} #{email_query} LIMIT #{USER_EDITS_LIMIT}&format=geojson"
-    url = URI.escape "http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}"
-    uri = URI.parse url
-    res = Net::HTTP.get_response(uri)
-    ogr_command = "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{files_path} '#{res.body}'"
-    system ogr_command
-    system "zip -j #{zip_path+zip_name} #{files_path}/*"
-    zip_path+zip_name
-  end
 end

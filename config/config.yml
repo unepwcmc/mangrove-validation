@@ -1,11 +1,15 @@
 development:
   cartodb_table: 'mangrove_and_coral_validation_development'
+  background_machine: 'ec2-107-22-142-254.compute-1.amazonaws.com'
 
 staging:
   cartodb_table: 'mangrove_and_coral_validation_development'
+  background_machine: 'ec2-107-22-142-254.compute-1.amazonaws.com'
 
 test:
   cartodb_table: 'mangrove_and_coral_validation_development'
+  background_machine: 'ec2-107-22-142-254.compute-1.amazonaws.com'
 
 production:
   cartodb_table: 'mangrove_and_coral_validation'
+  background_machine: 'ec2-107-22-142-254.compute-1.amazonaws.com'
