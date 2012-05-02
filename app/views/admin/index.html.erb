@@ -13,9 +13,9 @@
 <ul>
   <% @layers.each do |layer| %>
     <li>
-      <%= layer.email.presence||"Anonymous" %> did <strong><%= pluralize(Layer.where(:email => layer.email).count, 'edit') %></strong>
-      (<%= link_to "Download Mangroves edits (.shp)", admin_download_from_cartodb_path(:email => layer.email, :status => Status::USER_EDITS, :name => Names::MANGROVE)%>)
-      (<%= link_to "Download Corals edits (.shp)", admin_download_from_cartodb_path(:email => layer.email, :status => Status::USER_EDITS, :name => Names::CORAL)%>)
+      <%= layer.user.email.presence||"Anonymous" %> did <strong><%= pluralize(Layer.where(:user_id => layer.user.id).count, 'edit') %></strong>
+      (<%= link_to "Download Mangroves edits (.shp)", admin_download_from_cartodb_path(:user_id => layer.user_id, :status => Status::VALIDATED, :name => Names::MANGROVE)%>)
+      (<%= link_to "Download Corals edits (.shp)", admin_download_from_cartodb_path(:user_id => layer.user_id, :status => Status::VALIDATED, :name => Names::CORAL)%>)
     </li>
   <% end %>
 </ul>

@@ -73,7 +73,13 @@ class Layer < ActiveRecord::Base
     puts "There was an error trying to execute the following query:\n#{sql}"
   end
 
-  def self.get_from_cartodb layer_name, layer_status, email
+  # Generates a shp file of user edits of the specified type to the specified layer
+  #
+  # @param [Integer] layer_name enum of the layer you want edits to
+  # @param [Integer] layer_status enum of the status you want 
+  # @param [User] user the user you want edits by
+  # @return [String] Location of the shp file
+  def self.get_from_cartodb layer_name, layer_status, user
     require 'net/http'
     require 'uri'
     #create folder if it doesn't exist
@@ -89,17 +95,27 @@ class Layer < ActiveRecord::Base
     if !File.exists?(zip_path)
       FileUtils.mkdir_p zip_path
     end
+
     zip_name = "/#{user.email ? user.email+"_" : ""}#{Status.key_for(layer_name).to_s}_#{Status.key_for(layer_status).to_s}.zip"
-    email_query = layer_status != Status::USER_EDITS ? "" : ( user.email.present? ? sanitize_sql_array(["AND email like ?", email]) : "AND email IS NOT NULL" )
+
+    # Build the cartodb query
+    email_query = layer_status != Status::USER_EDITS ? "" : ( user.email.present? ? sanitize_sql_array(["AND email = ?", user.email]) : "AND email IS NOT NULL" )
     name_query = sanitize_sql_array(["name = ?", layer_name])
     status_query = sanitize_sql_array(["status = ?", layer_status])
     query = "SELECT * FROM #{APP_CONFIG['cartodb_table']} WHERE #{name_query} AND #{status_query} #{email_query} LIMIT #{USER_EDITS_LIMIT}&format=geojson"
+
+    # Get the data
     url = URI.escape "http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}"
     uri = URI.parse url
     res = Net::HTTP.get_response(uri)
+
+    logger.info url
+
+    #Build the zip file
     ogr_command = "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{files_path} '#{res.body}'"
     system ogr_command
     system "zip -j #{zip_path+zip_name} #{files_path}/*"
+
     zip_path+zip_name
   end
 end
