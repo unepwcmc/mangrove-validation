@@ -1,3 +1,4 @@
+set :stages, %w(staging production background-staging)
 set :default_stage, 'staging'
 require 'capistrano/ext/multistage'
 
@@ -52,7 +53,7 @@ default_run_options[:pty] = true # Must be set for the password prompt from git 
 # The shared area is prepared with 'deploy:setup' and all the shared
 # items are symlinked in when the code is updated.
 set :local_shared_files, %w(config/database.yml config/cartodb_config.yml config/http_auth_config.yml)
-set :local_shared_dirs, %w(public/system)
+set :local_shared_dirs, %w(public/system tmp/exports)
 
 task :setup_production_database_configuration do
   the_host = Capistrano::CLI.ui.ask("Database IP address: ")
