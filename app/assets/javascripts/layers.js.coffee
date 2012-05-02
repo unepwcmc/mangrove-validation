@@ -144,7 +144,7 @@ jQuery ->
     setTimeout("$('#alert-message').fadeOut('slow')", 2000)
   ).bind('ajax:error', (evt, data, status, xhr) ->
     if data.status == 401 || data.status == 403 # Unauthorized OR Forbidden
-      $.fancybox.open('/users/sign_in', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 360, closeBtn: false})
+      $.fancybox.open('/users/sign_in', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 380, closeBtn: false})
     else
       $("#alert-message .alert").removeClass('alert-success').addClass('alert-error').html("There was some error while trying to submit the data.")
       $("#alert-message").show()

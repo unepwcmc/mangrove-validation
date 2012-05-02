@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120501171957) do
+ActiveRecord::Schema.define(:version => 20120502103611) do
 
   create_table "layers", :force => true do |t|
     t.text     "polygon"
@@ -35,6 +35,8 @@ ActiveRecord::Schema.define(:version => 20120501171957) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
+    t.string   "name"
+    t.string   "institution"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

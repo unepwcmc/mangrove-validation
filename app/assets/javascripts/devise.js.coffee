@@ -27,6 +27,14 @@ $ ->
       $("form#form_sign_up span.help-block").remove()
       $("form#form_sign_up div.control-group").removeClass("error")
 
+      $.each(errors.name || [], (index, value) ->
+        $("form#form_sign_up input#user_name").after($("<span class='help-block'>Name #{value}</span>")).parents("div.control-group").addClass("error")
+      )
+
+      $.each(errors.institution || [], (index, value) ->
+        $("form#form_sign_up input#user_institution").after($("<span class='help-block'>Institution #{value}</span>")).parents("div.control-group").addClass("error")
+      )
+
       $.each(errors.email || [], (index, value) ->
         $("form#form_sign_up input#user_email").after($("<span class='help-block'>Email #{value}</span>")).parents("div.control-group").addClass("error")
       )
