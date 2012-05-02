@@ -11,7 +11,6 @@ require 'brightbox/passenger'
 # and Apache configs. Should be unique on the Brightbox
 set :application, "mangrove-validation"
 
-
 # Target directory for the application on the web and app servers.
 set(:deploy_to) { File.join("", "home", user, application) }
 
@@ -123,3 +122,11 @@ end
 after "deploy:setup", :setup_production_database_configuration
 after "deploy:setup", :setup_cartodb_configuration
 after "deploy:setup", :setup_http_auth_configuration
+
+namespace :deploy do
+  namespace :assets do
+    task :precompile, :roles => :web, :except => { :no_release => true } do
+      run "cd #{latest_release} && bundle exec #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:precompile"
+    end
+  end
+end
