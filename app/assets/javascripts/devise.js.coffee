@@ -6,16 +6,14 @@
 
 $ ->
   signInSuccessful = (evt, data, status, xhr) ->
-    # Remove errors
-    $(".alert").remove()
-    $("form#form_sign_up span.help-block").remove()
-    $("form#form_sign_up div.control-group").removeClass("error")
-
     # Close modalbox
     parent.$.fancybox.close()
 
+    # Check if user signed in
+    parent.checkUserSignedIn()
+
     # Re-submit polygon
-    #parent...
+    parent.$('#main_menu .submit-polygon').click()
 
   $("form").bind('ajax:success', signInSuccessful).bind('ajax:error', (evt, data, status, xhr) ->
     if $(evt.target).attr("id") == 'form_sign_in'

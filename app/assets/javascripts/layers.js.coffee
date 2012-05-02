@@ -2,9 +2,16 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
+# Check if user signed in
+window.checkUserSignedIn = ->
+  $.getJSON '/me', (data) ->
+    $(".logout").show().tooltip({title: "Logout #{data.email}", placement: 'bottom'})
+
 jQuery ->
+  checkUserSignedIn()
+
   # Tooltips
-  $('#map_menu .btn').tooltip({placement: 'bottom'})
+  $('#map_menu .show-tooltip').tooltip({placement: 'bottom'})
 
   $('[href^=#]').click (e) ->
     e.preventDefault()
@@ -103,23 +110,6 @@ jQuery ->
       $('#main_menu .edit-area').addClass('active')
       $('#main_menu ul.dropdown-menu li').removeClass('hide')
 
-  $('form.new_layer').submit ->
-    $.ajax
-      type: 'POST'
-      url: $(this).attr('action')
-      data: $(this).serialize()
-      dataType: 'json'
-      success: ->
-        console.log(arguments)
-      error: (jqXHR, settings, exception) ->
-        if jqXHR.status == 401 || jqXHR.status == 403 # Unauthorized OR Forbidden
-          $.fancybox.open('/users/sign_in', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 360, closeBtn: false})
-        else
-          #FIXME
-          console.log(arguments)
-
-    return false
-
   $('#main_menu .submit-polygon').click ->
     # Fill form
     $("form#new_layer input#layer_polygon").val ->
@@ -133,8 +123,35 @@ jQuery ->
     $("form#new_layer input#layer_name").val(window.VALIDATION.layers[window.VALIDATION.selectedLayer].id)
     $("form#new_layer input#layer_action").val(window.VALIDATION.currentAction)
 
+    $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
+
     # Submit form
-    $('form.new_layer').submit()
+    $('form#new_layer').submit()
+
+  $('form#new_layer').bind('ajax:success', (evt, data, status, xhr) ->
+    window.VALIDATION.mapPolygon.getPath().clear()
+
+    # Update layers
+    random_number = Math.floor(Math.random()*100)
+    _.each window.VALIDATION.layers, (layer, layer_name) ->
+      _.each layer.editions, (edition_properties, edition) ->
+        name = `(edition == 'base' ? layer_name : layer_name + '_' + edition)`
+        if window.VALIDATION[name].isVisible()
+          window.VALIDATION[name].update("#{window.VALIDATION["#{name}_params"].query} AND #{random_number} = #{random_number}")
+
+    $("#alert-message .alert").removeClass('alert-error').addClass('alert-success').html("Successfully submitted, thank you for your contribution.")
+    $("#alert-message").show()
+    setTimeout("$('#alert-message').fadeOut('slow')", 2000)
+  ).bind('ajax:error', (evt, data, status, xhr) ->
+    if data.status == 401 || data.status == 403 # Unauthorized OR Forbidden
+      $.fancybox.open('/users/sign_in', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 360, closeBtn: false})
+    else
+      $("#alert-message .alert").removeClass('alert-success').addClass('alert-error').html("There was some error while trying to submit the data.")
+      $("#alert-message").show()
+      setTimeout("$('#alert-message').fadeOut('slow')", 2000)
+
+    $('#main_menu .submit-polygon, #main_menu .erase-polygon').removeClass('disabled')
+  )
 
   $('#main_menu .erase-polygon').click ->
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')

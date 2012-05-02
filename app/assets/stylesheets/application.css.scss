@@ -165,7 +165,11 @@ body {
   }
   .help {
     margin-left: 5px;
-    float:right;
+    float: right;
+  }
+  .logout {
+    margin-left: 5px;
+    float: right;
   }
 }
 
@@ -182,6 +186,18 @@ body {
   border-top-color: white;
   opacity: 0.75;
   filter: alpha(opacity=75);
+}
+
+#alert-message {
+  position: absolute;
+  top: 5px;
+  left: 250px;
+  right: 300px;
+
+  .alert {
+    margin: 0 auto;
+    max-width: 350px;
+  }
 }
 
 /* Scrollbars */

@@ -6,6 +6,8 @@ MangroveValidation::Application.routes.draw do
 
   resources :layers, :only => [:index, :show, :create]
 
+  match 'me' => 'user#me'
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
