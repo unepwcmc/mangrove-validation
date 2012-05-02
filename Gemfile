@@ -29,7 +29,8 @@ gem 'devise'
 
 #Handle background jobs
 #gem 'redis'
-#gem 'resque'
+gem 'resque'
+gem 'resque-status'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
@@ -49,3 +50,5 @@ group :development, :test do
   # To use debugger
   gem 'ruby-debug19'#, :require => 'ruby-debug'
 end
+
+gem 'rake', '0.9.2'

@@ -50,6 +50,7 @@ jQuery ->
       window.VALIDATION.currentAction = window.VALIDATION.actions['validate']
 
       $('#main_menu .submit-or-erase').slideDown()
+      $("select.knowledge").val('')
       $('#main_menu .edit-area').html('<i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span>').removeClass('btn-success btn-danger active').addClass('btn-warning')
       $('#main_menu ul.dropdown-menu li.divider').addClass('hide').next('li').addClass('hide')
 
@@ -78,6 +79,7 @@ jQuery ->
       window.VALIDATION.currentAction = window.VALIDATION.actions['add']
 
       $('#main_menu .submit-or-erase').slideDown()
+      $("select.knowledge").val('')
       $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
       $('#main_menu .edit-area').addClass('active')
       $('#main_menu ul.dropdown-menu li').removeClass('hide')
@@ -105,7 +107,8 @@ jQuery ->
       # Current action
       window.VALIDATION.currentAction = window.VALIDATION.actions['delete']
 
-      $('#main_menu .submit-or-erase').slideDown();
+      $('#main_menu .submit-or-erase').slideDown()
+      $("select.knowledge").val('')
       $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
       $('#main_menu .edit-area').addClass('active')
       $('#main_menu ul.dropdown-menu li').removeClass('hide')
@@ -122,6 +125,7 @@ jQuery ->
 
     $("form#new_layer input#layer_name").val(window.VALIDATION.layers[window.VALIDATION.selectedLayer].id)
     $("form#new_layer input#layer_action").val(window.VALIDATION.currentAction)
+    $("form#new_layer input#layer_knowledge").val($(".knowledge").val())
 
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
 
@@ -142,6 +146,8 @@ jQuery ->
     $("#alert-message .alert").removeClass('alert-error').addClass('alert-success').html("Successfully submitted, thank you for your contribution.")
     $("#alert-message").show()
     setTimeout("$('#alert-message').fadeOut('slow')", 2000)
+
+    $("select.knowledge").val('')
   ).bind('ajax:error', (evt, data, status, xhr) ->
     if data.status == 401 || data.status == 403 # Unauthorized OR Forbidden
       $.fancybox.open('/users/sign_in', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 380, closeBtn: false})

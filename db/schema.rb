@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120502103611) do
+ActiveRecord::Schema.define(:version => 20120502111904) do
 
   create_table "layers", :force => true do |t|
     t.text     "polygon"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(:version => 20120502103611) do
     t.integer  "name"
     t.integer  "action"
     t.integer  "user_id"
+    t.string   "knowledge"
   end
 
   create_table "users", :force => true do |t|

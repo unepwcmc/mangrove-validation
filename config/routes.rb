@@ -2,7 +2,9 @@ MangroveValidation::Application.routes.draw do
   devise_for :users
 
   match 'admin' => "admin#index"
+  match 'admin/generate_from_cartodb' => "admin#generate_from_cartodb"
   match 'admin/download_from_cartodb' => "admin#download_from_cartodb"
+  match 'admin/get_job_status' => "admin#get_job_status"
 
   resources :layers, :only => [:index, :show, :create]
 

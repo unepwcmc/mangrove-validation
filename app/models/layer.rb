@@ -1,12 +1,11 @@
 class Layer < ActiveRecord::Base
-  USER_EDITS_LIMIT = 200
-
   belongs_to :user
 
   validates :name, presence: true, inclusion: { in: Names.list, message: "%{value} is not a valid name" }
   validates :action, presence: true, inclusion: { in: Actions.list, message: "%{value} is not a valid action" }
   validates :polygon, presence: true
   validates :user, presence: true
+  validates :knowledge, presence: true
 
   before_create :cartodb
 
