@@ -30,11 +30,13 @@ class AdminController < ApplicationController
   end
 
   def generate_from_cartodb
+    email = nil
+    email = User.find(params[:user_id]).email if params[:user_id].present?
     job_params = {
       :cartodb_table => APP_CONFIG['cartodb_table'],
       :layer_name => params[:name].to_i,
       :layer_status => params[:status].to_i,
-      :email => User.find(params[:user_id]).email
+      :email => email
     }
     job_id = LayerFileJob.create(job_params)
     redirect_to({:action => :index, :job_id => job_id})
