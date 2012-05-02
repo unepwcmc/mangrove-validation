@@ -19,3 +19,13 @@ Also, you'll need to create an http_auth_config.yml:
           -
            login: 'login'
            password: 'password'
+
+==Redis & Resque
+
+You need redis-server installed and running. Default redis config is in config/resque.yml.
+
+To get the workers running:
+
+  QUEUE=statused rake resque:work
+
+You can view the status of resque jobs in the browser using the resque-web tool.

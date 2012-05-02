@@ -5,6 +5,7 @@ class LayerFile
   attr_accessor :job_id
 
   # Creates a new LayerFile with specified layer filters, sets up locations for shp file generation
+  # sets the zip_ctime if a zip file is found
   #
   # @param [String] cartodb_table the cartodb table to download from
   # @param [Integer] layer_name the enum of the layer (e.g. mangrove)

@@ -7,7 +7,7 @@
     <tr><th>File</th><th>Generated at</th><th>Actions</th></tr>
   </thead>
   <tbody>
-  <% @generated_layer_files.each do |clf| %>
+  <% @community_layer_files.each do |clf| %>
     <tr>
       <td><%= clf.title %> </td>
       <td>
@@ -24,17 +24,25 @@
 </table>
 
 
-<h2>Breakdown</h2>
-<p>There were <strong><%= pluralize(Layer.count, 'user edit') %></strong> by <strong><%= pluralize(@layers.length, 'diferent user') %></strong>.</p>
-<ul>
-  <% @layers.each do |layer| %>
-    <li>
-      <%= layer.user.try(:email).presence||"Anonymous" %> did <strong><%= pluralize(Layer.where(:user_id => layer.user.try(:id)).count, 'edit') %></strong>
-      (<%= link_to "Download Mangroves edits (.shp)", admin_generate_from_cartodb_path(:user_id => layer.user_id, :status => Status::VALIDATED, :name => Names::MANGROVE)%>)
-      (<%= link_to "Download Corals edits (.shp)", admin_generate_from_cartodb_path(:user_id => layer.user_id, :status => Status::VALIDATED, :name => Names::CORAL)%>)
-    </li>
+<h2>Individual user layers</h2>
+<p>There were <strong><%= pluralize(Layer.count, 'user edit') %></strong> by <strong><%= pluralize(@user_layers.length, 'diferent user') %></strong>.</p>
+<table>
+  <thead>
+    <tr><th>User</th><th></th><th>Mangrove</th><th>Coral</th></tr>
+  </thead>
+  <tbody>
+  <%
+    @user_layers.each do |layer|
+      email = layer.user.try(:email)
+  %>
+    <tr>
+      <td><strong><%= email.presence||"Anonymous" %></strong></td>
+      <td><%= pluralize(Layer.where(:user_id => layer.user.try(:id)).count, 'edit') %></td>
+      <td><%= link_to "Generate Mangroves edits (.shp)", admin_generate_from_cartodb_path(:email => email, :status => Status::VALIDATED, :name => Names::MANGROVE)%></td>
+      <td><%= link_to "Generate Corals edits (.shp)", admin_generate_from_cartodb_path(:email => email, :status => Status::VALIDATED, :name => Names::CORAL)%></td>
+    </tr>
   <% end %>
-</ul>
+</table>
 
 <script>
 /* poll for file generation status */
