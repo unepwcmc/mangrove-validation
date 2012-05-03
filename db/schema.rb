@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120502111904) do
+ActiveRecord::Schema.define(:version => 20120503135120) do
+
+  create_table "layer_downloads", :force => true do |t|
+    t.string   "name"
+    t.integer  "layer"
+    t.integer  "status"
+    t.datetime "generated_at"
+    t.boolean  "finished"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
   create_table "layers", :force => true do |t|
     t.text     "polygon"
@@ -38,6 +48,8 @@ ActiveRecord::Schema.define(:version => 20120502111904) do
     t.datetime "updated_at",                             :null => false
     t.string   "name"
     t.string   "institution"
+    t.datetime "generated_at"
+    t.boolean  "finished"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

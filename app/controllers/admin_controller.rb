@@ -3,54 +3,56 @@ class AdminController < ApplicationController
   before_filter :ensure_background_machine
 
   def index
-    @layers = Layer.select("DISTINCT(email) AS email").order(:email)
-    @generated_layer_files = [
-      LayerFile.new(APP_CONFIG['cartodb_table'], Names::MANGROVE, Status::VALIDATED),
-      LayerFile.new(APP_CONFIG['cartodb_table'], Names::CORAL, Status::VALIDATED),
-      LayerFile.new(APP_CONFIG['cartodb_table'], Names::MANGROVE, Status::USER_EDITS),
-      LayerFile.new(APP_CONFIG['cartodb_table'], Names::CORAL, Status::USER_EDITS)
-    ]
-    current_jobs = Resque.peek('statused', 0, 20)
-    current_jobs.each do |cj|
-      job_parameters = cj['args'].last
-      puts job_parameters.inspect
-      @generated_layer_files.each do |glf|
-        if glf.cartodb_table == job_parameters['cartodb_table'] &&
-          glf.layer_name == job_parameters['layer_name'] &&
-          glf.layer_status == job_parameters['layer_status']
-          glf.job_id = cj['args'].first
-          next
-        end
-      end
+    @layer_downloads = LayerDownload.order(:id)
+    @users = User.order(:email)
+  end
+
+  # Generates download file from CartoDB
+  def generate
+    if params[:layer]
+      layer_download = LayerDownload.find(params[:layer])
+      layer_download.update_attributes(generated_at: Time.now, finished: false)
+      Resque.enqueue(DownloadJob, {:layer => layer_download.id})
+    else # user
+      user = User.find(params[:user])
+      user.update_attributes(generated_at: Time.now, finished: false)
+      Resque.enqueue(DownloadJob, {:user => user.id})
+    end
+
+    redirect_to :action => :index
+  end
+
+  # Downloads file generated from CartoDB
+  def download
+    if params[:layer]
+      layer_download = LayerDownload.find(params[:layer])
+      send_file DownloadJob.zip_path(:layer, params[:layer]), filename: "#{layer_download.name}.zip", type: 'application/zip'
+    else # user
+      user = User.find(params[:user])
+      send_file DownloadJob.zip_path(:user, params[:user]), filename: "#{user.email}.zip", type: 'application/zip'
     end
   end
+  
+  def download_users
+    require 'csv'
 
-  def get_job_status
-    render :json => Resque::Plugins::Status::Hash.get(params[:job_id])
+    users = CSV.generate do |csv|
+      csv << ['EMAIL']
+      User.order(:email).each do |user|
+        csv << [user.email]
+      end
+    end
+
+    send_data users, filename: 'users.csv', type: 'text/csv; charset=utf-8; header=present'
   end
 
-  def generate_from_cartodb
-    job_params = {
-      :cartodb_table => APP_CONFIG['cartodb_table'],
-      :layer_name => params[:name].to_i,
-      :layer_status => params[:status].to_i,
-      :email => params[:email]
-    }
-    job_id = LayerFileJob.create(job_params)
-    redirect_to({:action => :index, :job_id => job_id})
-  end
-
-  def download_from_cartodb
-    output = LayerFile.new(APP_CONFIG['cartodb_table'], params[:name].to_i, params[:status].to_i, params[:email])
-    send_file output.zip_path, :filename => output.zip_name, :type => "application/zip"
-  end
-
- private
+  private
     def authenticate
       authenticate_with_http_basic { |u, p| !APP_CONFIG['admins'].select{ |a| a['login'] == u && a['password'] == p }.empty? } || request_http_basic_authentication
     end
+
     def ensure_background_machine
-      unless request.host_with_port == APP_CONFIG['background_machine']
+      if Rails.env == 'production' && request.host_with_port != APP_CONFIG['background_machine']
         redirect_to "http://#{APP_CONFIG['background_machine']}/admin"
       end
     end
