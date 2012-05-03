@@ -26,7 +26,9 @@ You need redis-server installed and running. Default redis config is in config/r
 
 To get the workers running:
 
-  QUEUE=statused rake resque:work
+  QUEUE=download_serve rake resque:work
+
+With debug and verbose:
 
   VVERBOSE=1 QUEUE=download_serve bundle exec rake resque:work
 

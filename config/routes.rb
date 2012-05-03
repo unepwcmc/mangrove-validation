@@ -9,6 +9,7 @@ MangroveValidation::Application.routes.draw do
   match 'admin' => "admin#index"
   match 'admin/generate' => "admin#generate"
   match 'admin/download' => "admin#download"
+  match 'admin/download_users' => "admin#download_users"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

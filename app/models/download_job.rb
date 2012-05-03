@@ -23,12 +23,12 @@ class DownloadJob
       # Result count
       count = JSON.parse(res.body)["rows"].first["count"]
       
-      Tempfile.open('download') do |file|
+      Tempfile.open(['download', '.json']) do |file|
         0.upto (count/APP_CONFIG['admin_user_edits_limit']).round do |offset|
           query = "SELECT * FROM #{APP_CONFIG['cartodb_table']} WHERE #{where_clause} LIMIT #{APP_CONFIG['admin_user_edits_limit']} OFFSET #{offset * APP_CONFIG['admin_user_edits_limit']}"
           uri = URI.parse(URI.escape("http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}&format=geojson"))
           res = Net::HTTP.get_response(uri)
-          file << "#{res.body}\n"
+          file << res.body
         end
 
         file.rewind
@@ -38,7 +38,6 @@ class DownloadJob
         # Debug
         # system "cp #{file.path} ~/Desktop"
 
-        p "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{Rails.root}#{file.path}"
         system "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{Rails.root}#{file.path}"
         system "zip -j #{self.zip_path(:layer, layer_download.id)} #{ogr2ogr_dir}/*"
 
@@ -60,12 +59,12 @@ class DownloadJob
       # Result count
       count = JSON.parse(res.body)["rows"].first["count"]
       
-      Tempfile.open('download') do |file|
+      Tempfile.open(['download', '.json']) do |file|
         0.upto (count/APP_CONFIG['admin_user_edits_limit']).round do |offset|
           query = "SELECT * FROM #{APP_CONFIG['cartodb_table']} WHERE #{where_clause} LIMIT #{APP_CONFIG['admin_user_edits_limit']} OFFSET #{offset * APP_CONFIG['admin_user_edits_limit']}"
           uri = URI.parse(URI.escape("http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}&format=geojson"))
           res = Net::HTTP.get_response(uri)
-          file << "#{res.body}\n"
+          file << res.body
         end
 
         file.rewind
@@ -75,7 +74,6 @@ class DownloadJob
         # Debug
         # system "cp #{file.path} ~/Desktop"
 
-        p "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{Rails.root}#{file.path}"
         system "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{Rails.root}#{file.path}"
         system "zip -j #{self.zip_path(:user, user.id)} #{ogr2ogr_dir}/*"
 

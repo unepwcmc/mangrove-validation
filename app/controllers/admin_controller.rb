@@ -4,12 +4,8 @@ class AdminController < ApplicationController
 
   def index
     @layer_downloads = LayerDownload.order(:id)
-    @users = User.all
+    @users = User.order(:email)
   end
-
-#  def get_job_status
-#    render :json => Resque::Plugins::Status::Hash.get(params[:job_id])
-#  end
 
   # Generates download file from CartoDB
   def generate
@@ -17,7 +13,7 @@ class AdminController < ApplicationController
       layer_download = LayerDownload.find(params[:layer])
       layer_download.update_attributes(generated_at: Time.now, finished: false)
       Resque.enqueue(DownloadJob, {:layer => layer_download.id})
-    else
+    else # user
       user = User.find(params[:user])
       user.update_attributes(generated_at: Time.now, finished: false)
       Resque.enqueue(DownloadJob, {:user => user.id})
@@ -29,10 +25,25 @@ class AdminController < ApplicationController
   # Downloads file generated from CartoDB
   def download
     if params[:layer]
-      send_file DownloadJob.zip_path(:layer, params[:layer]), type: 'application/zip'
-    else
-      send_file DownloadJob.zip_path(:user, params[:user]), type: 'application/zip'
+      layer_download = LayerDownload.find(params[:layer])
+      send_file DownloadJob.zip_path(:layer, params[:layer]), filename: "#{layer_download.name}.zip", type: 'application/zip'
+    else # user
+      user = User.find(params[:user])
+      send_file DownloadJob.zip_path(:user, params[:user]), filename: "#{user.email}.zip", type: 'application/zip'
     end
+  end
+  
+  def download_users
+    require 'csv'
+
+    users = CSV.generate do |csv|
+      csv << ['EMAIL']
+      User.order(:email).each do |user|
+        csv << [user.email]
+      end
+    end
+
+    send_data users, filename: 'users.csv', type: 'text/csv; charset=utf-8; header=present'
   end
 
   private
