@@ -1,60 +1,47 @@
-<h1>The admin side is here to serve you</h1>
-<p>Behold of amazing download options:</p>
-
 <h2>Community layer files</h2>
-<table>
+
+<table class="table table-bordered table-striped">
   <thead>
-    <tr><th>File</th><th>Generated at</th><th>Actions</th></tr>
+    <tr>
+      <th>File</th>
+      <th>Generated at</th>
+      <th>Finished</th>
+      <th></th>
+      <th></th>
+    </tr>
   </thead>
   <tbody>
-  <% @community_layer_files.each do |clf| %>
-    <tr>
-      <td><%= clf.title %> </td>
-      <td>
-        <% if clf.job_id %>
-          <span id="<%= clf.job_id %>" class="job_in_progress">in progress</span>
-        <% else %>
-          <%= clf.zip_ctime %>
-        <% end %>
-      </td>
-      <td><%= layer_download_link(clf) %> | <%= layer_generate_link(clf) %></td>
-    </tr>
-  <% end %>
+    <% @layer_downloads.each do |layer_download| %>
+      <tr>
+        <td><%= layer_download.name %></td>
+        <td><%= layer_download.generated_at %></td>
+        <td><%= layer_download.finished %></td>
+        <td><%= link_to 'Generate', admin_generate_path(layer: layer_download) %></td>
+        <td><%= layer_download.finished? ? link_to('Download', admin_download_path(layer: layer_download)) : 'Download' %></td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
 
-
 <h2>Individual user layers</h2>
-<p>There were <strong><%= pluralize(Layer.count, 'user edit') %></strong> by <strong><%= pluralize(@user_layers.length, 'diferent user') %></strong>.</p>
-<table>
+
+<table class="table table-bordered table-striped">
   <thead>
-    <tr><th>User</th><th></th><th>Mangrove</th><th>Coral</th></tr>
+    <tr>
+      <th>User</th>
+      <th>Edits</th>
+      <th>Mangrove</th>
+      <th>Coral</th>
+    </tr>
   </thead>
   <tbody>
-  <%
-    @user_layers.each do |layer|
-      email = layer.user.try(:email)
-  %>
-    <tr>
-      <td><strong><%= email.presence||"Anonymous" %></strong></td>
-      <td><%= pluralize(Layer.where(:user_id => layer.user.try(:id)).count, 'edit') %></td>
-      <td><%= link_to "Generate Mangroves edits (.shp)", admin_generate_from_cartodb_path(:email => email, :status => Status::VALIDATED, :name => Names::MANGROVE)%></td>
-      <td><%= link_to "Generate Corals edits (.shp)", admin_generate_from_cartodb_path(:email => email, :status => Status::VALIDATED, :name => Names::CORAL)%></td>
-    </tr>
-  <% end %>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.email %></td>
+        <td><%= user.layers.count %></td>
+        <td><%= link_to 'Generate', admin_generate_path(user: user) %></td>
+        <td><%= user.finished? ? link_to('Download', admin_download_path(user: user)) : 'Download' %></td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
-
-<script>
-/* poll for file generation status */
-$('.job_in_progress').each(function(i){
-  var job_id = this.id;
-  setInterval(function(){
-    $.ajax({ url: "/admin/get_job_status?job_id="+job_id, success: function(data){
-      if(data['status'] == 'completed'){
-        alert(data['message']);
-        window.location.reload();
-      }
-    }, dataType: "json"});
-  }, 30000);
-});
-</script>

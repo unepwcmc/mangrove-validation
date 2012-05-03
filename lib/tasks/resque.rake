@@ -95,3 +95,12 @@ namespace :resque do
     end
   end
 end
+
+# http://stackoverflow.com/questions/6137570/resque-enqueue-failing-on-second-run
+require 'resque/tasks'
+
+task "resque:setup" => :environment do
+  ENV['QUEUE'] = '*'
+
+  Resque.before_fork = Proc.new { ActiveRecord::Base.establish_connection }
+end
