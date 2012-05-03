@@ -6,16 +6,30 @@ A tool to allow users to validate and improve the accuracy of our mangrove and c
 
 You'll need to create a cartodb_config.yml file and place it into config directory:
 
-        host: '<your cartodb host>'
-        oauth_key: 'oauthkey'
-        oauth_secret: 'oauthsecret'
-        username: 'username'
-        password: 'password'
+  host: '<your cartodb host>'
+  oauth_key: 'oauthkey'
+  oauth_secret: 'oauthsecret'
+  username: 'username'
+  password: 'password'
 
 Also, you'll need to create an http_auth_config.yml:
 
-        development:
-         admins:
-          -
-           login: 'login'
-           password: 'password'
+  development:
+    admins:
+      -
+        login: 'login'
+        password: 'password'
+
+==Redis & Resque
+
+You need redis-server installed and running. Default redis config is in config/resque.yml.
+
+To get the workers running:
+
+  QUEUE=download_serve rake resque:work
+
+With debug and verbose:
+
+  VVERBOSE=1 QUEUE=download_serve bundle exec rake resque:work
+
+You can view the status of resque jobs in the browser using the resque-web tool.
