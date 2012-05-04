@@ -54,6 +54,11 @@ body {
       list-style-type: lower-roman;
     }
   }
+  .modal-footer {
+    .get-started {
+      float: right;
+    }
+  }
 }
 
 #map_canvas {
