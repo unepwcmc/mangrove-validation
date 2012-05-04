@@ -8,7 +8,15 @@ window.checkUserSignedIn = ->
     $(".logout").show().tooltip({title: "Logout #{data.email}", placement: 'bottom'})
 
 jQuery ->
+  # Check if user signed in
   checkUserSignedIn()
+
+  $('#select-mangroves').click ->
+    $('#map_menu .layer-switcher .dropdown-menu a[data-layer="mangroves"]').click()
+  $('#select-corals').click ->
+    $('#map_menu .layer-switcher .dropdown-menu a[data-layer="corals"]').click()
+  $('#select-salt-marshes').click ->
+    $('#map_menu .layer-switcher .dropdown-menu a[data-layer="saltmarshes"]').click()
 
   # Tooltips
   $('#map_menu .show-tooltip').tooltip({placement: 'bottom'})
@@ -21,7 +29,7 @@ jQuery ->
 
   # Main menu buttons
   $('#map_menu .help').click ->
-    $('#landingModal .modal-footer .btn').html('Continue')
+    $('#landingModal .modal-footer span.get-started').html('Continue with:')
     $('#landingModal').modal('show')
 
   $('#main_menu .zoom').click ->

@@ -8,5 +8,5 @@ $ ->
     $('table#users tbody tr').hide()
     $('table#users tbody').children('tr').filter((index) =>
       self = $('table#users tbody').children('tr')[index]
-      $.text($(self).children('td').first()).indexOf($(this).val()) != -1
+      $.text($(self).children('td').slice(0,4)).toLowerCase().indexOf($(this).val().toLowerCase()) != -1
     ).show()

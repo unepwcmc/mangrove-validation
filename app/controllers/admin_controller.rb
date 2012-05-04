@@ -3,7 +3,7 @@ class AdminController < ApplicationController
   before_filter :ensure_background_machine
 
   def index
-    @layer_downloads = LayerDownload.order(:id)
+    @layer_downloads = LayerDownload.order(:name)
     @users = User.order(:email)
   end
 
@@ -37,9 +37,9 @@ class AdminController < ApplicationController
     require 'csv'
 
     users = CSV.generate do |csv|
-      csv << ['EMAIL']
+      csv << ['NAME', 'EMAIL', 'INSTITUTION', 'EDITS']
       User.order(:email).each do |user|
-        csv << [user.email]
+        csv << [user.name, user.email, user.institution, user.layers.count]
       end
     end
 

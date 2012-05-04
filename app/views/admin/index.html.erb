@@ -35,7 +35,9 @@
 <table id="users" class="table table-bordered table-striped">
   <thead>
     <tr>
+      <th>Name</th>
       <th>Email</th>
+      <th>Institution</th>
       <th>Edits</th>
       <th>Generated at</th>
       <th>Finished</th>
@@ -46,7 +48,9 @@
   <tbody>
     <% @users.each do |user| %>
       <tr>
+        <td><%= user.name %></td>
         <td><%= user.email %></td>
+        <td><%= user.institution %></td>
         <td><%= user.layers.count %></td>
         <td><%= user.generated_at %></td>
         <td><%= user.finished %></td>
