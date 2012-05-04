@@ -20,7 +20,7 @@ Also, you'll need to create an http_auth_config.yml:
         login: 'login'
         password: 'password'
 
-==Redis & Resque
+== Redis & Resque
 
 You need redis-server installed and running. Default redis config is in config/resque.yml.
 
@@ -33,3 +33,10 @@ With debug and verbose:
   VVERBOSE=1 QUEUE=download_serve bundle exec rake resque:work
 
 You can view the status of resque jobs in the browser using the resque-web tool.
+
+== CartoDB SQL
+
+SQL to create the initial database on CartoDB:
+
+  INSERT INTO mangrove_and_coral_validation (the_geom, name, status) (SELECT the_geom, 0 AS name, 0 AS status FROM mangroves_to_validate ORDER BY cartodb_id ASC OFFSET 0 LIMIT 50000)
+  INSERT INTO mangrove_and_coral_validation (the_geom, name, status) (SELECT the_geom, 1 AS name, 0 AS status FROM corals_to_validate)
