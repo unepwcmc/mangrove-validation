@@ -4,8 +4,6 @@ class LayersController < ApplicationController
   respond_to :html, :only => :index
   respond_to :json, :only => :create
 
-  caches_page :index
-
   def index
     @layer = Layer.new
     respond_with @layer
