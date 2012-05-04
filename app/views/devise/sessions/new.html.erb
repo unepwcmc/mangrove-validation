@@ -1,9 +1,11 @@
 <%= simple_form_for(resource, :remote => true, :as => resource_name, :url => session_path(resource_name), :html => {:id => 'form_sign_in'}, :defaults => { :input_html => { :class => 'input-xlarge' } }) do |f| %>
   <div class="modal-header">
     <a class="close">×</a>
-    <h3>Sign in</h3>
+    <h3>Please sign in, or create an account to continue</h3>
   </div>
   <div class="modal-body">
+    <p>Signing up is free and easy - please enter your details below and you'll be signed in.</p>
+    <p>Thanks.</p>
     <div class="inputs">
       <%= f.input :email, :required => false, :autofocus => true %>
       <%= f.input :password, :required => false %>

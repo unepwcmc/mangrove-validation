@@ -8,7 +8,15 @@ window.checkUserSignedIn = ->
     $(".logout").show().tooltip({title: "Logout #{data.email}", placement: 'bottom'})
 
 jQuery ->
+  # Check if user signed in
   checkUserSignedIn()
+
+  $('#select-mangroves').click ->
+    $('#map_menu .layer-switcher .dropdown-menu a[data-layer="mangroves"]').click()
+  $('#select-corals').click ->
+    $('#map_menu .layer-switcher .dropdown-menu a[data-layer="corals"]').click()
+  $('#select-salt-marshes').click ->
+    $('#map_menu .layer-switcher .dropdown-menu a[data-layer="saltmarshes"]').click()
 
   # Tooltips
   $('#map_menu .show-tooltip').tooltip({placement: 'bottom'})
@@ -21,7 +29,7 @@ jQuery ->
 
   # Main menu buttons
   $('#map_menu .help').click ->
-    $('#landingModal .modal-footer .btn').html('Continue')
+    $('#landingModal .modal-footer span.get-started').html('Continue with:')
     $('#landingModal').modal('show')
 
   $('#main_menu .zoom').click ->
@@ -50,7 +58,7 @@ jQuery ->
       window.VALIDATION.currentAction = window.VALIDATION.actions['validate']
 
       $('#main_menu .submit-or-erase').slideDown()
-      $("select.knowledge").val('')
+      $("select.knowledge").val('').parents('.control-group').removeClass('error').find('.help-block').remove()
       $('#main_menu .edit-area').html('<i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span>').removeClass('btn-success btn-danger active').addClass('btn-warning')
       $('#main_menu ul.dropdown-menu li.divider').addClass('hide').next('li').addClass('hide')
 
@@ -79,7 +87,7 @@ jQuery ->
       window.VALIDATION.currentAction = window.VALIDATION.actions['add']
 
       $('#main_menu .submit-or-erase').slideDown()
-      $("select.knowledge").val('')
+      $("select.knowledge").val('').parents('.control-group').removeClass('error').find('.help-block').remove()
       $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
       $('#main_menu .edit-area').addClass('active')
       $('#main_menu ul.dropdown-menu li').removeClass('hide')
@@ -108,7 +116,7 @@ jQuery ->
       window.VALIDATION.currentAction = window.VALIDATION.actions['delete']
 
       $('#main_menu .submit-or-erase').slideDown()
-      $("select.knowledge").val('')
+      $("select.knowledge").val('').parents('.control-group').removeClass('error').find('.help-block').remove()
       $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
       $('#main_menu .edit-area').addClass('active')
       $('#main_menu ul.dropdown-menu li').removeClass('hide')
@@ -147,7 +155,7 @@ jQuery ->
     $("#alert-message").show()
     setTimeout("$('#alert-message').fadeOut('slow')", 2000)
 
-    $("select.knowledge").val('')
+    $("select.knowledge").val('').parents('.control-group').removeClass('error').find('.help-block').remove()
   ).bind('ajax:error', (evt, data, status, xhr) ->
     if data.status == 401 || data.status == 403 # Unauthorized OR Forbidden
       $.fancybox.open('/users/sign_in', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 380, closeBtn: false})
@@ -155,6 +163,14 @@ jQuery ->
       $("#alert-message .alert").removeClass('alert-success').addClass('alert-error').html("There was some error while trying to submit the data.")
       $("#alert-message").show()
       setTimeout("$('#alert-message').fadeOut('slow')", 2000)
+      
+      # Errors
+      errors = $.parseJSON(data.responseText).errors
+
+      $('select.knowledge').parents('.control-group').removeClass('error').find('.help-block').remove()
+      $.each(errors.knowledge || [], (index, value) ->
+        $("select.knowledge").after($("<span class='help-block'>Source #{value}</span>")).parents("div.control-group").addClass("error")
+      )
 
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').removeClass('disabled')
   )
@@ -269,7 +285,7 @@ window.VALIDATION.initializeGoogleMaps = ->
         user_name: 'carbon-tool'
         table_name: window.CARTODB_TABLE
         query: query
-        tile_style: "##{window.CARTODB_TABLE}{#{edition_properties.style}}"
+        tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{edition_properties.color};polygon-opacity:0.7;line-width:0;line-color:#{edition_properties.color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:8}"
 
       window.VALIDATION[name] = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION["#{name}_params"])
       window.VALIDATION[name].hide() if edition_properties.hide

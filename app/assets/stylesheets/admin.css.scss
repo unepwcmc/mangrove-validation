@@ -3,12 +3,13 @@ body {
   padding-bottom: 40px;
 }
 
-table {
-  border: 1px solid grey;
+#users-search {
+  float: right;
 }
-th {
-  text-align: left;
+
+.btn-td-gen {
+  width: 125px;
 }
-td {
-  padding: 3px;
+.btn-td {
+  width: 165px;
 }

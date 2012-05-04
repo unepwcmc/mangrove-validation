@@ -5,51 +5,52 @@ window.VALIDATION =
       editions:
         base:
           status: 0 # check app/models/enumerations/status.rb
-          style: 'polygon-fill:#B15F00;polygon-opacity:0.7;line-width:0'
+          color: '#B15F00'
           hide: false
         validated:
           status: 1 # check app/models/enumerations/status.rb
           action: 0 # check app/models/enumerations/actions.rb
-          style: 'polygon-fill:#FF8800;polygon-opacity:0.7;line-width:0'
+          color: '#88FF00'
           hide: false
         added:
           status: 1 # check app/models/enumerations/status.rb
           action: 1 # check app/models/enumerations/actions.rb
-          style: 'polygon-fill:#FF0000;polygon-opacity:0.7;line-width:0'
+          color: '#0000FF'
           hide: false
     corals:
       id: 1
       editions:
         base:
           status: 0 # check app/models/enumerations/status.rb
-          style: 'polygon-fill:#A1A121;polygon-opacity:0.7;line-width:0'
+          style: 'polygon-fill:#B15F00;polygon-opacity:0.7;line-width:0'
+          color: '#B15F00'
           hide: true
         validated:
           status: 1 # check app/models/enumerations/status.rb
           action: 0 # check app/models/enumerations/actions.rb
-          style: 'polygon-fill:#FDFD34;polygon-opacity:0.7;line-width:0'
+          color: '#88FF00'
           hide: true
         added:
           status: 1 # check app/models/enumerations/status.rb
           action: 1 # check app/models/enumerations/actions.rb
-          style: 'polygon-fill:#00FF00;polygon-opacity:0.7;line-width:0'
+          color: '#0000FF'
           hide: true
     saltmarshes:
       id: 2
       editions:
         base:
           status: 0 # check app/models/enumerations/status.rb
-          style: 'polygon-fill:#663CA0;polygon-opacity:0.7;line-width:0'
+          color: '#B15F00'
           hide: true
         validated:
           status: 1 # check app/models/enumerations/status.rb
           action: 0 # check app/models/enumerations/actions.rb
-          style: 'polygon-fill:#A260FF;polygon-opacity:0.7;line-width:0'
+          color: '#88FF00'
           hide: true
         added:
           status: 1 # check app/models/enumerations/status.rb
           action: 1 # check app/models/enumerations/actions.rb
-          style: 'polygon-fill:#0000FF;polygon-opacity:0.7;line-width:0'
+          color: '#0000FF'
           hide: true
   actions: # check app/models/enumerations/actions.rb
     validate: 0

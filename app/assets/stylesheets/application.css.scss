@@ -54,6 +54,11 @@ body {
       list-style-type: lower-roman;
     }
   }
+  .modal-footer {
+    .get-started {
+      float: right;
+    }
+  }
 }
 
 #map_canvas {
@@ -133,6 +138,12 @@ body {
   position: absolute;
   top: 5px;
   left: 5px;
+
+  h2 {
+    font-size: 16px;
+    color: #CCC;
+    line-height: 20px;
+  }
 
   .control-row {
     margin-top: 6px;

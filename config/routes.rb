@@ -1,15 +1,16 @@
 MangroveValidation::Application.routes.draw do
   devise_for :users
 
-  match 'admin' => "admin#index"
-  match 'admin/generate_from_cartodb' => "admin#generate_from_cartodb"
-  match 'admin/download_from_cartodb' => "admin#download_from_cartodb"
-  match 'admin/get_job_status' => "admin#get_job_status"
-
   resources :layers, :only => [:index, :show, :create]
 
   match 'me' => 'user#me'
-  
+
+  # Admin
+  match 'admin' => "admin#index"
+  match 'admin/generate' => "admin#generate"
+  match 'admin/download' => "admin#download"
+  match 'admin/download_users' => "admin#download_users"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
