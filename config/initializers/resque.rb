@@ -3,4 +3,3 @@ rails_env = ENV['RAILS_ENV'] || 'development'
 
 resque_config = YAML.load_file(rails_root + '/config/resque.yml')
 Resque.redis = resque_config[rails_env]
-Resque::Plugins::Status::Hash.expire_in = (24 * 60 * 60) # 24hrs in second

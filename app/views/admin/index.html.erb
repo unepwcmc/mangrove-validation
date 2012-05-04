@@ -1,52 +1,68 @@
-<h1>The admin side is here to serve you</h1>
-<p>Behold of amazing download options:</p>
+<div class="page-header">
+  <h1>Community layers</h1>
+</div>
 
-<h2>Community layer files</h2>
-<table>
+<table class="table table-bordered table-striped">
   <thead>
-    <tr><th>File</th><th>Generated at</th><th>Actions</th></tr>
+    <tr>
+      <th>Name</th>
+      <th colspan="2"></th>
+    </tr>
   </thead>
   <tbody>
-  <% @generated_layer_files.each do |clf| %>
-    <tr>
-      <td><%= clf.title %> </td>
-      <td>
-        <% if clf.job_id %>
-          <span id="<%= clf.job_id %>" class="job_in_progress">in progress</span>
-        <% else %>
-          <%= clf.zip_ctime %>
-        <% end %>
-      </td>
-      <td><%= layer_download_link(clf) %> <%= layer_generate_link(clf) %></td>
-    </tr>
-  <% end %>
+    <% @layer_downloads.each do |layer_download| %>
+      <tr>
+        <td><%= layer_download.name %></td>
+        <td class='btn-td-gen'>
+          <%= link_to 'Generate current', admin_generate_path(layer: layer_download), :class => 'btn' %>
+        </td>
+        <td class='btn-td'>
+          <% if layer_download.generated_at.present? %> 
+            <%= layer_download.finished? ? link_to("Download - #{layer_download.generated_at.strftime('%d/%m/%Y')}", admin_download_path(layer: layer_download), :class => 'btn btn-primary') : content_tag(:span, 'Generating download..', :class => 'btn btn-primary disabled') %>
+          <% else %> 
+            <%= content_tag(:span, 'Not yet generated', :class => 'btn btn-primary disabled') %>
+          <% end %> 
+        </td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
 
+<div class="page-header">
+  <%= link_to 'Download users information', admin_download_users_path, :class => 'btn' %>
+  <h1>Individual user layers</h1>
+</div>
 
-<h2>Breakdown</h2>
-<p>There were <strong><%= pluralize(Layer.count, 'user edit') %></strong> by <strong><%= pluralize(@layers.length, 'diferent user') %></strong>.</p>
-<ul>
-  <% @layers.each do |layer| %>
-    <li>
-      <%= layer.email.presence||"Anonymous" %> did <strong><%= pluralize(Layer.where(:email => layer.email).count, 'edit') %></strong>
-      (<%= link_to "Download Mangroves edits (.shp)", admin_generate_from_cartodb_path(:email => layer.email, :status => Status::USER_EDITS, :name => Names::MANGROVE)%>)
-      (<%= link_to "Download Corals edits (.shp)", admin_generate_from_cartodb_path(:email => layer.email, :status => Status::USER_EDITS, :name => Names::CORAL)%>)
-    </li>
-  <% end %>
-</ul>
+<input type="text" id="users-search" placeholder="Search users" />
 
-<script>
-/* poll for file generation status */
-$('.job_in_progress').each(function(i){
-  var job_id = this.id;
-  setInterval(function(){
-    $.ajax({ url: "/admin/get_job_status?job_id="+job_id, success: function(data){
-      if(data['status'] == 'completed'){
-        alert(data['message']);
-        window.location.reload();
-      }
-    }, dataType: "json"});
-  }, 30000);
-});
-</script>
+<table id="users" class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Institution</th>
+      <th>Edits</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.email %></td>
+        <td><%= user.institution %></td>
+        <td><%= user.layers.count %></td>
+        <td class='btn-td-gen'>
+          <%= link_to 'Generate current', admin_generate_path(user: user), :class => 'btn' %>
+        </td>
+        <td class='btn-td'>
+          <% if user.generated_at.present? %> 
+            <%= user.finished? ? link_to("Download - #{user.generated_at.strftime('%d/%m/%Y')}", admin_download_path(user: user), :class => 'btn btn-primary') : content_tag(:span, 'Generating download..', :class => 'btn btn-primary disabled') %>
+          <% else %> 
+            <%= content_tag(:span, 'Not yet generated', :class => 'btn btn-primary disabled') %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

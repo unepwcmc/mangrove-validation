@@ -5,3 +5,8 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+LayerDownload.create(name: 'Mangroves community layer (.shp)', layer: Names::MANGROVE, status: Status::VALIDATED)
+LayerDownload.create(name: 'Corals community layer (.shp)', layer: Names::CORAL, status: Status::VALIDATED)
+LayerDownload.create(name: 'Mangroves user edits (.shp)', layer: Names::MANGROVE, status: Status::USER_EDITS)
+LayerDownload.create(name: 'Corals user edits (.shp)', layer: Names::CORAL, status: Status::USER_EDITS)

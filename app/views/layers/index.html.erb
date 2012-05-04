@@ -8,6 +8,7 @@
 
 <div id="map_menu">
   <div id='layers-box' class='well'>
+    <h2>Habitat validation tool</h3>
     <div class='control-row'>
       <div class="btn-group layer-switcher">
         <a class="btn dropdown-toggle layers-selection" data-toggle="dropdown" href="#">
@@ -36,7 +37,7 @@
         <a href="#" class="zoom-out btn show-tooltip" title="Zoom out"><i class="icon-minus"></i></a>
       </div>
       <a href="#" class="help btn show-tooltip btn-info" title="Information"><i class="icon-question-sign icon-white"></i></a>
-      <a href="/users/sign_out" class="logout btn btn-danger" style="display:none" data-method="delete" rel="nofollow"><i class="icon-remove-sign icon-white"></i></a>
+      <a href="/users/sign_out" class="logout btn btn-danger" style="display:none" data-method="delete" rel="nofollow">Logout</a>
     </div>
   </div>
 
@@ -52,11 +53,15 @@
       </div>
     </div>
     <div class="submit-or-erase btn-group hide">
-      <select class="knowledge">
-        <option value="">Please select source</option>
-        <option value="local">Expert/Local knowledge</option>
-        <option value="map">Reviewing the online maps</option>
-      </select>
+      <div class="control-group">
+        <div class="controls">
+          <select class="knowledge">
+            <option value="">Please select source</option>
+            <option value="local">Expert/Local knowledge</option>
+            <option value="map">Reviewing the online maps</option>
+          </select>
+        </div>
+      </div>
       <div class="buttons">
       <a href="#" class="submit-polygon btn btn-inverse disabled"><i class="icon-check icon-white"></i> Submit</a>
       <a href="#" class="erase-polygon btn btn-danger disabled"><i class="icon-repeat icon-white"></i> Erase</a>
@@ -104,7 +109,10 @@
     <p>For any feedback or questions, please email <%= mail_to "mads@unep-wcmc.org" %>.</p>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn btn-primary" data-dismiss="modal">Get started</a>
+    <a href="#" id="select-salt-marshes" class="btn btn-primary" data-dismiss="modal">Salt Marshes</a>
+    <a href="#" id="select-corals" class="btn btn-primary" data-dismiss="modal">Corals</a>
+    <a href="#" id="select-mangroves" class="btn btn-primary" data-dismiss="modal">Mangroves</a>
+    <h3 class="get-started">Get started with</h3>
   </div>
 </div>
 
