@@ -285,7 +285,7 @@ window.VALIDATION.initializeGoogleMaps = ->
         user_name: 'carbon-tool'
         table_name: window.CARTODB_TABLE
         query: query
-        tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{edition_properties.color};polygon-opacity:0.7;line-width:0;line-color:#{edition_properties.color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:8}"
+        tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{edition_properties.color};polygon-opacity:0.67;line-width:0;line-opacity:0.8;line-color:#{edition_properties.color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:8}"
 
       window.VALIDATION[name] = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION["#{name}_params"])
       window.VALIDATION[name].hide() if edition_properties.hide

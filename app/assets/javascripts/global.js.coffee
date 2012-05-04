@@ -5,52 +5,51 @@ window.VALIDATION =
       editions:
         base:
           status: 0 # check app/models/enumerations/status.rb
-          color: '#B15F00'
+          color: '#FC860A'
           hide: false
         validated:
           status: 1 # check app/models/enumerations/status.rb
           action: 0 # check app/models/enumerations/actions.rb
-          color: '#88FF00'
+          color: '#4C9D38'
           hide: false
         added:
           status: 1 # check app/models/enumerations/status.rb
           action: 1 # check app/models/enumerations/actions.rb
-          color: '#0000FF'
+          color: '#0A94FF'
           hide: false
     corals:
       id: 1
       editions:
         base:
           status: 0 # check app/models/enumerations/status.rb
-          style: 'polygon-fill:#B15F00;polygon-opacity:0.7;line-width:0'
-          color: '#B15F00'
+          color: '#FC860A'
           hide: true
         validated:
           status: 1 # check app/models/enumerations/status.rb
           action: 0 # check app/models/enumerations/actions.rb
-          color: '#88FF00'
+          color: '#4C9D38'
           hide: true
         added:
           status: 1 # check app/models/enumerations/status.rb
           action: 1 # check app/models/enumerations/actions.rb
-          color: '#0000FF'
+          color: '#0A94FF'
           hide: true
     saltmarshes:
       id: 2
       editions:
         base:
           status: 0 # check app/models/enumerations/status.rb
-          color: '#B15F00'
+          color: '#FC860A'
           hide: true
         validated:
           status: 1 # check app/models/enumerations/status.rb
           action: 0 # check app/models/enumerations/actions.rb
-          color: '#88FF00'
+          color: '#4C9D38'
           hide: true
         added:
           status: 1 # check app/models/enumerations/status.rb
           action: 1 # check app/models/enumerations/actions.rb
-          color: '#0000FF'
+          color: '#0A94FF'
           hide: true
   actions: # check app/models/enumerations/actions.rb
     validate: 0
