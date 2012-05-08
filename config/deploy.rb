@@ -1,11 +1,6 @@
-set :stages, %w(staging production background-staging)
+set :stages, %w(staging production)
 set :default_stage, 'staging'
 require 'capistrano/ext/multistage'
-
-## Generated with 'brightbox' on Thu Apr 21 11:12:49 +0100 2011
-gem 'brightbox', '>=2.3.8'
-require 'brightbox/recipes'
-require 'brightbox/passenger'
 
 # The name of your application.  Used for deployment directory and filenames
 # and Apache configs. Should be unique on the Brightbox
@@ -122,11 +117,3 @@ end
 after "deploy:setup", :setup_production_database_configuration
 after "deploy:setup", :setup_cartodb_configuration
 after "deploy:setup", :setup_http_auth_configuration
-
-namespace :deploy do
-  namespace :assets do
-    task :precompile, :roles => :web, :except => { :no_release => true } do
-      run "cd #{latest_release} && bundle exec #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:precompile"
-    end
-  end
-end

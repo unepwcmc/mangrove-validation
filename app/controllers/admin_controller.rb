@@ -1,6 +1,5 @@
 class AdminController < ApplicationController
   before_filter :authenticate
-  before_filter :ensure_background_machine
 
   def index
     @layer_downloads = LayerDownload.order(:name)
@@ -49,11 +48,5 @@ class AdminController < ApplicationController
   private
     def authenticate
       authenticate_with_http_basic { |u, p| !APP_CONFIG['admins'].select{ |a| a['login'] == u && a['password'] == p }.empty? } || request_http_basic_authentication
-    end
-
-    def ensure_background_machine
-      if Rails.env == 'production' && request.host_with_port != APP_CONFIG['background_machine']
-        redirect_to "http://#{APP_CONFIG['background_machine']}/admin"
-      end
     end
 end
