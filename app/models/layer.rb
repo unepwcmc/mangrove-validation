@@ -69,6 +69,6 @@ class Layer < ActiveRecord::Base
     CartoDB::Connection.query sql
   rescue CartoDB::Client::Error
     errors.add :base, 'There was an error trying to render the layers.'
-    puts "There was an error trying to execute the following query:\n#{sql}"
+    logger.info "There was an error trying to execute the following query:\n#{sql}"
   end
 end
