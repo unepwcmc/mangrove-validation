@@ -11,19 +11,15 @@ jQuery ->
   # Check if user signed in
   checkUserSignedIn()
 
+  # All aboard the event bus!
+  MangroveValidation.bus = _.extend({}, Backbone.Events)
+
   # Init routers
   window.router = new MangroveValidation.Routers.LayersRouter()
   Backbone.history.start()
   
   $('[href^=#]').click (e) ->
     e.preventDefault()
-
-  $('#landingModal').modal({backdrop: true, show: true})
-
-  # Main menu buttons
-  $('#map_menu .help').click ->
-    $('#landingModal .modal-footer span.get-started').html('Continue with:')
-    $('#landingModal').modal('show')
 
   $('#main_menu .zoom').click ->
     window.VALIDATION.map.setZoom(window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer])
@@ -173,11 +169,6 @@ jQuery ->
     window.VALIDATION.mapPolygon.getPath().clear()
 
   # Map menu buttons
-  $('#map_menu .zoom-in').click ->
-    window.VALIDATION.map.setZoom(window.VALIDATION.map.getZoom() + 1)
-
-  $('#map_menu .zoom-out').click ->
-    window.VALIDATION.map.setZoom(window.VALIDATION.map.getZoom() - 1)
 
   $('#map_menu .hide-data-layers').click ->
     if($(this).hasClass('active'))

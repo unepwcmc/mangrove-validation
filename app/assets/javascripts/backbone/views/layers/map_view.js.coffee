@@ -7,6 +7,10 @@ class MangroveValidation.Views.Layers.MapView extends Backbone.View
     # Google Maps
     @map = new google.maps.Map($('#map_canvas')[0], window.VALIDATION.mapOptions)
 
+    # Bus binding
+    MangroveValidation.bus.bind("zoomIn:MapControlsView", @zoomIn)
+    MangroveValidation.bus.bind("zoomOut:MapControlsView", @zoomOut)
+
     # Bind zoom behavior
     google.maps.event.addListener @map, 'zoom_changed', @handleZoomChange
 
@@ -36,6 +40,8 @@ class MangroveValidation.Views.Layers.MapView extends Backbone.View
 
     google.maps.event.addListener @map, 'click', @handleMapClick
 
+    $('#landingModal').modal({backdrop: true, show: true})
+
   handleMapClick: (event) =>
     if @map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer] && window.VALIDATION.mapPolygon && window.VALIDATION.selectedLayer != 'hide'
       path = window.VALIDATION.mapPolygon.getPath()
@@ -58,3 +64,9 @@ class MangroveValidation.Views.Layers.MapView extends Backbone.View
         $('#main_menu .zoom').removeClass('hide')
         $('#main_menu .select-layer').addClass('hide')
         window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
+
+  zoomIn: =>
+    @map.setZoom(@map.getZoom() + 1)
+
+  zoomOut: =>
+    @map.setZoom(@map.getZoom() - 1)

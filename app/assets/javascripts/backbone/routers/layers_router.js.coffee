@@ -2,6 +2,7 @@ class MangroveValidation.Routers.LayersRouter extends Backbone.Router
   initialize: (options) ->
     @layers = new MangroveValidation.Collections.LayersCollection()
     @mapView = new MangroveValidation.Views.Layers.MapView()
+    @mapControlsView = new MangroveValidation.Views.Layers.MapControlsView()
 
   routes:
     "index"    : "index"

@@ -1,0 +1,20 @@
+MangroveValidation.Views.Layers ||= {}
+
+class MangroveValidation.Views.Layers.MapControlsView extends Backbone.View
+  el: '#map_menu'
+
+  events: 
+    'click .help': 'showHelp'
+    'click .zoom-in': 'zoomIn'
+    'click .zoom-out': 'zoomOut'
+
+  showHelp: ->
+    $('#landingModal .modal-footer span.get-started').html('Continue with:')
+    $('#landingModal').modal('show')
+
+  zoomIn: ->
+    MangroveValidation.bus.trigger("zoomIn:MapControlsView")
+
+  zoomOut: ->
+    MangroveValidation.bus.trigger("zoomOut:MapControlsView")
+
