@@ -1,22 +1,20 @@
 class MangroveValidation.Routers.LayersRouter extends Backbone.Router
   initialize: (options) ->
     @layers = new MangroveValidation.Collections.LayersCollection()
-    @layers.reset options.layers
+    @mapView = new MangroveValidation.Views.Layers.MapView()
 
   routes:
-    "new"      : "newLayer"
     "index"    : "index"
     ":id/edit" : "edit"
     ":id"      : "show"
     ".*"        : "index"
 
-  newLayer: ->
-    @view = new MangroveValidation.Views.Layers.NewView(collection: @layers)
-    $("#layers").html(@view.render().el)
-
   index: ->
     @view = new MangroveValidation.Views.Layers.IndexView(layers: @layers)
     $("#layers").html(@view.render().el)
+
+    # Tooltips
+    $('#map_menu .show-tooltip').tooltip({placement: 'bottom'})
 
   show: (id) ->
     layer = @layers.get(id)

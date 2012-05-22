@@ -24,6 +24,7 @@ group :assets do
 end
 
 gem 'jquery-rails'
+gem 'rails-backbone'
 gem 'enumerate_it'
 gem 'devise'
 
