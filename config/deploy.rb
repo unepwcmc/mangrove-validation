@@ -4,7 +4,7 @@ require 'capistrano/ext/multistage'
 
 # The name of your application.  Used for deployment directory and filenames
 # and Apache configs. Should be unique on the Brightbox
-set :application, "mangrove-validation"
+set :application, "gid"
 
 # Target directory for the application on the web and app servers.
 set(:deploy_to) { File.join("", "home", user, application) }
@@ -17,7 +17,7 @@ set(:deploy_to) { File.join("", "home", user, application) }
 set :repository, "git@github.com:unepwcmc/mangrove-validation.git"
 
 set :scm, :git
-set :branch, "master"
+set :branch, "gid"
 set :scm_username, "unepwcmc-read"
 set :git_enable_submodules, 1
 default_run_options[:pty] = true # Must be set for the password prompt from git to work

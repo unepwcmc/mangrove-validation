@@ -50,3 +50,18 @@ group :development, :test do
 end
 
 gem 'rake', '0.9.2'
+
+gem 'rspec-rails', '~> 2.6', :group => [:development, :test]
+group :test do
+  gem 'capybara'
+  # LocalStorage support: https://github.com/thoughtbot/capybara-webkit/pull/310
+  gem 'capybara-webkit', :git => 'git://github.com/chrisfarber/capybara-webkit.git'
+  gem 'headless'
+  gem 'database_cleaner'
+
+  gem 'guard-rspec'
+  gem 'shoulda'
+  gem 'factory_girl_rails'
+  gem 'database_cleaner'
+  gem 'launchy'
+end
