@@ -12,4 +12,4 @@ class MangroveValidation.Collections.LayersCollection extends Backbone.Collectio
     # Get the layers for the given search term
     
     #TODO actually search
-    @reset([{name: 'result 1'}, {name: 'result 2'}])
+    @reset([{name: 'result 1', layer_id:1}, {name: 'result 2', layer_id: 5}])

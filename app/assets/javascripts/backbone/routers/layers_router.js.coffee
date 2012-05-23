@@ -1,7 +1,7 @@
 class MangroveValidation.Routers.LayersRouter extends Backbone.Router
   initialize: (options) ->
     @layers = new MangroveValidation.Collections.LayersCollection()
-    @mapView = new MangroveValidation.Views.Layers.MapView()
+    @mapView = new MangroveValidation.Views.Layers.MapView(@layers)
     @mapControlsView = new MangroveValidation.Views.Layers.MapControlsView()
     @searchView = new MangroveValidation.Views.Layers.SearchView(@layers)
     @searchResultsView = new MangroveValidation.Views.Layers.SearchResultsView(@layers)
