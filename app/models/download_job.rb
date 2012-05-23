@@ -10,7 +10,7 @@ class DownloadJob
 
       # Where clause
       where = []
-      where << "email IS NOT NULL" if layer_download.status == Status::USER_EDITS
+      where << "email IS NOT NULL" if layer_download.status == 'user_edits'
       where << ActiveRecord::Base.send(:sanitize_sql_array, ["name = ?", layer_download.layer])
       where << ActiveRecord::Base.send(:sanitize_sql_array, ["status = ?", layer_download.status])
       where_clause = where.join(' AND ')

@@ -31,7 +31,7 @@ class AdminController < ApplicationController
       send_file DownloadJob.zip_path(:user, params[:user]), filename: "#{user.email}.zip", type: 'application/zip'
     end
   end
-  
+
   def download_users
     require 'csv'
 
