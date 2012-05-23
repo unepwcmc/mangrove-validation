@@ -20,6 +20,7 @@ class MangroveValidation.Routers.LayersRouter extends Backbone.Router
     $('#map_menu .show-tooltip').tooltip({placement: 'bottom'})
 
   show: (id) ->
+    alert("This is island #{id}")
     layer = @layers.get(id)
 
     @view = new MangroveValidation.Views.Layers.ShowView(model: layer)

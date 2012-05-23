@@ -58,27 +58,46 @@ class MangroveValidation.Views.Layers.MapView extends Backbone.View
     @allLayersLayer = new google.maps.CartoDBLayer $.extend({}, layerParams)
 
   handleMapClick: (event) =>
-    if @map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer] && window.VALIDATION.mapPolygon && window.VALIDATION.selectedLayer != 'hide'
-      path = window.VALIDATION.mapPolygon.getPath()
-      path.push(event.latLng)
-      if path.length > 0
-        $('#main_menu .erase-polygon').removeClass('disabled')
-      if path.length > 2
-        $('#main_menu .submit-polygon').removeClass('disabled')
+    if true #TODO: Not in geom edit mode
+      @navigateToIslandAtPoint(event.latLng)
+    else
+      if @map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer] && window.VALIDATION.mapPolygon && window.VALIDATION.selectedLayer != 'hide'
+        path = window.VALIDATION.mapPolygon.getPath()
+        path.push(event.latLng)
+        if path.length > 0
+          $('#main_menu .erase-polygon').removeClass('disabled')
+        if path.length > 2
+          $('#main_menu .submit-polygon').removeClass('disabled')
+
+  # Asks cartobd for any islands at the given point
+  # and navigates to the island show path if one is found
+  navigateToIslandAtPoint: (point) ->
+    query = "SELECT name FROM #{window.CARTODB_TABLE}
+              WHERE ST_Intersects(the_geom, ST_GeomFromText('point(#{point.lng()} #{point.lat()})', 4326))
+              LIMIT 1"
+
+    $.ajax(
+      url: "#{window.CARTODB_API_ADDRESS}?q=#{query}"
+      success: (data) ->
+        if data.rows.length > 0
+          # If we find a island, redirect to it
+          window.router.navigate("#{data.rows[0].name}", true)
+    )
+    
 
   handleZoomChange: () =>
-      if window.VALIDATION.selectedLayer != 'hide' && @map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]
-        $('#main_menu .zoom').addClass('hide')
-        $('#main_menu .select-layer').addClass('hide')
-        window.VALIDATION.mapPolygon.setEditable(true) if window.VALIDATION.mapPolygon
-      else if @map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]
-        $('#main_menu .zoom').addClass('hide')
-        $('#main_menu .select-layer').removeClass('hide')
-        window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
-      else
-        $('#main_menu .zoom').removeClass('hide')
-        $('#main_menu .select-layer').addClass('hide')
-        window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
+    if window.VALIDATION.selectedLayer != 'hide' && @map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]
+      $('#main_menu .zoom').addClass('hide')
+      $('#main_menu .select-layer').addClass('hide')
+      window.VALIDATION.mapPolygon.setEditable(true) if window.VALIDATION.mapPolygon
+    else if @map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]
+      $('#main_menu .zoom').addClass('hide')
+      $('#main_menu .select-layer').removeClass('hide')
+      window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
+    else
+      $('#main_menu .zoom').removeClass('hide')
+      $('#main_menu .select-layer').addClass('hide')
+      window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
 
   render: =>
     @renderCurrentLayers()
