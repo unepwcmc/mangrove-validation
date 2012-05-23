@@ -1,5 +1,7 @@
 MangroveValidation.Views.Layers ||= {}
 
+# = Map View
+# Creates and manages the map and showing of layers
 class MangroveValidation.Views.Layers.MapView extends Backbone.View
   template: JST["backbone/templates/layers/map"]
 

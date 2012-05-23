@@ -61,8 +61,30 @@ body {
   }
 }
 
+.navbar {
+  margin-bottom:0;
+}
+
+#search-results {
+  display:none;
+  position: absolute;
+  right: 29px;
+  z-index:1;
+  background-color: white;
+  width: 200px;
+  padding: 5px;
+  margin-left: 0;
+  list-style-type: none;
+}
+
+#main-content {
+  position:relative;
+  height:100%;
+}
+
 #map_canvas {
-  height: 100%
+  width:100%;
+  height:100%;
 }
 
 #main_menu {

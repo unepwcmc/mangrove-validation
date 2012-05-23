@@ -3,6 +3,8 @@ class MangroveValidation.Routers.LayersRouter extends Backbone.Router
     @layers = new MangroveValidation.Collections.LayersCollection()
     @mapView = new MangroveValidation.Views.Layers.MapView()
     @mapControlsView = new MangroveValidation.Views.Layers.MapControlsView()
+    @searchView = new MangroveValidation.Views.Layers.SearchView(@layers)
+    @searchResultsView = new MangroveValidation.Views.Layers.SearchResultsView(@layers)
 
   routes:
     "index"    : "index"
