@@ -11,26 +11,15 @@ jQuery ->
   # Check if user signed in
   checkUserSignedIn()
 
-  $('#select-mangroves').click ->
-    $('#map_menu .layer-switcher .dropdown-menu a[data-layer="mangroves"]').click()
-  $('#select-corals').click ->
-    $('#map_menu .layer-switcher .dropdown-menu a[data-layer="corals"]').click()
-  $('#select-salt-marshes').click ->
-    $('#map_menu .layer-switcher .dropdown-menu a[data-layer="saltmarshes"]').click()
+  # All aboard the event bus!
+  MangroveValidation.bus = _.extend({}, Backbone.Events)
 
-  # Tooltips
-  $('#map_menu .show-tooltip').tooltip({placement: 'bottom'})
-
+  # Init routers
+  window.router = new MangroveValidation.Routers.IslandsRouter()
+  Backbone.history.start()
+  
   $('[href^=#]').click (e) ->
     e.preventDefault()
-
-  window.VALIDATION.initializeGoogleMaps()
-  $('#landingModal').modal({backdrop: true, show: true})
-
-  # Main menu buttons
-  $('#map_menu .help').click ->
-    $('#landingModal .modal-footer span.get-started').html('Continue with:')
-    $('#landingModal').modal('show')
 
   $('#main_menu .zoom').click ->
     window.VALIDATION.map.setZoom(window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer])
@@ -180,11 +169,6 @@ jQuery ->
     window.VALIDATION.mapPolygon.getPath().clear()
 
   # Map menu buttons
-  $('#map_menu .zoom-in').click ->
-    window.VALIDATION.map.setZoom(window.VALIDATION.map.getZoom() + 1)
-
-  $('#map_menu .zoom-out').click ->
-    window.VALIDATION.map.setZoom(window.VALIDATION.map.getZoom() - 1)
 
   $('#map_menu .hide-data-layers').click ->
     if($(this).hasClass('active'))
@@ -245,56 +229,4 @@ jQuery ->
 
     window.VALIDATION.map.setOptions({mapTypeId: google.maps.MapTypeId.HYBRID})
 
-window.VALIDATION.initializeGoogleMaps = ->
-  # Google Maps
-  window.VALIDATION.map = new google.maps.Map(document.getElementById('map_canvas'), window.VALIDATION.mapOptions)
 
-  google.maps.event.addListener window.VALIDATION.map, 'zoom_changed', ->
-    if window.VALIDATION.selectedLayer != 'hide' && window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]
-      $('#main_menu .zoom').addClass('hide')
-      $('#main_menu .select-layer').addClass('hide')
-      $('#main_menu .actions').removeClass('hide')
-      window.VALIDATION.mapPolygon.setEditable(true) if window.VALIDATION.mapPolygon
-    else if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]
-      $('#main_menu .zoom').addClass('hide')
-      $('#main_menu .select-layer').removeClass('hide')
-      $('#main_menu .actions').addClass('hide')
-      window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
-    else
-      $('#main_menu .zoom').removeClass('hide')
-      $('#main_menu .select-layer').addClass('hide')
-      $('#main_menu .actions').addClass('hide')
-      window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
-
-  # CartoDB Layers
-  _.each window.VALIDATION.layers, (layer, layer_name) ->
-    _.each layer.editions, (edition_properties, edition) ->
-      name = switch edition
-        when 'base' then layer_name
-        when 'validated' then "#{layer_name}_validated"
-        when 'added' then "#{layer_name}_added"
-
-      if edition_properties.action?
-        query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=#{layer.id} AND status=#{edition_properties.status} AND action=#{edition_properties.action}"
-      else
-        query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name=#{layer.id} AND status=#{edition_properties.status}"
-
-      window.VALIDATION["#{name}_params"] =
-        map_canvas: 'map_canvas'
-        map: window.VALIDATION.map
-        user_name: 'carbon-tool'
-        table_name: window.CARTODB_TABLE
-        query: query
-        tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{edition_properties.color};polygon-opacity:0.67;line-width:0;line-opacity:0.8;line-color:#{edition_properties.color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:8}"
-
-      window.VALIDATION[name] = new google.maps.CartoDBLayer $.extend({}, window.VALIDATION["#{name}_params"])
-      window.VALIDATION[name].hide() if edition_properties.hide
-
-  google.maps.event.addListener window.VALIDATION.map, 'click', (event) ->
-    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer] && window.VALIDATION.mapPolygon && window.VALIDATION.selectedLayer != 'hide'
-      path = window.VALIDATION.mapPolygon.getPath()
-      path.push(event.latLng)
-      if path.length > 0
-        $('#main_menu .erase-polygon').removeClass('disabled')
-      if path.length > 2
-        $('#main_menu .submit-polygon').removeClass('disabled')

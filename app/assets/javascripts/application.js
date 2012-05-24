@@ -15,9 +15,11 @@
 //= require jquery_ujs
 //= require jquery.fancybox
 //= require underscore
+//= require backbone
 //= require bootstrap-generators
 //= require wax.g
 //= require cartodb-gmapsv3
+//= require backbone/mangrove_validation
 //= require user_geo_edits
 
 /* Override Bootstrap Tooltip show function so the tooltip doesn't get out of the page */

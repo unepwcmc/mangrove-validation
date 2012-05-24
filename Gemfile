@@ -24,6 +24,7 @@ group :assets do
 end
 
 gem 'jquery-rails'
+gem 'rails-backbone'
 gem 'devise'
 
 #Handle background jobs
