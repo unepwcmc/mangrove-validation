@@ -23,7 +23,7 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     island = @islands.getAndResetBy(id)
 
     @view = new MangroveValidation.Views.Islands.ShowView(model: island)
-    $("#islands").html(@view.render().el)
+    $("#attributes-show").html(@view.render().el)
 
   edit: (id) ->
     island = @islands.get(id)
