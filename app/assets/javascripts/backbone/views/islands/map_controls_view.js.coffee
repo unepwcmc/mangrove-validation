@@ -1,6 +1,6 @@
-MangroveValidation.Views.Layers ||= {}
+MangroveValidation.Views.Islands ||= {}
 
-class MangroveValidation.Views.Layers.MapControlsView extends Backbone.View
+class MangroveValidation.Views.Islands.MapControlsView extends Backbone.View
   el: '#map_menu'
 
   events: 

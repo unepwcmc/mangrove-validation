@@ -1,7 +1,7 @@
-MangroveValidation.Views.Layers ||= {}
+MangroveValidation.Views.Islands ||= {}
 
-class MangroveValidation.Views.Layers.LayerView extends Backbone.View
-  template: JST["backbone/templates/layers/layer"]
+class MangroveValidation.Views.Islands.IslandView extends Backbone.View
+  template: JST["backbone/templates/islands/island"]
 
   events:
     "click .destroy" : "destroy"

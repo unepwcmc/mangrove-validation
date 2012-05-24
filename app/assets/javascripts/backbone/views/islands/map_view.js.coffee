@@ -1,12 +1,12 @@
-MangroveValidation.Views.Layers ||= {}
+MangroveValidation.Views.Islands ||= {}
 
 # = Map View
 # Creates and manages the map and showing of layers
-class MangroveValidation.Views.Layers.MapView extends Backbone.View
-  template: JST["backbone/templates/layers/map"]
+class MangroveValidation.Views.Islands.MapView extends Backbone.View
+  template: JST["backbone/templates/islands/map"]
 
-  initialize: (layers) ->
-    @layers = layers
+  initialize: (islands) ->
+    @islands = islands
     # Google Maps
     @map = new google.maps.Map($('#map_canvas')[0], window.VALIDATION.mapOptions)
 
@@ -18,11 +18,11 @@ class MangroveValidation.Views.Layers.MapView extends Backbone.View
     google.maps.event.addListener @map, 'zoom_changed', @handleZoomChange
 
     # CartoDB Layers
-    ## Show all layers in subtle colour
+    ## Show all islands in subtle colour
     @showAllSubtleLayers()
 
-    # Bind to layer events
-    @layers.on('reset', @render)
+    # Bind to island events
+    @islands.on('reset', @render)
 
     google.maps.event.addListener @map, 'click', @handleMapClick
 
@@ -39,13 +39,13 @@ class MangroveValidation.Views.Layers.MapView extends Backbone.View
       query: query
       tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.5;line-width:0;line-opacity:0.6;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:8}"
 
-    @allLayersLayer = new google.maps.CartoDBLayer $.extend({}, layerParams)
+    @allIslandsLayer = new google.maps.CartoDBLayer $.extend({}, layerParams)
 
-  renderCurrentLayers: ->
-    # Get the layer IDs to filter by
-    layerIds = @layers.map (layer) ->
-      layer.get('layer_id')
-    query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name in (#{layerIds.join()})"
+  renderCurrentIslands: ->
+    # Get the island IDs to filter by
+    islandIds = @islands.map (island) ->
+      island.get('island_id')
+    query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name in (#{islandIds.join()})"
     color = '#FF0000'
     layerParams =
       map_canvas: 'map_canvas'
@@ -55,7 +55,7 @@ class MangroveValidation.Views.Layers.MapView extends Backbone.View
       query: query
       tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.9;line-width:0;line-opacity:0.8;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:8}"
 
-    @allLayersLayer = new google.maps.CartoDBLayer $.extend({}, layerParams)
+    @currentIslandLayer = new google.maps.CartoDBLayer $.extend({}, layerParams)
 
   handleMapClick: (event) =>
     if true #TODO: Not in geom edit mode
@@ -84,7 +84,6 @@ class MangroveValidation.Views.Layers.MapView extends Backbone.View
           window.router.navigate("#{data.rows[0].name}", true)
     )
     
-
   handleZoomChange: () =>
     if window.VALIDATION.selectedLayer != 'hide' && @map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]
       $('#main_menu .zoom').addClass('hide')
@@ -100,7 +99,7 @@ class MangroveValidation.Views.Layers.MapView extends Backbone.View
       window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
 
   render: =>
-    @renderCurrentLayers()
+    @renderCurrentIslands()
     this
 
 

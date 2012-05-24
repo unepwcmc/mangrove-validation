@@ -15,7 +15,7 @@ jQuery ->
   MangroveValidation.bus = _.extend({}, Backbone.Events)
 
   # Init routers
-  window.router = new MangroveValidation.Routers.LayersRouter()
+  window.router = new MangroveValidation.Routers.IslandsRouter()
   Backbone.history.start()
   
   $('[href^=#]').click (e) ->

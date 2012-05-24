@@ -1,18 +1,18 @@
-MangroveValidation.Views.Layers ||= {}
+MangroveValidation.Views.Islands ||= {}
 
-class MangroveValidation.Views.Layers.EditView extends Backbone.View
-  template : JST["backbone/templates/layers/edit"]
+class MangroveValidation.Views.Islands.EditView extends Backbone.View
+  template : JST["backbone/templates/islands/edit"]
 
   events :
-    "submit #edit-layer" : "update"
+    "submit #edit-island" : "update"
 
   update : (e) ->
     e.preventDefault()
     e.stopPropagation()
 
     @model.save(null,
-      success : (layer) =>
-        @model = layer
+      success : (island) =>
+        @model = island
         window.location.hash = "/#{@model.id}"
     )
 
