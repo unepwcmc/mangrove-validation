@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h1>Community layers</h1>
+  <h1>Island user geo edits</h1>
 </div>
 
 <table class="table table-bordered table-striped">
@@ -10,15 +10,15 @@
     </tr>
   </thead>
   <tbody>
-    <% @layer_downloads.each do |layer_download| %>
+    <% @islands.each do |island| %>
       <tr>
-        <td><%= layer_download.name %></td>
+        <td><%= user_geo_edit_download.name %></td>
         <td class='btn-td-gen'>
-          <%= link_to 'Generate current', admin_generate_path(layer: layer_download), :class => 'btn' %>
+          <%= link_to 'Generate current', admin_generate_path(island: island), :class => 'btn' %>
         </td>
         <td class='btn-td'>
-          <% if layer_download.generated_at.present? %> 
-            <%= layer_download.finished? ? link_to("Download - #{layer_download.generated_at.strftime('%d/%m/%Y')}", admin_download_path(layer: layer_download), :class => 'btn btn-primary') : content_tag(:span, 'Generating download..', :class => 'btn btn-primary disabled') %>
+          <% if island.generated_at.present? %> 
+            <%= island.finished? ? link_to("Download - #{island.generated_at.strftime('%d/%m/%Y')}", admin_download_path(island: island), :class => 'btn btn-primary') : content_tag(:span, 'Generating download...', :class => 'btn btn-primary disabled') %>
           <% else %> 
             <%= content_tag(:span, 'Not yet generated', :class => 'btn btn-primary disabled') %>
           <% end %> 
@@ -30,7 +30,7 @@
 
 <div class="page-header">
   <%= link_to 'Download users information', admin_download_users_path, :class => 'btn' %>
-  <h1>Individual user layers</h1>
+  <h1>Individual user geo edits</h1>
 </div>
 
 <input type="text" id="users-search" placeholder="Search users" />
@@ -51,14 +51,14 @@
         <td><%= user.name %></td>
         <td><%= user.email %></td>
         <td><%= user.institution %></td>
-        <td><%= user.layers.count %></td>
+        <td><%= user.user_geo_edits.count %></td>
         <td class='btn-td-gen'>
           <%= link_to 'Generate current', admin_generate_path(user: user), :class => 'btn' %>
         </td>
         <td class='btn-td'>
           <% if user.generated_at.present? %> 
             <%= user.finished? ? link_to("Download - #{user.generated_at.strftime('%d/%m/%Y')}", admin_download_path(user: user), :class => 'btn btn-primary') : content_tag(:span, 'Generating download..', :class => 'btn btn-primary disabled') %>
-          <% else %> 
+          <% else %>
             <%= content_tag(:span, 'Not yet generated', :class => 'btn btn-primary disabled') %>
           <% end %>
         </td>

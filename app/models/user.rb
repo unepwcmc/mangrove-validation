@@ -11,5 +11,5 @@ class User < ActiveRecord::Base
 
   validates :name, presence: true
 
-  has_many :layers
+  has_many :user_geo_edits
 end

@@ -6,17 +6,29 @@ class MangroveValidation.Models.Island extends Backbone.Model
 
 class MangroveValidation.Collections.IslandsCollection extends Backbone.Collection
   model: MangroveValidation.Models.Island
-  url: '/islands'
+
+  url: ->
+    params = {}
+    params.query = @query if @query
+    params.island_id = @island_id if @island_id
+
+    if _.isEmpty(params)
+      '/islands'
+    else
+      "/islands?#{$.param(params)}"
 
   # Get the islands for the given search term
   search: (query) ->
-    
-    #TODO actually search
-    @reset([{name: 'result 1', island_id:1}, {name: 'result 2', island_id: 5}])
+    if(@query == query)
+      return false
 
-  # Gets the island for the given ID, resets the collection to just that island and returns it
-  getAndResetBy: (id) ->
-    
-    #TODO actually get the island from the DB
-    @reset([{name: 'result 1', island_id:1}])
-    return @.models[0]
+    @query = query
+    @fetch({add: false})
+
+  # Gets the island for the given ID
+  filterById: (island_id) ->
+    if(@island_id == island_id)
+      return false
+
+    @island_id = island_id
+    @fetch({add: false})

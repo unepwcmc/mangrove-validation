@@ -20,7 +20,7 @@
 //= require wax.g
 //= require cartodb-gmapsv3
 //= require backbone/mangrove_validation
-//= require layers
+//= require user_geo_edits
 
 /* Override Bootstrap Tooltip show function so the tooltip doesn't get out of the page */
 

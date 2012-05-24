@@ -1,0 +1,144 @@
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <%= link_to 'Global Islands Database', root_path, class: 'brand' %>
+      <div class="nav-collapse">
+        <ul class="nav">
+          <li class="active">
+            <a href="#">About</a>
+          </li>
+          <li>
+            <a href="#">Help</a>
+          </li>
+          <li>
+            <a href="#">Logout</a>
+          </li>
+        </ul>
+        <div class="pull-right">
+          <form class="navbar-search" action="">
+            <input id="search" type="text" class="search-query span3" placeholder="Search">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="main-content">
+  <div id="map-content">
+    <div id="map_canvas"></div>
+
+    <a href="http://www.unep-wcmc.org" target="_blank" id="logo"></a>
+
+    <div id="alert-message" style="display:none">
+      <div class="alert"></div>
+    </div>
+
+    <div id="map_menu">
+      <div id='layers-box' class='well'>
+        <div class='control-row'>
+          <%= image_tag 'layer_legend.png' %>
+          <br/>
+          <div class="btn-group layer-switcher " data-toggle="buttons-radio">
+            <button class="use-satellite btn show-tooltip btn-info active" title="Use satellite base layer">Satellite</button>
+            <button class="use-hybrid btn show-tooltip" title="Use hybrid base layer">Hybrid</button>
+          </div>
+        </div>
+
+        <div class='control-row break'>
+          <div class="btn-group zoom-group">
+            <a href="#" class="zoom-in btn show-tooltip" title="Zoom in"><i class="icon-plus"></i></a>
+            <a href="#" class="zoom-out btn show-tooltip" title="Zoom out"><i class="icon-minus"></i></a>
+          </div>
+          <a href="#" class="help btn show-tooltip btn-info" title="Information"><i class="icon-question-sign icon-white"></i></a>
+          <a href="/users/sign_out" class="logout btn btn-danger" style="display:none" data-method="delete" rel="nofollow">Logout</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="main_menu">
+      <div class="actions well hide">
+        <div id='tools'>
+          <a href="#" class="validate btn btn-success"><i class="icon-ok icon-white"></i><br/>Validate</a>
+          <div class="btn-group">
+            <a href="#" class="add-area btn btn-primary"><i class="icon-plus icon-white"></i><br/>Add New</a>
+            <a href="#" class="delete-area btn btn-danger"><i class="icon-trash icon-white"></i><br/>Delete</a>
+          </div>
+        </div>
+        <div class="submit-or-erase btn-group hide">
+          <div class="control-group">
+            <div class="controls">
+              <select class="knowledge">
+                <option value="">Please select evidence type</option>
+                <option value="imagery">Underlying imagery in browser</option>
+                <option value="local data">Local data</option>
+                <option value="local knowledge">Local knowledge</option>
+              </select>
+            </div>
+          </div>
+          <div class="buttons">
+            <a href="#" class="submit-polygon btn btn-inverse disabled"><i class="icon-check icon-white"></i> Submit</a>
+            <a href="#" class="erase-polygon btn btn-danger disabled"><i class="icon-repeat icon-white"></i> Erase</a>
+          </div>
+        </div>
+      </div>
+      <a href="#" class="zoom btn btn-inverse">Zoom in to region to start editing</a>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="landingModal">
+      <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Habitat validation tool</h3>
+      </div>
+      <div class="modal-body">
+        <div class="logos">
+          <%= link_to image_tag('unep_wcmc_logo.png'), 'http://unep-wcmc.org/' %>
+          <%= link_to image_tag('icri_logo.gif'), 'http://www.icriforum.org/' %>
+          <%= link_to image_tag('usdos_seal_logo.png'), 'http://www.state.gov/' %>
+          <%= link_to image_tag('cclme.png'), 'http://www.canarycurrent.org/' %>
+        </div>
+        <p>This tool allows basic editing and validation of coastal habitat data. This is a beta version with limited functionality, being tested with the Global Distribution of Coral Reefs (2010) and the African subset of the USGS Global Distribution of Mangrove (2000) datasets. The original versions of the datasets can be downloaded from <%= link_to 'http://data.unep-wcmc.org/'%> </p>
+        <p>Validation of the datasets should be based on:</p>
+        <ol clas="roman">
+          <li>Local knowledge of the habitat</li>
+          <li>Obvious omission/commission errors in the data</li>
+          <li>Basic user interpretation of the underlying imagery</li>
+        </ol>
+        <p>This tool will ultimately improve the accuracy of coastal habitat datasets, to support better decision-making. This tool forms part of our work under the <em>Better Data, Better Decisions Initiative</em>.</p>
+        <h3>Get started!</h3>
+        <p>Simply choose the dataset you wish to edit and zoom in to the desired area. Select the type of editing that you want to undertake: Validate (agree with existing areas), Add or Delete, using the tool bar on the top right of the screen, and then start editing.</p>
+        <h3>Editing tips and advice</h3>
+        <p>All edits should be based on obvious errors/omissions in the data.</p>
+        <p>Where there is any ambiguity, no edits/additions should be made.</p>
+        <p>We are currently unable to show the different spectral bands so it is not currently possible to distinguish e.g. mangroves and terrestrial forest cover, without in-depth local knowledge of the area.</p>
+        <p>The underlying imagery is not from a specific time period, so there are limitations to the temporal resolution of the validation.</p>
+        <p>Future functionalities will allow users to:</p>
+        <ol class="roman">
+          <li>Specify the justification for the edit (e.g. imagery interpretation, expert knowledge).</li>
+          <li>Upload their own spatial data for integration into the community dataset.</li>
+          <li>Download subsets of the dataset according to their own defined area of interest.</li>
+          <li>View imagery with explicit dates to facilitate local habitat change detection analyses.</li>
+        </ol>
+        <p>For any feedback or questions, please email <%= mail_to "mads@unep-wcmc.org" %>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" id="select-salt-marshes" class="btn btn-primary" data-dismiss="modal">Salt Marshes</a>
+        <a href="#" id="select-corals" class="btn btn-primary" data-dismiss="modal">Corals</a>
+        <a href="#" id="select-mangroves" class="btn btn-primary" data-dismiss="modal">Mangroves</a>
+        <h3 class="get-started">Get started with</h3>
+      </div>
+    </div>
+
+    <div class="modal hide" id="authModal"></div>
+
+    <div style="display: none;"><%= render 'form' %></div>
+  </div>
+
+  <div id="right-panel"></div>
+</div>
