@@ -11,7 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120523091505) do
+ActiveRecord::Schema.define(:version => 20120523112655) do
+
+  create_table "islands", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "layer_downloads", :force => true do |t|
     t.string   "name"
@@ -23,13 +29,14 @@ ActiveRecord::Schema.define(:version => 20120523091505) do
     t.datetime "updated_at",   :null => false
   end
 
-  create_table "layers", :force => true do |t|
+  create_table "user_geo_edits", :force => true do |t|
     t.text     "polygon"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.string   "action"
     t.integer  "user_id"
     t.string   "knowledge"
+    t.integer  "island_id"
   end
 
   create_table "users", :force => true do |t|

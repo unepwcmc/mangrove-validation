@@ -5,14 +5,14 @@ class DownloadJob
     require 'net/http'
     require 'uri'
 
-    if options['layer']
-      layer_download = LayerDownload.find(options['layer'])
+    if options['user_geo_edit']
+      user_geo_edit_download = UserGeoEditDownload.find(options['user_geo_edit'])
 
       # Where clause
       where = []
-      where << "email IS NOT NULL" if layer_download.status == 'user_edits'
-      where << ActiveRecord::Base.send(:sanitize_sql_array, ["name = ?", layer_download.layer])
-      where << ActiveRecord::Base.send(:sanitize_sql_array, ["status = ?", layer_download.status])
+      where << "email IS NOT NULL" if user_geo_edit_download.status == 'user_edits'
+      where << ActiveRecord::Base.send(:sanitize_sql_array, ["name = ?", user_geo_edit_download.user_geo_edit])
+      where << ActiveRecord::Base.send(:sanitize_sql_array, ["status = ?", user_geo_edit_download.status])
       where_clause = where.join(' AND ')
 
       # CartoDB Query
@@ -33,15 +33,15 @@ class DownloadJob
 
         file.rewind
 
-        ogr2ogr_dir = self.ogr2ogr_directory(:layer, layer_download.id)
+        ogr2ogr_dir = self.ogr2ogr_directory(:user_geo_edit, user_geo_edit_download.id)
 
         # Debug
         # system "cp #{file.path} ~/Desktop"
 
         system "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{Rails.root}#{file.path}"
-        system "zip -j #{self.zip_path(:layer, layer_download.id)} #{ogr2ogr_dir}/*"
+        system "zip -j #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{ogr2ogr_dir}/*"
 
-        layer_download.update_attributes(finished: true)
+        user_geo_edit_download.update_attributes(finished: true)
       end
     else # user
       user = User.find(options['user'])

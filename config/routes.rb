@@ -1,7 +1,9 @@
 MangroveValidation::Application.routes.draw do
+  resources :islands
+
   devise_for :users
 
-  resources :layers, :only => [:index, :show, :create]
+  resources :user_geo_edits, :only => [:index, :show, :create]
 
   match 'me' => 'user#me'
 
@@ -60,7 +62,7 @@ MangroveValidation::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'layers#index'
+  root :to => 'user_geo_edits#index'
 
   # See how all your routes lay out with "rake routes"
 

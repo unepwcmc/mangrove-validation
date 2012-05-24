@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'layers' do
+describe 'user_geo_edits' do
   describe 'GET /' do
     it 'works!' do
       visit '/'

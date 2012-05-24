@@ -2,16 +2,16 @@ class AdminController < ApplicationController
   before_filter :authenticate
 
   def index
-    @layer_downloads = LayerDownload.order(:name)
+    @islands = Island.order(:name)
     @users = User.order(:email)
   end
 
   # Generates download file from CartoDB
   def generate
-    if params[:layer]
-      layer_download = LayerDownload.find(params[:layer])
-      layer_download.update_attributes(generated_at: Time.now, finished: false)
-      Resque.enqueue(DownloadJob, {:layer => layer_download.id})
+    if params[:user_geo_edit]
+      user_geo_edit_download = UserGeoEditDownload.find(params[:user_geo_edit])
+      user_geo_edit_download.update_attributes(generated_at: Time.now, finished: false)
+      Resque.enqueue(DownloadJob, {:user_geo_edit => user_geo_edit_download.id})
     else # user
       user = User.find(params[:user])
       user.update_attributes(generated_at: Time.now, finished: false)
@@ -23,9 +23,9 @@ class AdminController < ApplicationController
 
   # Downloads file generated from CartoDB
   def download
-    if params[:layer]
-      layer_download = LayerDownload.find(params[:layer])
-      send_file DownloadJob.zip_path(:layer, params[:layer]), filename: "#{layer_download.name}.zip", type: 'application/zip'
+    if params[:user_geo_edit]
+      user_geo_edit_download = UserGeoEditDownload.find(params[:user_geo_edit])
+      send_file DownloadJob.zip_path(:user_geo_edit, params[:user_geo_edit]), filename: "#{user_geo_edit_download.name}.zip", type: 'application/zip'
     else # user
       user = User.find(params[:user])
       send_file DownloadJob.zip_path(:user, params[:user]), filename: "#{user.email}.zip", type: 'application/zip'
@@ -38,7 +38,7 @@ class AdminController < ApplicationController
     users = CSV.generate do |csv|
       csv << ['NAME', 'EMAIL', 'INSTITUTION', 'EDITS']
       User.order(:email).each do |user|
-        csv << [user.name, user.email, user.institution, user.layers.count]
+        csv << [user.name, user.email, user.institution, user.user_geo_edits.count]
       end
     end
 
