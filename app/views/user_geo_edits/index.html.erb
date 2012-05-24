@@ -1,12 +1,13 @@
-<div class="navbar">
+<div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
+    <div class="container-fluid">
       <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href="/">Global Islands Database</a>
-      <div class="nav-collapse collapse">
+      <%= link_to 'Global Islands Database', root_path, class: 'brand' %>
+      <div class="nav-collapse">
         <ul class="nav">
           <li class="active">
             <a href="#">About</a>
@@ -18,9 +19,9 @@
             <a href="#">Logout</a>
           </li>
         </ul>
-        <div id='search-box' class='pull-right'>
+        <div class="pull-right">
           <form class="navbar-search" action="">
-            <input id='search-query' type="text" class="search-query span3" placeholder="Search">
+            <input id="search" type="text" class="search-query span3" placeholder="Search">
           </form>
         </div>
       </div>
@@ -28,9 +29,9 @@
   </div>
 </div>
 
-<div id='main-content'>
-  <div id='map-content' style='position:relative; height:100%'>
-    <div id="map_canvas" style="width:100%; height:100%"></div>
+<div id="main-content">
+  <div id="map-content">
+    <div id="map_canvas"></div>
 
     <a href="http://www.unep-wcmc.org" target="_blank" id="logo"></a>
 
@@ -41,7 +42,7 @@
     <div id="map_menu">
       <div id='layers-box' class='well'>
         <div class='control-row'>
-          <%= image_tag 'layer_legend.png'%>
+          <%= image_tag 'layer_legend.png' %>
           <br/>
           <div class="btn-group layer-switcher " data-toggle="buttons-radio">
             <button class="use-satellite btn show-tooltip btn-info active" title="Use satellite base layer">Satellite</button>
@@ -58,7 +59,6 @@
           <a href="/users/sign_out" class="logout btn btn-danger" style="display:none" data-method="delete" rel="nofollow">Logout</a>
         </div>
       </div>
-
     </div>
 
     <div id="main_menu">
@@ -140,8 +140,5 @@
     <div style="display: none;"><%= render 'form' %></div>
   </div>
 
-  <div id='right-panel'>
-    <ul id='search-results'></ul>
-    <div id='attributes-show'></div>
-  </div>
+  <div id="right-panel"></div>
 </div>

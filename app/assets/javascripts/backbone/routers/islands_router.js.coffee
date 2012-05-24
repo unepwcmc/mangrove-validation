@@ -1,10 +1,10 @@
 class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
   initialize: (options) ->
     @islands = new MangroveValidation.Collections.IslandsCollection()
-    @mapView = new MangroveValidation.Views.Islands.MapView(@islands)
-    @mapControlsView = new MangroveValidation.Views.Islands.MapControlsView()
-    @searchView = new MangroveValidation.Views.Islands.SearchView(@islands)
-    @searchResultsView = new MangroveValidation.Views.Islands.SearchResultsView(@islands)
+    @islands.fetch()
+
+    # Base layout
+    @baseLayout()
 
   routes:
     "index"    : "index"
@@ -30,3 +30,16 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
 
     @view = new MangroveValidation.Views.Islands.EditView(model: island)
     $("#islands").html(@view.render().el)
+
+  baseLayout: ->
+    # Search box
+    @searchIslands = new MangroveValidation.Collections.IslandsCollection()
+    @searchIslands.fetch
+      success: (collection, response) ->
+        $("#search").typeahead
+          source: _.pluck(collection.toJSON(), 'name')
+          items: 4
+
+    @mapView = new MangroveValidation.Views.Islands.MapView(@islands)
+    @mapControlsView = new MangroveValidation.Views.Islands.MapControlsView()
+    @searchResultsView = new MangroveValidation.Views.Islands.SearchResultsView(@islands)
