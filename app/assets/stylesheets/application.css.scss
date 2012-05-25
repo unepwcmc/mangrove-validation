@@ -166,6 +166,31 @@ html, body {
       background-color: #323232;
     }
   }
+
+  #island-attributes {
+    padding: 15px;
+
+    .field {
+      overflow:hidden;
+      label {
+        color: #F5CD03;
+        float:left;
+        width: 80px;
+      }
+      input {
+        float:left;
+        width: 150px;
+        background-color: #4A4A4A;
+        border: 1px solid #535353;
+        color: #FF6600;
+      }
+    }
+    .field.full-width {
+      input {
+        width: 230px;
+      }
+    }
+  }
 }
 
 footer {
