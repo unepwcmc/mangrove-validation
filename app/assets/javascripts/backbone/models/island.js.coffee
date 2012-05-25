@@ -26,9 +26,11 @@ class MangroveValidation.Collections.IslandsCollection extends Backbone.Collecti
     @fetch({add: false})
 
   # Gets the island for the given ID
-  filterById: (island_id) ->
+  # Returns the only island
+  getAndResetById: (island_id) ->
     if(@island_id == island_id)
       return false
 
     @island_id = island_id
     @fetch({add: false})
+    @get(island_id)

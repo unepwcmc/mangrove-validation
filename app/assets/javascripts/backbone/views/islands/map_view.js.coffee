@@ -72,7 +72,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
   # Asks cartobd for any islands at the given point
   # and navigates to the island show path if one is found
   navigateToIslandAtPoint: (point) ->
-    query = "SELECT name FROM #{window.CARTODB_TABLE}
+    query = "SELECT island_id FROM #{window.CARTODB_TABLE}
               WHERE ST_Intersects(the_geom, ST_GeomFromText('point(#{point.lng()} #{point.lat()})', 4326))
               LIMIT 1"
 
@@ -81,7 +81,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
       success: (data) ->
         if data.rows.length > 0
           # If we find a island, redirect to it
-          window.router.navigate("#{data.rows[0].name}", true)
+          window.router.navigate("#{data.rows[0].island_id}", true)
     )
     
   handleZoomChange: () =>

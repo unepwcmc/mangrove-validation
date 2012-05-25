@@ -20,7 +20,7 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     $('#map_menu .show-tooltip').tooltip({placement: 'bottom'})
 
   show: (id) ->
-    island = @islands.getAndResetBy(id)
+    island = @islands.getAndResetById(id)
 
     @view = new MangroveValidation.Views.Islands.ShowView(model: island)
     $("#right-panel").html(@view.render().el)
