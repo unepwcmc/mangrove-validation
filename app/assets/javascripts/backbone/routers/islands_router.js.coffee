@@ -37,8 +37,11 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     @searchIslands.fetch
       success: (collection, response) ->
         $("#search").typeahead
-          source: _.pluck(collection.toJSON(), 'name')
+          source: collection.toJSON()
           items: 4
+          property: 'name'
+          onselect: (obj) ->
+            window.router.navigate("#{obj.id}", true)
 
     @mapView = new MangroveValidation.Views.Islands.MapView(@islands)
     @mapControlsView = new MangroveValidation.Views.Islands.MapControlsView()

@@ -26,7 +26,6 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
 
     google.maps.event.addListener @map, 'click', @handleMapClick
 
-
   # Adds cartodb layer of all islands in subtle colour
   showAllSubtleLayers: ->
     query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE}"
@@ -39,14 +38,19 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
       query: query
       tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.5;line-width:0;line-opacity:0.6;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:8}"
 
-    @allIslandsLayer = new google.maps.CartoDBLayer $.extend({}, layerParams)
+    @allIslandsLayer = new google.maps.CartoDBLayer layerParams
 
   renderCurrentIslands: ->
-    # Get the island IDs to filter by
-    islandIds = @islands.map (island) ->
+    islandsIds = @islands.map (island) ->
       island.get('id')
-    query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE island_id in (#{islandIds.join()})"
+
+    if _.isEmpty(islandsIds)
+      query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE}"
+    else
+      query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE island_id in (#{islandsIds.join()})"
+      
     color = '#FF0000'
+
     layerParams =
       map_canvas: 'map_canvas'
       map: @map
@@ -55,7 +59,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
       query: query
       tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.9;line-width:0;line-opacity:0.8;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:8}"
 
-    @currentIslandLayer = new google.maps.CartoDBLayer $.extend({}, layerParams)
+    @currentIslandLayer = new google.maps.CartoDBLayer layerParams
 
   handleMapClick: (event) =>
     if true #TODO: Not in geom edit mode
@@ -73,17 +77,16 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
   # and navigates to the island show path if one is found
   navigateToIslandAtPoint: (point) ->
     query = "SELECT island_id FROM #{window.CARTODB_TABLE}
-              WHERE ST_Intersects(the_geom, ST_GeomFromText('point(#{point.lng()} #{point.lat()})', 4326))
-              LIMIT 1"
+      WHERE ST_Intersects(the_geom, ST_GeomFromText('point(#{point.lng()} #{point.lat()})', 4326))
+      LIMIT 1"
 
-    $.ajax(
+    $.ajax
       url: "#{window.CARTODB_API_ADDRESS}?q=#{query}"
       success: (data) ->
         if data.rows.length > 0
           # If we find a island, redirect to it
           window.router.navigate("#{data.rows[0].island_id}", true)
-    )
-    
+
   handleZoomChange: () =>
     if window.VALIDATION.selectedLayer != 'hide' && @map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]
       $('#main_menu .zoom').addClass('hide')
@@ -101,8 +104,6 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
   render: =>
     @renderCurrentIslands()
     this
-
-
 
   zoomIn: =>
     @map.setZoom(@map.getZoom() + 1)

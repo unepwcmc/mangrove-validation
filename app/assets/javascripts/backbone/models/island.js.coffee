@@ -10,7 +10,7 @@ class MangroveValidation.Collections.IslandsCollection extends Backbone.Collecti
   url: ->
     params = {}
     params.query = @query if @query
-    params.island_id = @island_id if @island_id
+    params.id = @island_id if @island_id
 
     if _.isEmpty(params)
       '/islands'
