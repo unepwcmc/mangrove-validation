@@ -44,8 +44,8 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
   renderCurrentIslands: ->
     # Get the island IDs to filter by
     islandIds = @islands.map (island) ->
-      island.get('island_id')
-    query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE name in (#{islandIds.join()})"
+      island.get('id')
+    query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE island_id in (#{islandIds.join()})"
     color = '#FF0000'
     layerParams =
       map_canvas: 'map_canvas'
