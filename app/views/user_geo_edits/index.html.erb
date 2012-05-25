@@ -140,5 +140,57 @@
     <div style="display: none;"><%= render 'form' %></div>
   </div>
 
-  <div id="right-panel"></div>
+  <div id="right-panel">
+    <div id='header-strip'>
+      <h2>
+        Little Big Island
+        <span>ID 225</span>
+      </h2>
+      <h4>Azerbaijan</h4>
+    </div>
+    
+    <div id='tabbed-panel'>
+      <ul id='tabs'>
+        <li class='active'>Attributes</li>
+        <li>Geometry</li>
+      </ul>
+      <div id='tabbed-content'>
+        <div id='island-attributes'>
+          <div class='field'>
+            <label for="name"> name:</label>
+            <input type="text" name="name" id="name" value="$NAME" >
+          </div>
+          <div class='field'>
+            <label for="local-name"> local name:</label>
+            <input type="text" name="local-name" id="local-name" value="$LOCAL-NAME" >
+          </div>
+
+          <hr/>
+
+          <div class='field'>
+            <input type="text" name="local-name" id="local-name" value="$SOURCE" >
+          </div>
+
+          <div class="actions">
+            <input type="submit" value="Update Island" />
+            <input type="submit" value="Clear" />
+          </div>
+        </div>
+      </div>
+      <div id='stats'>
+        <span>
+          <h4>12%</h4>
+          <p>validated</p>
+        </span>
+        <span>
+          <h4>9,001</h4>
+          <p>Total # islands</p>
+        </span>
+      </div>
+      <footer>
+        Copyright UNEP-WCMC <%= Date.today.year %>
+        <%= image_tag 'unep-wcmc-logo.png' %>
+      </footer>
+    </div>
+  </div>
 </div>
