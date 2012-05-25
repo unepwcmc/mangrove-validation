@@ -150,9 +150,17 @@ html, body {
     li {
       padding: 10px 15px;
       float:left;
-      width: 50%;
+      width: 105px;
       color: #F5CD03;
       font-weight: bold;
+
+      img {
+        margin-right:10px;
+      }
+      span {
+        position:relative;
+        top:-6px;
+      }
     }
     li.active {
       background-color: #323232;
