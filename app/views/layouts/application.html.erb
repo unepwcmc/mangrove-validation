@@ -19,6 +19,6 @@
 </head>
 <body>
 <%= yield %>
-<%= javascript_tag "window.CARTODB_TABLE = '#{APP_CONFIG['cartodb_table']}';window.CARTODB_API_ADDRESS='http://carbon-tool.cartodb.com/api/v1/sql'" %>
+<%= javascript_tag "window.CARTODB_TABLE='#{APP_CONFIG['cartodb_table']}';window.CARTODB_API_ADDRESS='http://carbon-tool.cartodb.com/api/v1/sql';window.CARTODB_API_KEY='#{APP_CONFIG['cartodb_oauth_key']}'" %>
 </body>
 </html>
