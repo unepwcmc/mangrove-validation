@@ -11,12 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120523112655) do
+ActiveRecord::Schema.define(:version => 20120528155513) do
 
   create_table "islands", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "name_local"
+    t.string   "iso_3"
   end
 
   create_table "layer_downloads", :force => true do |t|
