@@ -211,10 +211,10 @@ html, body {
   position:absolute;
   bottom: 65px;
   padding: 10px 13px;
-  width: 100%;
+  width: 244px;
   overflow:hidden;
   color: #FF6600;
-  border-top: 1px solid #CCC;
+  border-top: 1px solid #535353;
 
   span {
     float:left;
@@ -234,10 +234,17 @@ footer {
   position:absolute;
   bottom:0;
   padding: 10px 13px;
-  width: 100%;
+  width: 244px;
   background-color: #666;
   color: #CCC;
   font-size: 11px;
+  height: 15px;
+
+  img {
+    float:right;
+    position: relative;
+    top: -6px;
+  }
 }
 
 #map_canvas {
