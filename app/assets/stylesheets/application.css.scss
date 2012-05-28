@@ -172,6 +172,7 @@ html, body {
 
     .field {
       overflow:hidden;
+      margin-bottom: 4px;
       label {
         color: #F5CD03;
         float:left;
@@ -190,6 +191,42 @@ html, body {
         width: 230px;
       }
     }
+    .actions {
+      float:right;
+      input {
+        padding: 8px 10px;
+        border: 1px solid #493E2D;
+        color: #FFCC33;
+        background-color:#49442D;
+      }
+      input.primary {
+        border: 1px solid #664D26;
+        background-color: #665926;
+      }
+    }
+  }
+}
+
+#stats {
+  position:absolute;
+  bottom: 65px;
+  padding: 10px 13px;
+  width: 100%;
+  overflow:hidden;
+  color: #FF6600;
+  border-top: 1px solid #CCC;
+
+  span {
+    float:left;
+    h4 {
+      font-size: 28px;
+      color: #FF6600;
+      font-weight: normal;
+      margin-bottom: 8px;
+    }
+  }
+  span.right {
+    float:right;
   }
 }
 
