@@ -44,12 +44,15 @@ SQL to create the initial database on CartoDB:
   INSERT INTO gid_development_copy (the_geom, status, polygon_id, name, name_local, iso_3) (SELECT the_geom, 'original' AS status, id AS polygon_id, name, name_local, iso_3 FROM gid_import_200001_300000);
   INSERT INTO gid_development_copy (the_geom, status, polygon_id, name, name_local, iso_3) (SELECT the_geom, 'original' AS status, id AS polygon_id, name, name_local, iso_3 FROM gid_import_300001_464020);
 
-  -- Create island_ids (for rows with name not empty)
-  UPDATE gid_development_copy SET island_id = (SELECT MIN(cartodb_id) FROM gid_development_copy AS b WHERE gid_development_copy.name=b.name AND gid_development_copy.name_local=b.name_local AND gid_development_copy.iso_3=b.iso_3 GROUP BY name, name_local, iso_3) WHERE name != ' ' AND cartodb_id <= 100000;
+  -- Create indexes for the next queries
+  CREATE INDEX name_idx ON films (name);
+  CREATE INDEX iso_3_idx ON films (iso_3);
 
-  !!
+  -- Update island_ids (name_local was not used because there were some NULL values - and the value seemed redundant with name)
+  UPDATE gid_development_copy SET island_id = g.group_id FROM (SELECT MIN(cartodb_id) AS group_id, min(name) AS gname, min(iso_3) as giso_3 FROM gid_development_copy AS b GROUP BY name, iso_3) AS g WHERE name IS NOT NULL AND name = g.gname AND iso_3 = g.giso_3 AND cartodb_id < 500000 AND cartodb_id >= 0
 
-  UPDATE gid_development_copy SET island_id = g.group_id FROM (SELECT MIN(cartodb_id) AS group_id, min(name) AS gname, min(name_local) AS gname_local, min(iso_3) as giso_3 FROM gid_development_copy AS b GROUP BY name, name_local, iso_3) AS g
-  WHERE name != ' ' AND name = g.gname AND name_local = g.gname_local AND iso_3 = g.giso_3
+  -- Update island_ids (for rows with empty ISO_3 codes)
+  UPDATE gid_development_copy SET island_id = (SELECT MIN(cartodb_id) FROM gid_development_copy AS b WHERE gid_development_copy.name=b.name GROUP BY name) WHERE iso_3 IS NULL;
 
-  -- Create island_ids (for rows with empty names)
+  -- Update island_ids (for rows with empty names)
+  UPDATE gid_development_copy SET island_id = cartodb_id WHERE name IS NULL;
