@@ -144,53 +144,57 @@
     <div id='header-strip'>
       <h2>
         Little Big Island
-        <span>ID 225</span>
+        <span><span class='up'>ID</span> 225</span>
       </h2>
       <h4>Azerbaijan</h4>
     </div>
     
     <div id='tabbed-panel'>
       <ul id='tabs'>
-        <li class='active'>Attributes</li>
-        <li>Geometry</li>
+        <li class='active'>
+          <%= image_tag 'attributes-icon.png' %>
+          <span>Attributes</span>
+        </li>
+        <li>
+          <%= image_tag 'geom-icon.png' %>
+          <span>Geometry</span>
+        </li>
       </ul>
       <div id='tabbed-content'>
         <div id='island-attributes'>
           <div class='field'>
-            <label for="name"> name:</label>
+            <label for="name"> Name</label>
             <input type="text" name="name" id="name" value="$NAME" >
           </div>
           <div class='field'>
-            <label for="local-name"> local name:</label>
+            <label for="local-name"> Local name</label>
             <input type="text" name="local-name" id="local-name" value="$LOCAL-NAME" >
           </div>
 
-          <hr/>
-
-          <div class='field'>
+          <div class='field full-width'>
             <input type="text" name="local-name" id="local-name" value="$SOURCE" >
           </div>
 
           <div class="actions">
-            <input type="submit" value="Update Island" />
+            <input type="submit" class='primary' value="Update Island" />
             <input type="submit" value="Clear" />
           </div>
         </div>
       </div>
-      <div id='stats'>
-        <span>
-          <h4>12%</h4>
-          <p>validated</p>
-        </span>
-        <span>
-          <h4>9,001</h4>
-          <p>Total # islands</p>
-        </span>
-      </div>
-      <footer>
-        Copyright UNEP-WCMC <%= Date.today.year %>
-        <%= image_tag 'unep-wcmc-logo.png' %>
-      </footer>
     </div>
+    <div id='stats'>
+      <span>
+        <h4>12%</h4>
+        <p>validated</p>
+      </span>
+      <span class='right'>
+        <h4>9,001</h4>
+        <p>Total # islands</p>
+      </span>
+    </div>
+    <footer>
+      Copyright UNEP-WCMC <%= Date.today.year %>
+      <%= image_tag 'unep-wcmc-logo.png' %>
+    </footer>
   </div>
 </div>

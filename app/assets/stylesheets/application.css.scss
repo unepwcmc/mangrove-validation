@@ -73,13 +73,16 @@ html, body {
   }
 
   #map-content {
-    width:75%;
     left: 0;
+    right: 0;
+    margin-right: 270px;
+    overflow:hidden;
   }
 
   #right-panel {
-    width:25%;
+    width:270px;
     right: 0;
+    height: 100%;
 
     background-color: #323232;
     color: #EEE;
@@ -100,6 +103,141 @@ html, body {
       padding: 20px 10px 10px;
     }
   }
+}
+
+#header-strip {
+  background-image: url('header-strip-bg.png');
+  padding: 10px 15px;
+  height: 120px;
+
+  h2, h4 {
+    color: #F9D000;
+  }
+
+  h2 {
+    font-size: 22px;
+    line-height: 22px;
+    margin-bottom: 15px;
+    position:relative;
+    
+    > span {
+      position:absolute;
+      right:0;
+      opacity: 0.6;
+
+      span.up {
+        position:relative;
+        top: -6px;
+        font-size: 12px;
+        line-height: 12px;
+      }
+    }
+  }
+  h4 {
+    font-size: 11px;
+    line-height: 11px;
+  }
+
+}
+
+#tabbed-panel {
+  #tabs {
+    list-style-type: none;
+    margin: 0;
+    overflow:hidden;
+    background-color: #666;
+
+    li {
+      padding: 10px 15px;
+      float:left;
+      width: 105px;
+      color: #F5CD03;
+      font-weight: bold;
+
+      img {
+        margin-right:10px;
+      }
+      span {
+        position:relative;
+        top:-6px;
+      }
+    }
+    li.active {
+      background-color: #323232;
+    }
+  }
+
+  #island-attributes {
+    padding: 15px;
+
+    .field {
+      overflow:hidden;
+      margin-bottom: 4px;
+      label {
+        color: #F5CD03;
+        float:left;
+        width: 80px;
+      }
+      input {
+        float:left;
+        width: 150px;
+        background-color: #4A4A4A;
+        border: 1px solid #535353;
+        color: #FF6600;
+      }
+    }
+    .field.full-width {
+      input {
+        width: 230px;
+      }
+    }
+    .actions {
+      float:right;
+      input {
+        padding: 8px 10px;
+        border: 1px solid #493E2D;
+        color: #FFCC33;
+        background-color:#49442D;
+      }
+      input.primary {
+        border: 1px solid #664D26;
+        background-color: #665926;
+      }
+    }
+  }
+}
+
+#stats {
+  position:absolute;
+  bottom: 65px;
+  padding: 10px 13px;
+  width: 100%;
+  overflow:hidden;
+  color: #FF6600;
+  border-top: 1px solid #CCC;
+
+  span {
+    float:left;
+    h4 {
+      font-size: 28px;
+      color: #FF6600;
+      font-weight: normal;
+      margin-bottom: 8px;
+    }
+  }
+  span.right {
+    float:right;
+  }
+}
+
+footer {
+  position:absolute;
+  bottom:0;
+  padding: 10px 13px;
+  width: 100%;
+  background-color: #666;
+  color: #CCC;
+  font-size: 11px;
 }
 
 #map_canvas {
