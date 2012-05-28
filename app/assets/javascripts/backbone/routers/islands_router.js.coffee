@@ -1,7 +1,7 @@
 class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
   initialize: (options) ->
     @islands = new MangroveValidation.Collections.IslandsCollection()
-    @islands.fetch()
+    #@islands.fetch()
 
     # Base layout
     @baseLayout()
@@ -20,7 +20,8 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     $('#map_menu .show-tooltip').tooltip({placement: 'bottom'})
 
   show: (id) ->
-    island = @islands.getAndResetById(id)
+    island = new MangroveValidation.Models.Island({id: id})
+    island.fetch()
 
     @view = new MangroveValidation.Views.Islands.ShowView(model: island)
     $("#right-panel").html(@view.render().el)
@@ -33,15 +34,18 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
 
   baseLayout: ->
     # Search box
-    @searchIslands = new MangroveValidation.Collections.IslandsCollection()
-    @searchIslands.fetch
-      success: (collection, response) ->
-        $("#search").typeahead
-          source: collection.toJSON()
-          items: 4
-          property: 'name'
-          onselect: (obj) ->
-            window.router.navigate("#{obj.id}", true)
+    typeahead_items = 4
+
+    $("#search").typeahead
+      source: (typeahead, query) ->
+        $.ajax
+          url: "http://carbon-tool.cartodb.com/api/v2/sql?q=SELECT island_id AS id, name FROM gid_development_copy WHERE name ILIKE '%25#{query}%25' GROUP BY island_id, name LIMIT #{typeahead_items}&api_key=#{window.CARTODB_API_KEY}"
+          success: (data) =>
+            typeahead.process(data['rows'])
+      items: typeahead_items
+      property: 'name'
+      onselect: (obj) ->
+        window.router.navigate("#{obj.id}", true)
 
     @mapView = new MangroveValidation.Views.Islands.MapView(@islands)
     @mapControlsView = new MangroveValidation.Views.Islands.MapControlsView()

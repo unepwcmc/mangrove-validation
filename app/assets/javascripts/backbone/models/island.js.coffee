@@ -4,6 +4,12 @@ class MangroveValidation.Models.Island extends Backbone.Model
   defaults:
     name: null
 
+  url: ->
+    "http://carbon-tool.cartodb.com/api/v2/sql?q=SELECT island_id AS id, name FROM gid_development_copy WHERE island_id = #{@id} LIMIT 1&api_key=#{window.CARTODB_API_KEY}"
+
+  parse: (resp) ->
+    resp.rows[0]
+
 class MangroveValidation.Collections.IslandsCollection extends Backbone.Collection
   model: MangroveValidation.Models.Island
 

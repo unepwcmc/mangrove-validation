@@ -1,19 +1,23 @@
 development:
   cartodb_table: 'gid_development'
+  cartodb_oauth_key: '0QN2jT32Lxripd0ER6yOxwuX6XdTQKbGLrRiCOi3'
   background_machine: 'ec2-107-22-142-254.compute-1.amazonaws.com'
   admin_user_edits_limit: 500
 
 staging:
   cartodb_table: 'gid_development'
+  cartodb_oauth_key: '0QN2jT32Lxripd0ER6yOxwuX6XdTQKbGLrRiCOi3'
   background_machine: 'ec2-107-22-142-254.compute-1.amazonaws.com'
   admin_user_edits_limit: 500
 
 test:
   cartodb_table: 'gid_development'
+  cartodb_oauth_key: '0QN2jT32Lxripd0ER6yOxwuX6XdTQKbGLrRiCOi3'
   background_machine: 'ec2-107-22-142-254.compute-1.amazonaws.com'
   admin_user_edits_limit: 500
 
 production:
   cartodb_table: 'gid_production'
+  cartodb_oauth_key: '0QN2jT32Lxripd0ER6yOxwuX6XdTQKbGLrRiCOi3'
   background_machine: 'ec2-107-22-142-254.compute-1.amazonaws.com'
   admin_user_edits_limit: 500
