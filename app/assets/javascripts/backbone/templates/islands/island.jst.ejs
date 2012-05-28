@@ -1,5 +1,40 @@
-<td><%= name %></td>
+<div id='header-strip'>
+  <h2>
+    <%= name %>
+    <span><span class='up'>ID</span> <%= id %></span>
+  </h2>
+  <h4>$ISO_CODE</h4>
+</div>
+<div id="tabbed-panel">
+  <ul id="tabs">
+    <li class="active">
+      <img alt="Attributes-icon" src="/assets/attributes-icon.png">
+      <span>Attributes</span>
+    </li>
+    <li>
+      <img alt="Geom-icon" src="/assets/geom-icon.png">
+      <span>Geometry</span>
+    </li>
+  </ul>
+  <div id="tabbed-content">
+    <div id="island-attributes">
+      <div class="field">
+        <label for="name"> Name</label>
+        <input type="text" name="name" id="name" value="$NAME">
+      </div>
+      <div class="field">
+        <label for="local-name"> Local name</label>
+        <input type="text" name="local-name" id="local-name" value="$LOCAL-NAME">
+      </div>
 
-<td><a href="#/">Show</td>
-<td><a href="#//edit">Edit</td>
-<td><a href="#//destroy" class="destroy">Destroy</a></td>
+      <div class="field full-width">
+        <input type="text" name="local-name" id="local-name" value="$SOURCE">
+      </div>
+
+      <div class="actions">
+        <input type="submit" class="primary" value="Update Island">
+        <input type="submit" value="Clear">
+      </div>
+    </div>
+  </div>
+</div>
