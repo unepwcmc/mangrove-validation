@@ -10,6 +10,10 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
     @currentView = options.view
     @currentView ||= 'show'
 
+    # Zoom to the bounds of the island
+    @model.getBounds (bounds) ->
+      MangroveValidation.bus.trigger('zoomToBounds', bounds)
+
     # Bind to island events
     @model.on('change', @render)
     MangroveValidation.bus.on('changeIslandView', @changeView)
@@ -24,7 +28,7 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
   render: =>
     $(@el).html(@template(@model.toJSON() ))
 
-    # Switch to render the sub view
+    # Create a sub-view based on the currentView
     if @currentView == 'edit'
       view = new MangroveValidation.Views.Islands.EditView({model: @model})
     else if @currentView == 'show'

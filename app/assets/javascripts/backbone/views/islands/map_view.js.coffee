@@ -13,6 +13,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
     # Bus binding
     MangroveValidation.bus.bind("zoomIn:MapControlsView", @zoomIn)
     MangroveValidation.bus.bind("zoomOut:MapControlsView", @zoomOut)
+    MangroveValidation.bus.bind("zoomToBounds", @zoomToBounds)
 
     # Bind zoom behavior
     google.maps.event.addListener @map, 'zoom_changed', @handleZoomChange
@@ -110,3 +111,6 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
 
   zoomOut: =>
     @map.setZoom(@map.getZoom() - 1)
+
+  zoomToBounds: (bounds) =>
+    @map.fitBounds(bounds)
