@@ -23,12 +23,12 @@ class MangroveValidation.Collections.IslandsCollection extends Backbone.Collecti
       "/islands?#{$.param(params)}"
 
   # Get the islands for the given search term
-  search: (query) ->
+  search: (query, callback) ->
     if(@query == query)
       return false
 
     @query = query
-    @fetch({add: false})
+    @fetch({add: false, success: callback})
 
   # Gets the island for the given ID
   # Returns the only island
