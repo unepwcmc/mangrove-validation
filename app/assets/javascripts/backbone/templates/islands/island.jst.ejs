@@ -7,11 +7,11 @@
 </div>
 <div id="tabbed-panel">
   <ul id="tabs">
-    <li class="active">
+    <li id="attributes-tab" <% if (activeTab == 'attributes') {%> class="active" <%} %>>
       <img alt="Attributes-icon" src="/assets/attributes-icon.png">
       <span>Attributes</span>
     </li>
-    <li>
+    <li id="geometry-tab" <% if (activeTab == 'geometry') {%> class="active" <%} %>>
       <img alt="Geom-icon" src="/assets/geom-icon.png">
       <span>Geometry</span>
     </li>
