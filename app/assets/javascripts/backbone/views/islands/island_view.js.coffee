@@ -47,7 +47,7 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
       viewParams.activeTab = 'geometry'
     else
       viewParams.activeTab = 'attributes'
-    $(@el).html(@template(viewParams))
+    @$el.html(@template(viewParams))
 
     # Create a sub-view based on the currentView
     if @currentView == 'show'
