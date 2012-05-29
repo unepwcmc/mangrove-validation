@@ -4,7 +4,7 @@ class MangroveValidation.Views.Islands.IndexView extends Backbone.View
   template: JST["backbone/templates/islands/index"]
 
   initialize: () ->
-    @options.islands.bind('reset', @addAll)
+    #@options.islands.bind('reset', @addAll)
 
   addAll: () =>
     @options.islands.each(@addOne)

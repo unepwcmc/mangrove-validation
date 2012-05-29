@@ -26,7 +26,7 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
     @render()
 
   render: =>
-    $(@el).html(@template(@model.toJSON() ))
+    @$el.html(@template(@model.toJSON() ))
 
     # Create a sub-view based on the currentView
     if @currentView == 'edit'
