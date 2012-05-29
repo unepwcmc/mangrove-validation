@@ -7,6 +7,7 @@ window.checkUserSignedIn = ->
   $.getJSON '/me', (data) ->
     $(".logout").show().tooltip({title: "Logout #{data.email}", placement: 'bottom'})
 
+
 jQuery ->
   # Check if user signed in
   checkUserSignedIn()

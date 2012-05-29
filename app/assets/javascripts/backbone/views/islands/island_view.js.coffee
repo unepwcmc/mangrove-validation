@@ -12,8 +12,14 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
 
     # Bind to island events
     @model.on('change', @render)
+    MangroveValidation.bus.on('changeIslandView', @changeView)
 
   tagName: "div"
+
+  changeView: (view) =>
+    # Change the current view and render
+    @currentView = view
+    @render()
 
   render: =>
     $(@el).html(@template(@model.toJSON() ))
