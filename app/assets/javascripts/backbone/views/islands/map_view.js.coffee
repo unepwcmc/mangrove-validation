@@ -50,7 +50,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
     else
       query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE island_id in (#{islandsIds.join()})"
       
-    color = '#FF0000'
+    color = '#FFFF00'
 
     layerParams =
       map_canvas: 'map_canvas'
