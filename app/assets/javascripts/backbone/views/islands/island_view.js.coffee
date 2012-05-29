@@ -5,7 +5,11 @@ MangroveValidation.Views.Islands ||= {}
 class MangroveValidation.Views.Islands.IslandView extends Backbone.View
   template: JST["backbone/templates/islands/island"]
 
-  initialize: ->
+  initialize: (options) ->
+    # The sub-view to show can be passed as a param, default show
+    @currentView = options.view
+    @currentView ||= 'show'
+
     # Bind to island events
     @model.on('change', @render)
 
@@ -14,7 +18,11 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
   render: =>
     $(@el).html(@template(@model.toJSON() ))
 
-    view = new MangroveValidation.Views.Islands.EditView({model: @model})
+    # Switch to render the sub view
+    if @currentView == 'edit'
+      view = new MangroveValidation.Views.Islands.EditView({model: @model})
+    else if @currentView == 'show'
+      view = new MangroveValidation.Views.Islands.ShowView({model: @model})
 
     $('#tabbed-content').html(view.render().el)
 

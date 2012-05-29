@@ -1,7 +1,14 @@
-<p>
-  <b>Name:</b>
-  <%= name %>
-</p>
+<div id="island-attributes">
+  <div class="field">
+    <label for="name"> Name</label>
+    <span><%= name %></span>
+  </div>
+  <div class="field">
+    <label for="local-name"> Local name</label>
+    <span>$LOCAL-NAME</span>
+  </div>
 
-
-<a href="#/index">Back</a>
+  <div class="actions">
+    <input type="submit" class="primary" value="Edit Attributes">
+  </div>
+</div>
