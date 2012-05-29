@@ -117,3 +117,8 @@ end
 after "deploy:setup", :setup_production_database_configuration
 after "deploy:setup", :setup_cartodb_configuration
 after "deploy:setup", :setup_http_auth_configuration
+
+desc "Populate the island table from cartodb"
+task :import_islands_from_cartodb do
+   run "cd #{current_path} && bundle exec rake import_islands_from_cartodb RAILS_ENV=#{rails_env}" 
+end

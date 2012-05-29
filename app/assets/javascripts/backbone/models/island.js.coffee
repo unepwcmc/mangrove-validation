@@ -6,6 +6,8 @@ class MangroveValidation.Models.Island extends Backbone.Model
 
   defaults:
     name: null
+    local_name: null
+    iso_3: null
 
 class MangroveValidation.Collections.IslandsCollection extends Backbone.Collection
   model: MangroveValidation.Models.Island
