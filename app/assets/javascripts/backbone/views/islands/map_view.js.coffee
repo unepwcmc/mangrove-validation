@@ -29,7 +29,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
 
   # Adds cartodb layer of all islands in subtle colour
   showAllSubtleLayers: ->
-    query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE}"
+    query = "SELECT cartodb_id, the_geom_webmercator FROM #{window.CARTODB_TABLE}"
     color = '#00FFFF'
     layerParams =
       map_canvas: 'map_canvas'
@@ -39,16 +39,16 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
       query: query
       tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.5;line-width:0;line-opacity:0.6;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:3}"
 
-    @allIslandsLayer = new google.maps.CartoDBLayer layerParams
+    @allIslandsLayer = new CartoDBLayer layerParams
 
   renderCurrentIslands: ->
     islandsIds = @islands.map (island) ->
       island.get('id')
 
     if _.isEmpty(islandsIds)
-      query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE}"
+      query = "SELECT cartodb_id, the_geom_webmercator FROM #{window.CARTODB_TABLE}"
     else
-      query = "SELECT the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE island_id in (#{islandsIds.join()})"
+      query = "SELECT cartodb_id, the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE island_id in (#{islandsIds.join()})"
       
     color = '#FFFF00'
 
@@ -60,7 +60,9 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
       query: query
       tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.9;line-width:0;line-opacity:0.8;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:8}"
 
-    @currentIslandLayer = new google.maps.CartoDBLayer layerParams
+    if @currentIslandLayer?
+      @currentIslandLayer.setMap(null)
+    @currentIslandLayer = new CartoDBLayer(layerParams)
 
   handleMapClick: (event) =>
     if true #TODO: Not in geom edit mode

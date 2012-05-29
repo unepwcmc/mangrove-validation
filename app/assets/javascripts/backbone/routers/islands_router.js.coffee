@@ -19,6 +19,7 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     $('#map_menu .show-tooltip').tooltip({placement: 'bottom'})
 
   show: (id) ->
+    @islands.getAndResetById(id)
     island = new MangroveValidation.Models.Island({id: id})
     island.fetch()
 
@@ -41,6 +42,13 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
       property: 'name'
       onselect: (obj) ->
         window.router.navigate("#{obj.id}", true)
+    $("#search").focus (e) =>
+      $(e.target).val('')
+      @islands.search(null)
+      @islands.getAndResetById(null)
+    # Prevent search form submission
+    $(".navbar-search").submit (e) ->
+      e.preventDefault()
 
     @mapView = new MangroveValidation.Views.Islands.MapView(@islands)
     @mapControlsView = new MangroveValidation.Views.Islands.MapControlsView()
