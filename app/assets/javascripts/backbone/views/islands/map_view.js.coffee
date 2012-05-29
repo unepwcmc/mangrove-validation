@@ -37,7 +37,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
       user_name: 'carbon-tool'
       table_name: window.CARTODB_TABLE
       query: query
-      tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.5;line-width:0;line-opacity:0.6;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:8}"
+      tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.5;line-width:0;line-opacity:0.6;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:3}"
 
     @allIslandsLayer = new google.maps.CartoDBLayer layerParams
 
