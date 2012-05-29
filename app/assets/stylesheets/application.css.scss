@@ -178,12 +178,14 @@ html, body {
         float:left;
         width: 80px;
       }
-      input {
+      span, input {
         float:left;
         width: 150px;
-        background-color: #4A4A4A;
-        border: 1px solid #535353;
         color: #FF6600;
+      }
+      input {
+        border: 1px solid #535353;
+        background-color: #4A4A4A;
       }
     }
     .field.full-width {
