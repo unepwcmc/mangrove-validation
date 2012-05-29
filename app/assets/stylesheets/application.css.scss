@@ -154,6 +154,7 @@ html, body {
       width: 105px;
       color: #F5CD03;
       font-weight: bold;
+      cursor:pointer;
 
       img {
         margin-right:10px;
@@ -165,6 +166,7 @@ html, body {
     }
     li.active {
       background-color: #323232;
+      cursor:auto;
     }
   }
 
