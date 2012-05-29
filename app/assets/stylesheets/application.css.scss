@@ -37,6 +37,7 @@ html, body {
 }
 
 #landingModal {
+  display:none;
   overflow: hidden;
   .modal-body {
     max-height: 360px;

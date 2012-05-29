@@ -8,9 +8,6 @@ class MangroveValidation.Views.Islands.MapControlsView extends Backbone.View
     'click .zoom-in': 'zoomIn'
     'click .zoom-out': 'zoomOut'
 
-  initialize: ->
-    $('#landingModal').modal({backdrop: true, show: true})
-
   showHelp: ->
     $('#landingModal .modal-footer span.get-started').html('Continue with:')
     $('#landingModal').modal('show')
