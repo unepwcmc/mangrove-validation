@@ -1,7 +1,6 @@
 class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
   initialize: (options) ->
     @islands = new MangroveValidation.Collections.IslandsCollection()
-    #@islands.fetch()
 
     # Base layout
     @baseLayout()
@@ -35,12 +34,9 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
   baseLayout: ->
     # Search box
     $("#search").typeahead
-      source: (typeahead, query) ->
-        $.ajax
-          dataType: 'json'
-          url: "/islands?query=#{query}"
-          success: (data) =>
-            typeahead.process(data)
+      source: (typeahead, query) =>
+        @islands.search query, (collection, response) ->
+          typeahead.process(response)
       items: 4
       property: 'name'
       onselect: (obj) ->
