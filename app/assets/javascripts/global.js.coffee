@@ -60,9 +60,12 @@ window.VALIDATION =
     center: new google.maps.LatLng(-18.521283,36.650391)
     zoom: 4
     mapTypeId: google.maps.MapTypeId.SATELLITE
-    mapTypeControl: false
+    mapTypeControl: true
+    mapTypeControlOptions: 
+      mapTypeIds: [google.maps.MapTypeId.SATELLITE, google.maps.MapTypeId.TERRAIN, google.maps.MapTypeId.HYBRID]
+      style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
     panControl: false
-    zoomControl: false
+    zoomControl: true
     rotateControl: false
     scaleControl: true
     streetViewControl: false
