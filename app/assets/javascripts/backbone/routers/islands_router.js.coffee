@@ -1,6 +1,7 @@
 class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
   initialize: (options) ->
     @islands = new MangroveValidation.Collections.IslandsCollection()
+    @island = new MangroveValidation.Models.Island()
 
     # Base layout
     @baseLayout()
@@ -19,11 +20,11 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     $('#map_menu .show-tooltip').tooltip({placement: 'bottom'})
 
   show: (id) ->
-    @islands.getAndResetById(id)
-    island = new MangroveValidation.Models.Island({id: id})
-    island.fetch()
+    #@islands.getAndResetById(id)
+    @island.set({id: id})
+    @island.fetch()
 
-    @view = new MangroveValidation.Views.Islands.IslandView(model: island)
+    @view = new MangroveValidation.Views.Islands.IslandView(model: @island)
     $("#right-main").html(@view.render().el)
 
   edit: (id) ->
@@ -45,10 +46,9 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     $("#search").focus (e) =>
       $(e.target).val('')
       @islands.search(null)
-      @islands.getAndResetById(null)
     # Prevent search form submission
     $(".navbar-search").submit (e) ->
       e.preventDefault()
 
-    @mapView = new MangroveValidation.Views.Islands.MapView(@islands)
+    @mapView = new MangroveValidation.Views.Islands.MapView(@island)
     @searchResultsView = new MangroveValidation.Views.Islands.SearchResultsView(@islands)
