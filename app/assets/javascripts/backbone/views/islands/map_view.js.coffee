@@ -24,6 +24,8 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
 
     google.maps.event.addListener @map, 'click', @handleMapClick
 
+    @render()
+
   # Adds cartodb layer of all islands in subtle colour
   showAllSubtleLayers: ->
     if @showLayers
@@ -37,7 +39,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
           user_name: 'carbon-tool'
           table_name: window.CARTODB_TABLE
           query: query
-          tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.5;line-width:0;line-opacity:0.6;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:3}"
+          tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.5;line-width:1;line-opacity:0.7;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:3}"
 
         @allIslandsLayer = new CartoDBLayer layerParams
 
@@ -50,7 +52,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
       if @island.get('id')
         query = "SELECT cartodb_id, the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE island_id = #{@island.get('id')}"
       else
-        @currentIslandLayer.hide()
+        @currentIslandLayer.hide() if @currentIslandLayer?
         return
 
       color = '#FFFF00'
@@ -61,7 +63,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
         user_name: 'carbon-tool'
         table_name: window.CARTODB_TABLE
         query: query
-        tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.6;line-width:0;line-opacity:0.8;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:5}"
+        tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.6;line-width:2;line-opacity:0.8;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:5}"
 
       @currentIslandLayer.setMap(null) if @currentIslandLayer?
       @currentIslandLayer = new CartoDBLayer(layerParams)
