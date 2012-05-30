@@ -87,6 +87,9 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
         if data.rows.length > 0
           # If we find a island, redirect to it
           window.router.navigate("#{data.rows[0].island_id}", true)
+        else
+          # If no island, redirect to root '/'
+          window.router.navigate("/", true)
 
   handleZoomChange: () =>
     if window.VALIDATION.selectedLayer != 'hide' && @map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]

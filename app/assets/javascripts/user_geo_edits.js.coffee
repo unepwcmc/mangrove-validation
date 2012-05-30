@@ -22,9 +22,6 @@ jQuery ->
   $('[href^=#]').click (e) ->
     e.preventDefault()
 
-  $('#main_menu .zoom').click ->
-    window.VALIDATION.map.setZoom(window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer])
-
   $('#main_menu .validate').click ->
     # Add button clicked
     if $(this).hasClass('active')
@@ -193,41 +190,3 @@ jQuery ->
         window.VALIDATION[layer].hide()
         window.VALIDATION["#{layer}_validated"].hide()
         window.VALIDATION["#{layer}_added"].hide()
-
-  $('#map_menu .layer-switcher .dropdown-menu a').click ->
-    $(this).parents('.layer-switcher').find('#selected-layer').html($(this).html())
-
-    unless window.VALIDATION.selectedLayer == $(this).data('layer')
-      window.VALIDATION.selectedLayer = $(this).data('layer')
-
-      _.each window.VALIDATION.layers, (layer, name) ->
-        if name == window.VALIDATION.selectedLayer
-          window.VALIDATION[name].show()
-          window.VALIDATION["#{name}_validated"].show()
-          window.VALIDATION["#{name}_added"].show()
-        else
-          window.VALIDATION[name].hide()
-          window.VALIDATION["#{name}_validated"].hide()
-          window.VALIDATION["#{name}_added"].hide()
-
-    if window.VALIDATION.map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]
-      $('#main_menu .actions').removeClass('hide')
-      $('#main_menu .select-layer').addClass('hide')
-      window.VALIDATION.mapPolygon.setEditable(true) if window.VALIDATION.mapPolygon
-    else
-      $('#main_menu .zoom').removeClass('hide')
-      $('#main_menu .select-layer').addClass('hide')
-      $('#main_menu .actions').addClass('hide')
-      window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
-
-  $('#map_menu .use-satellite').click ->
-    $(this).addClass('btn-info').siblings().removeClass('btn-info')
-
-    window.VALIDATION.map.setOptions({mapTypeId: google.maps.MapTypeId.SATELLITE})
-
-  $('#map_menu .use-hybrid').click ->
-    $(this).addClass('btn-info').siblings().removeClass('btn-info')
-
-    window.VALIDATION.map.setOptions({mapTypeId: google.maps.MapTypeId.HYBRID})
-
-
