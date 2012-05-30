@@ -5,8 +5,8 @@ MangroveValidation.Views.Islands ||= {}
 class MangroveValidation.Views.Islands.MapView extends Backbone.View
   template: JST["backbone/templates/islands/map"]
 
-  initialize: (islands) ->
-    @islands = islands
+  initialize: (island) ->
+    @island = island
     # Google Maps
     @map = new google.maps.Map($('#map_canvas')[0], window.VALIDATION.mapOptions)
 
@@ -23,7 +23,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
     @showAllSubtleLayers()
 
     # Bind to island events
-    @islands.on('reset', @render)
+    @island.on('change', @render)
 
     google.maps.event.addListener @map, 'click', @handleMapClick
 
@@ -42,14 +42,13 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
     @allIslandsLayer = new CartoDBLayer layerParams
 
   renderCurrentIslands: ->
-    islandsIds = @islands.map (island) ->
-      island.get('id')
-
-    if _.isEmpty(islandsIds)
-      query = "SELECT cartodb_id, the_geom_webmercator FROM #{window.CARTODB_TABLE}"
+    if @island.get('id')
+      query = "SELECT cartodb_id, the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE island_id = #{@island.get('id')}"
+      @allIslandsLayer.setMap(null)
     else
-      query = "SELECT cartodb_id, the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE island_id in (#{islandsIds.join()})"
-      
+      query = "SELECT cartodb_id, the_geom_webmercator FROM #{window.CARTODB_TABLE}"
+      @allIslandsLayer.setMap(@map)
+
     color = '#FFFF00'
 
     layerParams =
@@ -60,8 +59,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
       query: query
       tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.9;line-width:0;line-opacity:0.8;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:8}"
 
-    if @currentIslandLayer?
-      @currentIslandLayer.setMap(null)
+    @currentIslandLayer.setMap(null) if @currentIslandLayer?
     @currentIslandLayer = new CartoDBLayer(layerParams)
 
   handleMapClick: (event) =>
