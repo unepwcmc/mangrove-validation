@@ -196,18 +196,18 @@ html, body {
         width: 230px;
       }
     }
-    .actions {
-      float:right;
-      input {
-        padding: 8px 10px;
-        border: 1px solid #493E2D;
-        color: #FFCC33;
-        background-color:#49442D;
-      }
-      input.primary {
-        border: 1px solid #664D26;
-        background-color: #665926;
-      }
+  }
+  .actions {
+    float:right;
+    input {
+      padding: 8px 10px;
+      border: 1px solid #493E2D;
+      color: #FFCC33;
+      background-color:#49442D;
+    }
+    input.primary {
+      border: 1px solid #664D26;
+      background-color: #665926;
     }
   }
 }
@@ -257,14 +257,28 @@ footer {
   height:100%;
 }
 
-#main_menu {
-  .zoom, .select-layer {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    opacity: 1;
-  }
+#geometry-edit {
+  margin: 15px;
 
+  #tools {
+    overflow:hidden;
+    padding: 10px;
+
+    .validate {
+      margin-right: 5px;
+      float:left; 
+    }
+
+    div.btn-group {
+      float:left;
+    }
+
+    .btn {
+      width: 45px;
+    }
+  }
+}
+#main_menu {
   .actions {
     position: absolute;
     top: 5px;
@@ -272,22 +286,6 @@ footer {
 
     padding: 7px;
 
-    #tools {
-      overflow:hidden;
-
-      .validate {
-        margin-right: 5px;
-        float:left; 
-      }
-
-      div.btn-group {
-        float:left;
-      }
-
-      .btn {
-        width: 60px;
-      }
-    }
 
     .submit-or-erase {
       margin-top: 5px;

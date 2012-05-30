@@ -2,6 +2,7 @@ MangroveValidation.Views.Islands ||= {}
 
 class MangroveValidation.Views.Islands.ShowView extends Backbone.View
   template: JST["backbone/templates/islands/show"]
+  id: 'island-attributes'
 
   events:
     'click #edit-attributes': 'showEdit'
