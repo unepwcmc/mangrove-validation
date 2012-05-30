@@ -19,6 +19,17 @@ jQuery ->
   window.router = new MangroveValidation.Routers.IslandsRouter()
   Backbone.history.start()
   
+  # Toggle map layers button
+  $('#toggle-map-layers').click (e) ->
+    target = $(e.target)
+    MangroveValidation.bus.trigger("toggleMapLayers", !target.hasClass('active'))
+    target.toggleClass('active')
+    if target.hasClass('active')
+      target.html('Hide Map Layers')
+    else
+      target.html('Show Map Layers')
+
+
   $('[href^=#]').click (e) ->
     e.preventDefault()
 

@@ -51,5 +51,4 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
       e.preventDefault()
 
     @mapView = new MangroveValidation.Views.Islands.MapView(@islands)
-    @mapControlsView = new MangroveValidation.Views.Islands.MapControlsView()
     @searchResultsView = new MangroveValidation.Views.Islands.SearchResultsView(@islands)

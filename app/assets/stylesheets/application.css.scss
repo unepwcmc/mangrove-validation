@@ -326,67 +326,6 @@ footer {
   }
 }
 
-#map_menu {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-
-  h2 {
-    font-size: 16px;
-    color: #888;
-    line-height: 20px;
-    margin-bottom:2px;
-  }
-
-  .control-row {
-    margin-top: 6px;
-    clear: both;
-    float: left;
-    width: 100%;
-  }
-  .control-row:first-child {
-    margin-top: 0;
-  }
-  .control-row.break {
-    padding-top: 6px;
-    border-top: 1px solid #DDD;
-  }
-
-  #layers-box {
-    padding: 7px;
-    margin-bottom: 5px;
-    float: left;
-
-    .layer-switcher {
-      float:left;
-      .layers-selection {
-        width: 122px;
-      }
-      button {
-        width: 90px;
-      }
-    }
-
-    a.hide-data-layers {
-      margin-left: 3px;
-      float: right;
-    }
-  }
-  .zoom-group {
-    clear:both;
-    margin-left: 0;
-    float: left;
-  }
-  .help {
-    margin-left: 5px;
-    float: right;
-  }
-  .logout {
-    margin-left: 5px;
-    float: right;
-  }
-}
-
 #logo {
   position: absolute;
   background: image-url('unep_wcmc_logo.png');
@@ -394,6 +333,33 @@ footer {
   right: 5px;
   width: 100px;
   height: 51px;
+}
+
+#toggle-map-layers {
+  position: absolute;
+  top:0;
+  right: 98px;
+  margin: 5px;
+  cursor: pointer;
+  direction: ltr;
+
+  overflow: hidden;
+  text-align: left;
+  font-family: Arial, sans-serif;
+  text-decoration: none;
+  -webkit-user-select: none;
+  font-size: 13px;
+  padding: 1px 6px;
+  border: 1px solid #717B87;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.398438) 0px 2px 4px;
+  box-shadow: rgba(0, 0, 0, 0.398438) 0px 2px 4px;
+  color: black;
+  font-weight: bold;
+  background: white;
+}
+
+#toggle-map-layers:hover {
+  background: #F6F6F6;
 }
 
 .btn-warning .caret {
