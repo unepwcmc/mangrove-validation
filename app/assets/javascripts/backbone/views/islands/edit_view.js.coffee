@@ -14,12 +14,9 @@ class MangroveValidation.Views.Islands.EditView extends Backbone.View
     @model.save(null,
       success : (island) =>
         @model = island
-        window.location.hash = "/#{@model.id}"
     )
 
   render : ->
     $(@el).html(@template(@model.toJSON() ))
-
-    #this.$("form").backboneLink(@model)
-
+    @$("form").backboneLink(@model)
     return this

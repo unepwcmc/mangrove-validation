@@ -16,6 +16,8 @@
 //= require jquery.fancybox
 //= require underscore
 //= require backbone
+//= require backbone_rails_sync
+//= require backbone_datalink
 //= require bootstrap-generators
 //= require wax.g
 //= require cartodb-gmapsv3

@@ -10,4 +10,11 @@ class IslandsController < ApplicationController
     @island = Island.find(params[:id])
     respond_with @island
   end
+
+  def update
+    @island = Island.find(params[:id])
+    @island.update_attributes(params[:island])
+    
+    respond_with @island
+  end
 end
