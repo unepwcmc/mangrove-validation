@@ -47,10 +47,10 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
     if @showLayers
       if @island.get('id')
         query = "SELECT cartodb_id, the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE island_id = #{@island.get('id')}"
-        @allIslandsLayer.setMap(null)
+        #@allIslandsLayer.setMap(null)
       else
         query = "SELECT cartodb_id, the_geom_webmercator FROM #{window.CARTODB_TABLE}"
-        @allIslandsLayer.setMap(@map)
+        #@allIslandsLayer.setMap(@map)
 
       color = '#FFFF00'
 
