@@ -33,33 +33,6 @@ jQuery ->
   $('[href^=#]').click (e) ->
     e.preventDefault()
 
-  $('#main_menu .validate').click ->
-    # Add button clicked
-    if $(this).hasClass('active')
-      window.VALIDATION.mapPolygon.setMap(null)
-      window.VALIDATION.mapPolygon = null
-      
-      # Current action
-      window.VALIDATION.currentAction = null
-      
-      $('#tools .btn').removeClass('active')
-      $('#main_menu .submit-or-erase').slideUp()
-      $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
-    else
-      $('#tools .btn').removeClass('active')
-      $(this).addClass('active')
-
-      window.VALIDATION.mapPolygon = new google.maps.Polygon(_.extend(window.VALIDATION.mapPolygonOptions, {strokeColor: '#08c', fillColor: '#08c'}))
-      window.VALIDATION.mapPolygon.setMap(window.VALIDATION.map)
-
-      # Current action
-      window.VALIDATION.currentAction = window.VALIDATION.actions['validate']
-
-      $('#main_menu .submit-or-erase').slideDown()
-      $("select.knowledge").val('').parents('.control-group').removeClass('error').find('.help-block').remove()
-      $('#main_menu .edit-area').html('<i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span>').removeClass('btn-success btn-danger active').addClass('btn-warning')
-      $('#main_menu ul.dropdown-menu li.divider').addClass('hide').next('li').addClass('hide')
-
   $('#main_menu .add-area').click ->
     # Add button clicked
     $('#main_menu .edit-area').html('<i class="icon-plus icon-white"></i> Add new area <span class="caret"></span>').removeClass('btn-warning btn-danger').addClass('btn-success')

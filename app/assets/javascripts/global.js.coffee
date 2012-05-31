@@ -54,7 +54,7 @@ window.VALIDATION =
   actions: # check app/models/enumerations/actions.rb
     validate: 0
     add: 1
-    'delete': 2
+    delete: 2
   map: null # Google Maps
   mapOptions:
     center: new google.maps.LatLng(-18.521283,36.650391)
@@ -72,11 +72,7 @@ window.VALIDATION =
   mapPolygon: null # Google Maps Polygon
   mapPolygonOptions:
     editable: true
-  minEditZoom:
-    hide: 10
-    mangroves: 13
-    corals: 10
-    saltmarshes: 12
+  minEditZoom: 8
 
   mangroves: null # CartoDB Mangroves Unverified Layer
   mangroves_params: null

@@ -15,6 +15,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
     # Bus binding
     MangroveValidation.bus.bind("zoomToBounds", @zoomToBounds)
     MangroveValidation.bus.bind("toggleMapLayers", @toggleMapLayers)
+    MangroveValidation.bus.bind("addToMap", @addToMap)
 
     # Bind zoom behavior
     google.maps.event.addListener @map, 'zoom_changed', @handleZoomChange
@@ -72,16 +73,11 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
       @currentIslandLayer.hide() if @currentIslandLayer?
 
   handleMapClick: (event) =>
-    if true #TODO: Not in geom edit mode
+    if window.VALIDATION.currentAction == null
       @navigateToIslandAtPoint(event.latLng)
     else
-      if @map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer] && window.VALIDATION.mapPolygon && window.VALIDATION.selectedLayer != 'hide'
-        path = window.VALIDATION.mapPolygon.getPath()
-        path.push(event.latLng)
-        if path.length > 0
-          $('#main_menu .erase-polygon').removeClass('disabled')
-        if path.length > 2
-          $('#main_menu .submit-polygon').removeClass('disabled')
+      if @map.getZoom() >= window.VALIDATION.minEditZoom
+        MangroveValidation.bus.trigger('mapClickAt', event.latLng)
 
   # Asks cartobd for any islands at the given point
   # and navigates to the island show path if one is found
@@ -118,6 +114,9 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
     @showAllSubtleLayers()
     @renderCurrentIslands()
     this
+
+  addToMap: (object) =>
+    object.setMap(@map)
 
   zoomToBounds: (bounds) =>
     @map.fitBounds(bounds)
