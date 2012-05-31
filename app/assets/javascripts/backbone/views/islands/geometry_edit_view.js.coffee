@@ -31,7 +31,7 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     @drawNewPolygon('add', '#08C', event)
 
   startDelete: (event) =>
-    @drawNewPolygon('add', '#9d261d', event)
+    @drawNewPolygon('delete', '#9d261d', event)
 
   # Start drawing a new polygon on the map, for the given action and color
   drawNewPolygon: (action, color, event) ->
@@ -67,15 +67,18 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
 
     return this
 
+  # Convert the given polygon to a points array
+  pointsToCoordArray: (polygon)->
+    coordinates = []
+    path = polygon.getPath()
+    path.forEach (coordinate) ->
+      coordinates.push("#{coordinate.lng()} #{coordinate.lat()}")
+    coordinates.push("#{path.getAt(0).lng()} #{path.getAt(0).lat()}") # Close the polygon
+    coordinates
+
   submitPolygon: =>
     # Fill form
-    $("form#new_user_geo_edit input#layer_polygon").val ->
-      coordinates = []
-      path = @mapPolygon.getPath()
-      path.forEach (coordinate) ->
-        coordinates.push("#{coordinate.lng()} #{coordinate.lat()}")
-      coordinates.push("#{path.getAt(0).lng()} #{path.getAt(0).lat()}") # Close the polygon
-      "#{coordinates.join(',')}"
+    $("form#new_user_geo_edit input#user_geo_edit_polygon").val(@pointsToCoordArray(@mapPolygon).join(','))
 
     $("form#new_user_geo_edit input#user_geo_edit_island_id").val(@model.get('id'))
     $("form#new_user_geo_edit input#user_geo_edit_action").val(window.VALIDATION.currentAction)
