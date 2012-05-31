@@ -34,7 +34,6 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
       @changeView('geometry') if @currentView != 'geometry'
     else if tabLi.prop('id') == 'attributes-tab'
       @changeView('show') if @currentView == 'geometry'
-      
 
   changeView: (view) =>
     # Change the current view and render
@@ -48,6 +47,11 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
     else
       viewParams.activeTab = 'attributes'
     @$el.html(@template(viewParams))
+
+    if @currentView == 'edit'
+      @model.off('change', @render)
+    else
+      @model.on('change', @render)
 
     # Create a sub-view based on the currentView
     if @currentView == 'show'
