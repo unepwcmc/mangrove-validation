@@ -17,9 +17,6 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
     MangroveValidation.bus.bind("toggleMapLayers", @toggleMapLayers)
     MangroveValidation.bus.bind("addToMap", @addToMap)
 
-    # Bind zoom behavior
-    google.maps.event.addListener @map, 'zoom_changed', @handleZoomChange
-
     # Bind to island events
     @island.on('change', @render)
 
@@ -78,6 +75,8 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
     else
       if @map.getZoom() >= window.VALIDATION.minEditZoom
         MangroveValidation.bus.trigger('mapClickAt', event.latLng)
+      else
+        alert("You can't edit geometry this far out, please zoom in")
 
   # Asks cartobd for any islands at the given point
   # and navigates to the island show path if one is found
@@ -95,20 +94,6 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
         else
           # If no island, redirect to root '/'
           window.router.navigate("/", true)
-
-  handleZoomChange: () =>
-    if window.VALIDATION.selectedLayer != 'hide' && @map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]
-      $('#main_menu .zoom').addClass('hide')
-      $('#main_menu .select-layer').addClass('hide')
-      window.VALIDATION.mapPolygon.setEditable(true) if window.VALIDATION.mapPolygon
-    else if @map.getZoom() >= window.VALIDATION.minEditZoom[window.VALIDATION.selectedLayer]
-      $('#main_menu .zoom').addClass('hide')
-      $('#main_menu .select-layer').removeClass('hide')
-      window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
-    else
-      $('#main_menu .zoom').removeClass('hide')
-      $('#main_menu .select-layer').addClass('hide')
-      window.VALIDATION.mapPolygon.setEditable(false) if window.VALIDATION.mapPolygon
 
   render: =>
     @showAllSubtleLayers()

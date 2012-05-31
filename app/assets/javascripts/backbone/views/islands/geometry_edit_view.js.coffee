@@ -11,8 +11,8 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     "click #validate-btn": "startValidate"
     "click #add-area-btn": "startAdd"
     "click #delete-area-btn": "startDelete"
-    "submit #submit-polygon" : "submitPolygon"
-    "submit #erase-polygon" : "erasePolygon"
+    "click #submit-polygon" : "submitPolygon"
+    "click #erase-polygon" : "clearCurrentEdits"
 
   addPoint: (latLng) =>
     # Add a point to the current polygons path
@@ -65,11 +65,23 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
   render : ->
     $(@el).html(@template(@model.toJSON() ))
 
-    #this.$("form").backboneLink(@model)
-
     return this
 
-  erasePolygon: ->
+  submitPolygon: =>
+    # Fill form
+    $("form#new_user_geo_edit input#layer_polygon").val ->
+      coordinates = []
+      path = @mapPolygon.getPath()
+      path.forEach (coordinate) ->
+        coordinates.push("#{coordinate.lng()} #{coordinate.lat()}")
+      coordinates.push("#{path.getAt(0).lng()} #{path.getAt(0).lat()}") # Close the polygon
+      "#{coordinates.join(',')}"
 
-  submitPolygon: ->
+    $("form#new_user_geo_edit input#user_geo_edit_island_id").val(@model.get('id'))
+    $("form#new_user_geo_edit input#user_geo_edit_action").val(window.VALIDATION.currentAction)
+    $("form#new_user_geo_edit input#user_geo_edit_knowledge").val($(".knowledge").val())
 
+    $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
+
+    # Submit form
+    $('form#new_user_geo_edit').submit()
