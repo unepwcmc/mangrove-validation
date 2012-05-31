@@ -33,26 +33,7 @@ jQuery ->
   $('[href^=#]').click (e) ->
     e.preventDefault()
 
-  $('#main_menu .submit-polygon').click ->
-    # Fill form
-    $("form#new_layer input#layer_polygon").val ->
-      coordinates = []
-      path = window.VALIDATION.mapPolygon.getPath()
-      path.forEach (coordinate) ->
-        coordinates.push("#{coordinate.lng()} #{coordinate.lat()}")
-      coordinates.push("#{path.getAt(0).lng()} #{path.getAt(0).lat()}") # Close the polygon
-      "#{coordinates.join(',')}"
-
-    $("form#new_layer input#layer_name").val(window.VALIDATION.layers[window.VALIDATION.selectedLayer].id)
-    $("form#new_layer input#layer_action").val(window.VALIDATION.currentAction)
-    $("form#new_layer input#layer_knowledge").val($(".knowledge").val())
-
-    $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
-
-    # Submit form
-    $('form#new_layer').submit()
-
-  $('form#new_layer').bind('ajax:success', (evt, data, status, xhr) ->
+  $('form#new_user_geo_edit').bind('ajax:success', (evt, data, status, xhr) ->
     window.VALIDATION.mapPolygon.getPath().clear()
 
     # Update layers
@@ -86,32 +67,3 @@ jQuery ->
 
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').removeClass('disabled')
   )
-
-  $('#main_menu .erase-polygon').click ->
-    $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
-    window.VALIDATION.mapPolygon.getPath().clear()
-
-  # Map menu buttons
-
-  $('#map_menu .hide-data-layers').click ->
-    if($(this).hasClass('active'))
-      $(this).removeClass('btn-danger')
-      $(this).find('i').removeClass('icon-white')
-
-      _.each window.VALIDATION.layers, (id, layer) ->
-        if layer == window.VALIDATION.selectedLayer
-          window.VALIDATION[layer].show()
-          window.VALIDATION["#{layer}_validated"].show()
-          window.VALIDATION["#{layer}_added"].show()
-        else
-          window.VALIDATION[layer].hide()
-          window.VALIDATION["#{layer}_validated"].hide()
-          window.VALIDATION["#{layer}_added"].hide()
-    else
-      $(this).addClass('btn-danger')
-      $(this).find('i').addClass('icon-white')
-
-      _.each window.VALIDATION.layers, (id, layer) ->
-        window.VALIDATION[layer].hide()
-        window.VALIDATION["#{layer}_validated"].hide()
-        window.VALIDATION["#{layer}_added"].hide()

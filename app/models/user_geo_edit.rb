@@ -17,14 +17,14 @@ class UserGeoEdit < ActiveRecord::Base
         # Insert validated area polygon
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, island_id, status, action, email)
-            (SELECT ST_Multi(ST_Intersection(the_geom, #{geom_sql})), #{id}, 'validated', #{action}, '#{user.email}'
+            (SELECT ST_Multi(ST_Intersection(the_geom, #{geom_sql})), #{island_id}, 'validated', '#{action}', '#{user.email}'
               FROM #{APP_CONFIG['cartodb_table']}
-              WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = 'original' AND island_id = #{id});
+              WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = 'original' AND island_id = #{island_id});
         SQL
 
         # Remove validated area from base
         sql = sql + <<-SQL
-          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = 'original' AND island_id = #{id};
+          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = 'original' AND island_id = #{island_id};
         SQL
 
       when 'add'
@@ -40,30 +40,30 @@ class UserGeoEdit < ActiveRecord::Base
               ELSE
                 #{geom_sql}
               END)
-              ,#{id}, 'validated', #{action}, '#{user.email}' FROM (
+              ,#{island_id}, 'validated', '#{action}', '#{user.email}' FROM (
               SELECT ST_Union(the_geom) as the_geom
               FROM #{APP_CONFIG['cartodb_table']}
-              WHERE ST_Intersects(#{geom_sql}, the_geom) AND status = 'validated' AND island_id = #{id}
+              WHERE ST_Intersects(#{geom_sql}, the_geom) AND status = 'validated' AND island_id = #{island_id}
             ) as existing_validations;
         SQL
 
         # Remove validated area from base
         sql = sql + <<-SQL
-          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = 'original' AND island_id = #{id};
+          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = 'original' AND island_id = #{island_id};
         SQL
 
       when 'delete'
         # Insert deleted area
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, island_id, status, action, email)
-            (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{id}, NULL, #{action}, '#{user.email}'
+            (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{island_id}, NULL, '#{action}', '#{user.email}'
               FROM #{APP_CONFIG['cartodb_table']}
-              WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)) AND status IS NOT NULL AND island_id = #{id});
+              WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)) AND status IS NOT NULL AND island_id = #{island_id});
         SQL
 
         # Remove all intersecting area
         sql = sql + <<-SQL
-          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status IS NOT NULL AND island_id = #{id};
+          UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status IS NOT NULL AND island_id = #{island_id};
         SQL
     end
     CartoDB::Connection.query sql

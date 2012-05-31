@@ -11,8 +11,8 @@ class UserGeoEditsController < ApplicationController
 
   def create
     @user_geo_edit = UserGeoEdit.new(params[:user_geo_edit])
-    @user_geo_edit.name = params[:user_geo_edit][:name].to_i
-    @user_geo_edit.action = params[:user_geo_edit][:action].to_i
+    @user_geo_edit.island_id = params[:user_geo_edit][:island_id].to_i
+    @user_geo_edit.action = params[:user_geo_edit][:action]
     @user_geo_edit.user = current_user
     @user_geo_edit.save
     respond_with @user_geo_edit

@@ -52,9 +52,9 @@ window.VALIDATION =
           color: '#0A94FF'
           hide: true
   actions: # check app/models/enumerations/actions.rb
-    validate: 0
-    add: 1
-    delete: 2
+    validate: 'validate'
+    add: 'add'
+    delete: 'delete'
   map: null # Google Maps
   mapOptions:
     center: new google.maps.LatLng(-18.521283,36.650391)
