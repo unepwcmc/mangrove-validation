@@ -9,6 +9,8 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
 
   events :
     "click #validate-btn": "startValidate"
+    "click #add-area-btn": "startAdd"
+    "click #delete-area-btn": "startDelete"
     "submit #submit-polygon" : "submitPolygon"
     "submit #erase-polygon" : "erasePolygon"
 
@@ -23,33 +25,42 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
         $('.submit-polygon').removeClass('disabled')
 
   startValidate: (event) =>
-    event.preventDefault();
-    if $(event.target).hasClass('active')
-      #Disable editing
-      @mapPolygon.setMap(null)
-      @mapPolygon = null
-      
-      # Current action
-      window.VALIDATION.currentAction = null
-      
-      $('#tools .btn').removeClass('active')
-      $('#main_menu .submit-or-erase').slideUp()
-      $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
-    else
-      # Set only this button active
-      $('#tools .btn').removeClass('active')
-      $(this).addClass('active')
+    @drawNewPolygon('validate', '#46a546', event)
 
-      @mapPolygon = new google.maps.Polygon(_.extend(window.VALIDATION.mapPolygonOptions, {strokeColor: '#08c', fillColor: '#08c'}))
+  startAdd: (event) =>
+    @drawNewPolygon('add', '#08C', event)
+
+  startDelete: (event) =>
+    @drawNewPolygon('add', '#9d261d', event)
+
+  # Start drawing a new polygon on the map, for the given action and color
+  drawNewPolygon: (action, color, event) ->
+    event.preventDefault()
+    if $(event.target).hasClass('active')
+      @clearCurrentEdits()
+    else
+      @clearCurrentEdits()
+      $(event.target).addClass('active')
+
+      @mapPolygon = new google.maps.Polygon(_.extend(window.VALIDATION.mapPolygonOptions, {strokeColor: color, fillColor: color}))
       MangroveValidation.bus.trigger('addToMap', @mapPolygon)
 
       # Current action
-      window.VALIDATION.currentAction = window.VALIDATION.actions.validate
+      window.VALIDATION.currentAction = window.VALIDATION.actions[action]
 
-      $('#main_menu .submit-or-erase').slideDown()
-      $("select.knowledge").val('').parents('.control-group').removeClass('error').find('.help-block').remove()
-      $('#main_menu .edit-area').html('<i class="icon-pencil icon-white"></i> Edit area <span class="caret"></span>').removeClass('btn-success btn-danger active').addClass('btn-warning')
-      $('#main_menu ul.dropdown-menu li.divider').addClass('hide').next('li').addClass('hide')
+  # Destroy the current polygon, hide submit options
+  clearCurrentEdits: ->
+    if @mapPolygon?
+      # Clear polygon
+      @mapPolygon.setMap(null)
+      @mapPolygon = null
+    
+    # Unset current 
+    window.VALIDATION.currentAction = null
+    
+    $('#tools .btn').removeClass('active')
+    $('#main_menu .submit-or-erase').slideUp()
+    $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
 
   render : ->
     $(@el).html(@template(@model.toJSON() ))
