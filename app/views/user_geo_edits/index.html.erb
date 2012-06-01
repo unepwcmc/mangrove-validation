@@ -41,7 +41,7 @@
     <div class="modal" id="landingModal">
       <div class="modal-middle">
         <h3>Global Islands Database</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultricies porta arcu, eu fringilla lacus convallis vel. Nam quis diam eget neque condimentum gravida sit amet eu felis. Nullam metus massa, porta ac elementum at, ultricies vitae mauris. Nullam dictum rutrum mollis. Donec ante nulla, ullamcorper et varius non, eleifend id risus. Mauris ut auctor nunc. Vestibulum tincidunt pretium interdum. Aliquam magna est, tincidunt et euismod eget, gravida eget tellus. Vivamus vitae purus vulputate quam pretium placerat. Nullam lectus risus, semper faucibus rutrum eu, gravida at eros. Integer congue egestas mauris, venenatis fermentum diam scelerisque sed. Proin turpis dolor, elementum sit amet ullamcorper non, ornare non sapien.</p>
+        <p><%= RedCloth.new(@modal_text.text).to_html.html_safe %></p>
       </div>
       <div class="modal-right">
         <a class="search-site" href="#" data-dismiss="modal">

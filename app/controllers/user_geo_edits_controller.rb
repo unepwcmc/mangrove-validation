@@ -6,6 +6,7 @@ class UserGeoEditsController < ApplicationController
 
   def index
     @user_geo_edit = UserGeoEdit.new
+    @modal_text = SiteText.find_or_create_by_name('landing_modal')
     respond_with @user_geo_edit
   end
 
