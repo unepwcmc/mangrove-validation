@@ -29,9 +29,11 @@ jQuery ->
     else
       target.html('Show Map Layers')
 
-
   $('[href^=#]').click (e) ->
     e.preventDefault()
+
+  $('#about-btn').click (e) ->
+    $('#landingModal').modal()
 
   $('form#new_user_geo_edit').bind('ajax:success', (evt, data, status, xhr) ->
     window.VALIDATION.mapPolygon.getPath().clear()

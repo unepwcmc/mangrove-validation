@@ -184,6 +184,7 @@ html, body {
   background-image: url('header-strip-bg.png');
   padding: 10px 15px;
   height: 120px;
+  color: #F9D000;
 
   h2, h4 {
     color: #F9D000;
@@ -194,21 +195,29 @@ html, body {
     line-height: 22px;
     margin-bottom: 15px;
     position:relative;
-    
-    > span {
-      position:absolute;
-      right:0;
-      opacity: 0.6;
+    float:left;
+    width: 145px;
+  }
+  > span {
+    position:absolute;
+    right: 0;
+    opacity: 0.6;
+    margin-right: 5px;
+    width: 100px;
+    font-weight:bold;
+    line-height: 26px;
+    font-size: 23px;
+    overflow:hidden;
 
-      span.up {
-        position:relative;
-        top: -6px;
-        font-size: 12px;
-        line-height: 12px;
-      }
+    span.up {
+      position:relative;
+      top: -6px;
+      font-size: 12px;
+      line-height: 12px;
     }
   }
   h4 {
+    clear:both;
     font-size: 11px;
     line-height: 11px;
   }
