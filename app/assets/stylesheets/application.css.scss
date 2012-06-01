@@ -39,19 +39,90 @@ html, body {
 #landingModal {
   display:none;
   overflow: hidden;
-  .modal-body {
-    max-height: 360px;
-    overflow: auto;
-    ol.letters {
-      list-style-type: lower-alpha;
-    }
-    ol.roman {
-      list-style-type: lower-roman;
-    }
+  background: #5c5d5e image-url('landing-bg.png') no-repeat;
+  width: 798px;
+  height: 260px;
+  color: #ffcc00;
+  margin-left: -420px;
+  
+  h3 {
+    color: #ffcc00;  
   }
-  .modal-footer {
-    .get-started {
+  
+  p {
+    font-size: 11px;
+  }
+
+  .modal-middle {
+    float: left;
+    margin-left: 169px;
+    width: 340px;
+    padding: 10px 20px;
+  }
+  
+  .modal-right {
+    background-image: image-url('unep-wcmc-logo.png');
+    background-position: 186px 10px;
+    background-repeat: no-repeat;
+    float: right;
+    width: 249px;
+    padding-top: 150px;
+    
+    a {
+      background: #9d8c45;
+      font-size: 11px;
+      float: left;
+      width: 225px;
+      margin-bottom: 6px;
+      color: #ffcc00;
+      padding-left: 15px;
+      position: relative;
+      
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+      
+      &.search-site {
+        span:before {
+          content: '';
+          background: #9d8c45 image-url('landing-sprite.png') no-repeat 0 0;
+          width: 10px;
+          height: 11px;
+          position: absolute;
+          top: 3px;
+          left: 3px;
+        }
+      }
+
+      &.add-island {
+        span:before {
+          content: '';
+          background: #9d8c45 image-url('landing-sprite.png') no-repeat 0 -12px;
+          width: 10px;
+          height: 10px;
+          position: absolute;
+          top: 3px;
+          left: 3px;
+        }
+      }
+
+      &.let-me-help {
+        span:before {
+          content: '';
+          background: #9d8c45 image-url('landing-sprite.png') no-repeat 0 -23px;
+          width: 10px;
+          height: 12px;
+          position: absolute;
+          top: 3px;
+          left: 1px;
+        }
+      }
+    }
+    
+    .footer {
       float: right;
+      clear: both;
+      margin-right: 10px;
     }
   }
 }

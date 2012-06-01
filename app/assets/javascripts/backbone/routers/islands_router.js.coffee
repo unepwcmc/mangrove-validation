@@ -19,6 +19,8 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     # Tooltips
     $('#map_menu .show-tooltip').tooltip({placement: 'bottom'})
 
+    $('#landingModal').modal()
+
   show: (id) ->
     #@islands.getAndResetById(id)
     @island.set({id: id})

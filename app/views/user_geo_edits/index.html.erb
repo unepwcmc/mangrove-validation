@@ -39,46 +39,21 @@
 
     <!-- Modals -->
     <div class="modal" id="landingModal">
-      <div class="modal-header">
-        <a class="close" data-dismiss="modal">×</a>
-        <h3>Habitat validation tool</h3>
+      <div class="modal-middle">
+        <h3>Global Islands Database</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultricies porta arcu, eu fringilla lacus convallis vel. Nam quis diam eget neque condimentum gravida sit amet eu felis. Nullam metus massa, porta ac elementum at, ultricies vitae mauris. Nullam dictum rutrum mollis. Donec ante nulla, ullamcorper et varius non, eleifend id risus. Mauris ut auctor nunc. Vestibulum tincidunt pretium interdum. Aliquam magna est, tincidunt et euismod eget, gravida eget tellus. Vivamus vitae purus vulputate quam pretium placerat. Nullam lectus risus, semper faucibus rutrum eu, gravida at eros. Integer congue egestas mauris, venenatis fermentum diam scelerisque sed. Proin turpis dolor, elementum sit amet ullamcorper non, ornare non sapien.</p>
       </div>
-      <div class="modal-body">
-        <div class="logos">
-          <%= link_to image_tag('unep_wcmc_logo.png'), 'http://unep-wcmc.org/' %>
-          <%= link_to image_tag('icri_logo.gif'), 'http://www.icriforum.org/' %>
-          <%= link_to image_tag('usdos_seal_logo.png'), 'http://www.state.gov/' %>
-          <%= link_to image_tag('cclme.png'), 'http://www.canarycurrent.org/' %>
-        </div>
-        <p>This tool allows basic editing and validation of coastal habitat data. This is a beta version with limited functionality, being tested with the Global Distribution of Coral Reefs (2010) and the African subset of the USGS Global Distribution of Mangrove (2000) datasets. The original versions of the datasets can be downloaded from <%= link_to 'http://data.unep-wcmc.org/'%> </p>
-        <p>Validation of the datasets should be based on:</p>
-        <ol clas="roman">
-          <li>Local knowledge of the habitat</li>
-          <li>Obvious omission/commission errors in the data</li>
-          <li>Basic user interpretation of the underlying imagery</li>
-        </ol>
-        <p>This tool will ultimately improve the accuracy of coastal habitat datasets, to support better decision-making. This tool forms part of our work under the <em>Better Data, Better Decisions Initiative</em>.</p>
-        <h3>Get started!</h3>
-        <p>Simply choose the dataset you wish to edit and zoom in to the desired area. Select the type of editing that you want to undertake: Validate (agree with existing areas), Add or Delete, using the tool bar on the top right of the screen, and then start editing.</p>
-        <h3>Editing tips and advice</h3>
-        <p>All edits should be based on obvious errors/omissions in the data.</p>
-        <p>Where there is any ambiguity, no edits/additions should be made.</p>
-        <p>We are currently unable to show the different spectral bands so it is not currently possible to distinguish e.g. mangroves and terrestrial forest cover, without in-depth local knowledge of the area.</p>
-        <p>The underlying imagery is not from a specific time period, so there are limitations to the temporal resolution of the validation.</p>
-        <p>Future functionalities will allow users to:</p>
-        <ol class="roman">
-          <li>Specify the justification for the edit (e.g. imagery interpretation, expert knowledge).</li>
-          <li>Upload their own spatial data for integration into the community dataset.</li>
-          <li>Download subsets of the dataset according to their own defined area of interest.</li>
-          <li>View imagery with explicit dates to facilitate local habitat change detection analyses.</li>
-        </ol>
-        <p>For any feedback or questions, please email <%= mail_to "mads@unep-wcmc.org" %>.</p>
-      </div>
-      <div class="modal-footer">
-        <a href="#" id="select-salt-marshes" class="btn btn-primary" data-dismiss="modal">Salt Marshes</a>
-        <a href="#" id="select-corals" class="btn btn-primary" data-dismiss="modal">Corals</a>
-        <a href="#" id="select-mangroves" class="btn btn-primary" data-dismiss="modal">Mangroves</a>
-        <h3 class="get-started">Get started with</h3>
+      <div class="modal-right">
+        <a class="search-site" href="#" data-dismiss="modal">
+          <span>Click the map or search to select a site</span>
+        </a>
+        <a class="add-island" href="#" data-dismiss="modal">
+          <span>Add new island</span>
+        </a>
+        <a class="let-me-help" href="#" data-dismiss="modal">
+          <span>Take me somewhere that needs my help</span>
+        </a>
+        <p class="footer">Copyright UNEP-WCMC 2012</p>
       </div>
     </div>
 
