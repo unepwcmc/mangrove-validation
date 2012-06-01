@@ -10,15 +10,15 @@
     </tr>
   </thead>
   <tbody>
-    <% @islands.each do |island| %>
+    <% @user_geo_edit_downloads.each do |user_geo_edit_download| %>
       <tr>
         <td><%= user_geo_edit_download.name %></td>
         <td class='btn-td-gen'>
-          <%= link_to 'Generate current', admin_generate_path(island: island), :class => 'btn' %>
+          <%= link_to 'Generate current', admin_generate_path(user_geo_edit_download: user_geo_edit_download), :class => 'btn' %>
         </td>
         <td class='btn-td'>
-          <% if island.generated_at.present? %> 
-            <%= island.finished? ? link_to("Download - #{island.generated_at.strftime('%d/%m/%Y')}", admin_download_path(island: island), :class => 'btn btn-primary') : content_tag(:span, 'Generating download...', :class => 'btn btn-primary disabled') %>
+          <% if user_geo_edit_download.generated_at.present? %> 
+            <%= user_geo_edit_download.finished? ? link_to("Download - #{user_geo_edit_download.generated_at.strftime('%d/%m/%Y')}", admin_download_path(user_geo_edit_download: user_geo_edit_download), :class => 'btn btn-primary') : content_tag(:span, 'Generating download...', :class => 'btn btn-primary disabled') %>
           <% else %> 
             <%= content_tag(:span, 'Not yet generated', :class => 'btn btn-primary disabled') %>
           <% end %> 

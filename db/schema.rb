@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120601084450) do
+ActiveRecord::Schema.define(:version => 20120601131801) do
 
   create_table "islands", :force => true do |t|
     t.string   "name"
@@ -21,7 +21,14 @@ ActiveRecord::Schema.define(:version => 20120601084450) do
     t.string   "iso_3"
   end
 
-  create_table "layer_downloads", :force => true do |t|
+  create_table "site_texts", :force => true do |t|
+    t.string   "name"
+    t.text     "text"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "user_geo_edit_downloads", :force => true do |t|
     t.string   "name"
     t.integer  "layer"
     t.integer  "status"
@@ -29,13 +36,6 @@ ActiveRecord::Schema.define(:version => 20120601084450) do
     t.boolean  "finished"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
-  end
-
-  create_table "site_texts", :force => true do |t|
-    t.string   "name"
-    t.text     "text"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
   end
 
   create_table "user_geo_edits", :force => true do |t|

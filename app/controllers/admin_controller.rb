@@ -2,7 +2,7 @@ class AdminController < ApplicationController
   before_filter :authenticate
 
   def index
-    @islands = Island.order(:name)
+    @user_geo_edit_downloads = UserGeoEditDownload.order(:name)
     @users = User.order(:email)
     @modal_text = SiteText.find_or_create_by_name('landing_modal')
   end
