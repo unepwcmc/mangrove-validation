@@ -295,6 +295,12 @@ html, body {
   }
 }
 
+#right-main.disabled {
+  h2, span, img, #island-attributes, .actions{
+    opacity: 0.4;
+  }
+}
+
 #stats {
   position:absolute;
   bottom: 65px;
