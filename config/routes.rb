@@ -5,6 +5,8 @@ MangroveValidation::Application.routes.draw do
 
   resources :user_geo_edits, :only => [:index, :show, :create]
 
+  resources :site_texts, :only => [:update]
+
   match 'me' => 'user#me'
 
   # Admin

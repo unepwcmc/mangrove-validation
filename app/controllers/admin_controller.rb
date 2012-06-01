@@ -4,6 +4,7 @@ class AdminController < ApplicationController
   def index
     @islands = Island.order(:name)
     @users = User.order(:email)
+    @modal_text = SiteText.find_or_create_by_name('landing_modal')
   end
 
   # Generates download file from CartoDB

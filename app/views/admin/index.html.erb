@@ -66,3 +66,11 @@
     <% end %>
   </tbody>
 </table>
+
+<div class="page-header">
+  <h3>Landing Modal Text</h3>
+</div>
+<%= simple_form_for(@modal_text) do |f| %>
+  <%= f.input :text, :as => :text, :input_html => { :style => "width: 500px", :rows => 10 } %>
+  <%= f.button :submit %>
+<% end %>
