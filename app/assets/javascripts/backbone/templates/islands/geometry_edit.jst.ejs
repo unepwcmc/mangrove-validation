@@ -15,3 +15,33 @@
   <input type="submit" id="submit-polygon" value="Update Island">
   <input type="submit" id="erase-polygon" value="Clear">
 </div>
+<div class="reallocate">
+  <a href="#" class="btn">Reallocate</a>
+  <p>Assign to:</p>
+  <p>Existing</p>
+  <input id="existing_island_id" name="existing_island_id" type="hidden">
+  <input id="assign-to" type="text">
+  <input type="submit" value="Reallocate">
+  <p>New site</p>
+  <form id="new-island" action="/islands" method="post">
+    <div class="field">
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name">
+    </div>
+    <div class="field">
+      <label for="local-name">Local name</label>
+      <input type="text" name="name_local" id="name_local">
+    </div>
+    <div class="field">
+      <label for="iso_3">Country</label>
+      <input type="text" name="iso_3" id="iso_3">
+    </div>
+    <div class="field full-width">
+      <input type="text" name="source" id="source" value="$SOURCE">
+    </div>
+    <div class="actions">
+      <input type="submit" class="primary" value="New Island">
+      <input type="submit" value="Clear">
+    </div>
+  </form>
+</div>

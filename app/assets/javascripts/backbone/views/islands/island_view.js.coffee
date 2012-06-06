@@ -9,6 +9,7 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
     'click #tabs li': 'tabClicked'
 
   initialize: (options) ->
+    @islands = new MangroveValidation.Collections.IslandsCollection()
     # The sub-view to show can be passed as a param, default show
     @currentView = options.view
     @currentView ||= 'show'
@@ -62,5 +63,19 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
       view = new MangroveValidation.Views.Islands.GeometryEditView({model: @model})
 
     $('#tabbed-content').html(view.render().el)
+
+    # Existing
+    $("#assign-to").typeahead
+      source: (typeahead, query) =>
+        @islands.search query, (collection, response) ->
+          typeahead.process(response)
+      items: 4
+      property: 'name'
+      onselect: (obj) ->
+        $("#existing_island_id").val(obj.id)
+    $("#assign-to").focus (e) =>
+      $("#existing_island_id").val('')
+      $(e.target).val('')
+      @islands.search(null)
 
     return this
