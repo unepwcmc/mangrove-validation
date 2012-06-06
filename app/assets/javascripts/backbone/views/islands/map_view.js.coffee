@@ -27,9 +27,10 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
   # Adds cartodb layer of all islands in subtle colour
   showAllSubtleLayers: ->
     if @showLayers
-      unless @allIslandsLayer?
-        # Build the layer if it doesn't exist and we want it
-        query = "SELECT cartodb_id, the_geom_webmercator FROM #{window.CARTODB_TABLE}"
+      unless @originalIslandsLayer?
+        # Build the layers if they don't exist
+        # Original layer
+        query = "SELECT cartodb_id, the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE status='original'"
         color = '#00FFFF'
         layerParams =
           map_canvas: 'map_canvas'
@@ -39,11 +40,26 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
           query: query
           tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.5;line-width:1;line-opacity:0.7;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:3}"
 
-        @allIslandsLayer = new CartoDBLayer layerParams
+        @originalIslandsLayer = new CartoDBLayer layerParams
 
-      @allIslandsLayer.show()
+        # Validated layer
+        query = "SELECT cartodb_id, the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE status='validated'"
+        color = '#00FF00'
+        layerParams =
+          map_canvas: 'map_canvas'
+          map: @map
+          user_name: 'carbon-tool'
+          table_name: window.CARTODB_TABLE
+          query: query
+          tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.5;line-width:1;line-opacity:0.7;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:3}"
+
+        @validatedLayer = new CartoDBLayer layerParams
+
+      @originalIslandsLayer.show()
+      @validatedLayer.show()
     else
-      @allIslandsLayer.hide() if @allIslandsLayer?
+      @originalIslandsLayer.hide() if @originalIslandsLayer?
+      @validatedLayer.hide() if @originalIslandsLayer?
 
   renderCurrentIslands: ->
     if @showLayers
