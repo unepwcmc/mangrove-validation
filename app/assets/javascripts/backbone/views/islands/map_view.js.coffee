@@ -66,24 +66,40 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
       if @island.get('id')
         query = "SELECT cartodb_id, the_geom_webmercator FROM #{window.CARTODB_TABLE} WHERE island_id = #{@island.get('id')}"
       else
-        @currentIslandLayer.hide() if @currentIslandLayer?
+        @currentIslandOriginalLayer.hide() if @currentIslandOriginalLayer?
+        @currentIslandValidatedLayer.hide() if @currentIslandValidatedLayer?
         return
 
+      # Original Current Layer
       color = '#FFFF00'
-
       layerParams =
         map_canvas: 'map_canvas'
         map: @map
         user_name: 'carbon-tool'
         table_name: window.CARTODB_TABLE
-        query: query
+        query: query + " AND status='original'"
         tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.6;line-width:2;line-opacity:0.8;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:5}"
 
-      @currentIslandLayer.setMap(null) if @currentIslandLayer?
-      @currentIslandLayer = new CartoDBLayer(layerParams)
-      @currentIslandLayer.show()
+      @currentIslandOriginalLayer.setMap(null) if @currentIslandOriginalLayer?
+      @currentIslandOriginalLayer = new CartoDBLayer(layerParams)
+      @currentIslandOriginalLayer.show()
+
+      # Validated Current Layer
+      color = '#00FF00'
+      layerParams =
+        map_canvas: 'map_canvas'
+        map: @map
+        user_name: 'carbon-tool'
+        table_name: window.CARTODB_TABLE
+        query: query + " AND status='validated'"
+        tile_style: "##{window.CARTODB_TABLE}{polygon-fill:#{color};polygon-opacity:0.6;line-width:2;line-opacity:0.8;line-color:#{color}} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:5}"
+
+      @currentIslandValidatedLayer.setMap(null) if @currentIslandValidatedLayer?
+      @currentIslandValidatedLayer = new CartoDBLayer(layerParams)
+      @currentIslandValidatedLayer.show()
     else
-      @currentIslandLayer.hide() if @currentIslandLayer?
+      @currentIslandOriginalLayer.hide() if @currentIslandOriginalLayer?
+      @currentIslandValidatedLayer.hide() if @currentIslandValidatedLayer?
 
   handleMapClick: (event) =>
     if window.VALIDATION.currentAction == null
