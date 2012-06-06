@@ -16,7 +16,8 @@
             <a href="#">Help</a>
           </li>
           <li>
-            <a href="#">Logout</a>
+            <%= link_to "Logout #{current_user.email}", destroy_user_session_path, :method => 'delete' if current_user.present? %>
+            <%= link_to 'Login', '#', :id => 'login-btn' unless current_user.present? %>
           </li>
         </ul>
         <div class="pull-right">

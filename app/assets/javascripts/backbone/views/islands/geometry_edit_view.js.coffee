@@ -8,6 +8,7 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     MangroveValidation.bus.bind('mapClickAt', @addPoint)
 
     $('form#new_user_geo_edit').bind('ajax:success', @afterPolySubmission)
+    $('form#new_user_geo_edit').bind('ajax:error', @failedPolySubmission)
 
   events :
     "click #validate-btn": "startValidate"
@@ -91,6 +92,7 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     # Submit form
     $('form#new_user_geo_edit').submit()
 
+  # Occurs after the polygon submission comes back successfully 
   afterPolySubmission: (evt, data, status, xhr) =>
     @clearCurrentEdits()
 
@@ -105,3 +107,19 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     # Redraw maps
     MangroveValidation.bus.trigger('layersChanged')
 
+  failedPolySubmission: (evt, data, status, xhr) ->
+    if data.status == 401 || data.status == 403 # Unauthorized OR Forbidden, show user login page
+      window.VALIDATION.showUserLogin()
+    else
+      #Notify user of error
+      $("#alert-message").removeClass('alert-success').addClass('alert-error').html("There was some error while trying to submit the data.")
+      $("#alert-message").show()
+      setTimeout("$('#alert-message').fadeOut('slow')", 2000)
+      
+      # Errors
+      errors = $.parseJSON(data.responseText).errors
+
+      $('select.knowledge').parents('.control-group').removeClass('error').find('.help-block').remove()
+      $.each(errors.knowledge || [], (index, value) ->
+        $("select.knowledge").after($("<span class='help-block'>Source #{value}</span>")).parents("div.control-group").addClass("error")
+      )

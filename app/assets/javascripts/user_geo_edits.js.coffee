@@ -5,8 +5,14 @@
 # Check if user signed in
 window.checkUserSignedIn = ->
   $.getJSON '/me', (data) ->
-    $(".logout").show().tooltip({title: "Logout #{data.email}", placement: 'bottom'})
+    $("#login-btn").text("Logout #{data.email}")
+      .attr('id', "logout-btn")
+      .attr('href', "/users/sign_out")
+      .attr('data-method', 'delete')
 
+# Show the user login page in a modal
+window.VALIDATION.showUserLogin = ->
+  $.fancybox.open('/users/sign_in', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 380, closeBtn: false})
 
 jQuery ->
   # Check if user signed in
@@ -35,21 +41,6 @@ jQuery ->
   $('#about-btn').click (e) ->
     $('#landingModal').modal()
 
-  $('form#new_user_geo_edit').bind('ajax:error', (evt, data, status, xhr) ->
-    if data.status == 401 || data.status == 403 # Unauthorized OR Forbidden
-      $.fancybox.open('/users/sign_in', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 380, closeBtn: false})
-    else
-      $("#alert-message .alert").removeClass('alert-success').addClass('alert-error').html("There was some error while trying to submit the data.")
-      $("#alert-message").show()
-      setTimeout("$('#alert-message').fadeOut('slow')", 2000)
-      
-      # Errors
-      errors = $.parseJSON(data.responseText).errors
+  $('#login-btn').click () ->
+    window.VALIDATION.showUserLogin()
 
-      $('select.knowledge').parents('.control-group').removeClass('error').find('.help-block').remove()
-      $.each(errors.knowledge || [], (index, value) ->
-        $("select.knowledge").after($("<span class='help-block'>Source #{value}</span>")).parents("div.control-group").addClass("error")
-      )
-
-    $('#main_menu .submit-polygon, #main_menu .erase-polygon').removeClass('disabled')
-  )
