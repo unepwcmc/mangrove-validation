@@ -16,6 +16,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
     MangroveValidation.bus.bind("zoomToBounds", @zoomToBounds)
     MangroveValidation.bus.bind("toggleMapLayers", @toggleMapLayers)
     MangroveValidation.bus.bind("addToMap", @addToMap)
+    MangroveValidation.bus.bind("layersChanged", @redrawLayers)
 
     # Bind to island events
     @island.on('change', @render)
@@ -142,3 +143,14 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
   toggleMapLayers: (enable) =>
     @showLayers = enable
     @render()
+
+  # Redraw the layers
+  redrawLayers: () =>
+    # Remove existing layers and set to null to force redraws
+    @originalIslandsLayer.hide() && @originalIslandsLayer = null if @originalIslandsLayer?
+    @validatedLayer.hide() && @validatedLayer = null if @originalIslandsLayer?
+    @currentIslandOriginalLayer.hide() && @currentIslandOriginalLayer = null if @currentIslandOriginalLayer?
+    @currentIslandValidatedLayer.hide() && @currentIslandValidatedLayer = null if @currentIslandValidatedLayer?
+
+    @render()
+

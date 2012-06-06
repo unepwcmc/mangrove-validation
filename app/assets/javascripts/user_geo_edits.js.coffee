@@ -35,23 +35,7 @@ jQuery ->
   $('#about-btn').click (e) ->
     $('#landingModal').modal()
 
-  $('form#new_user_geo_edit').bind('ajax:success', (evt, data, status, xhr) ->
-    window.VALIDATION.mapPolygon.getPath().clear()
-
-    # Update layers
-    random_number = Math.floor(Math.random()*100)
-    _.each window.VALIDATION.layers, (layer, layer_name) ->
-      _.each layer.editions, (edition_properties, edition) ->
-        name = `(edition == 'base' ? layer_name : layer_name + '_' + edition)`
-        if window.VALIDATION[name].isVisible()
-          window.VALIDATION[name].update("#{window.VALIDATION["#{name}_params"].query} AND #{random_number} = #{random_number}")
-
-    $("#alert-message .alert").removeClass('alert-error').addClass('alert-success').html("Successfully submitted, thank you for your contribution.")
-    $("#alert-message").show()
-    setTimeout("$('#alert-message').fadeOut('slow')", 2000)
-
-    $("select.knowledge").val('').parents('.control-group').removeClass('error').find('.help-block').remove()
-  ).bind('ajax:error', (evt, data, status, xhr) ->
+  $('form#new_user_geo_edit').bind('ajax:error', (evt, data, status, xhr) ->
     if data.status == 401 || data.status == 403 # Unauthorized OR Forbidden
       $.fancybox.open('/users/sign_in', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 380, closeBtn: false})
     else

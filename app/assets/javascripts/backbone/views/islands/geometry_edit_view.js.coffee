@@ -7,6 +7,8 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
   initialize: ->
     MangroveValidation.bus.bind('mapClickAt', @addPoint)
 
+    $('form#new_user_geo_edit').bind('ajax:success', @afterPolySubmission)
+
   events :
     "click #validate-btn": "startValidate"
     "click #add-area-btn": "startAdd"
@@ -88,3 +90,18 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
 
     # Submit form
     $('form#new_user_geo_edit').submit()
+
+  afterPolySubmission: (evt, data, status, xhr) =>
+    @clearCurrentEdits()
+
+    # Thank user for submission
+    $("#alert-message").removeClass('alert-error').addClass('alert-success').html("Successfully submitted, thank you for your contribution.")
+    $("#alert-message").fadeIn()
+    setTimeout("$('#alert-message').fadeOut('slow')", 2000)
+
+    # Unset any errors
+    $("select.knowledge").parents('.control-group').removeClass('error').find('.help-block').remove()
+
+    # Redraw maps
+    MangroveValidation.bus.trigger('layersChanged')
+

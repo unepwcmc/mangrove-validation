@@ -455,17 +455,13 @@ footer {
   filter: alpha(opacity=75);
 }
 
-#alert-message {
-  position: absolute;
-  top: 5px;
-  left: 250px;
-  right: 300px;
-
-  .alert {
-    margin: 0 auto;
-    max-width: 350px;
-    text-align: center;
-  }
+#alert-message.alert {
+  display:none;
+  position:relative;
+  top: -50px;
+  float:left;
+  margin: 0 auto;
+  text-align: center;
 }
 
 /* Scrollbars */
