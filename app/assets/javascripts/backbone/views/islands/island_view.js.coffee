@@ -41,6 +41,8 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
     @render()
 
   render: =>
+    @$el.parent().removeClass('disabled')
+
     viewParams = @model.toJSON()
     if @currentView == 'geometry'
       viewParams.activeTab = 'geometry'
