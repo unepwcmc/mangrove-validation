@@ -1,8 +1,9 @@
 class UserGeoEdit < ActiveRecord::Base
   belongs_to :user
   belongs_to :island
+  belongs_to :reallocated_from_island, :class_name => 'Comment'
 
-  validates :action, presence: true, inclusion: { in: %w(validate add delete) }
+  validates :action, presence: true, inclusion: { in: %w(validate add delete reallocate) }
   validates :polygon, presence: true
   validates :user, presence: true
   validates :knowledge, presence: true
@@ -25,6 +26,26 @@ class UserGeoEdit < ActiveRecord::Base
         # Remove validated area from base
         sql = sql + <<-SQL
           UPDATE #{APP_CONFIG['cartodb_table']} SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,#{geom_sql}), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY'))) WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = 'original' AND island_id = #{island_id};
+        SQL
+
+      when 'reallocate'
+        # Insert copy polygon area from reallocated_from_island
+        sql = <<-SQL
+          INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, island_id, status, action, email)
+            (SELECT ST_Multi(ST_Intersection(the_geom, #{geom_sql})), #{island_id}, 'validated', '#{action}', '#{user.email}'
+              FROM #{APP_CONFIG['cartodb_table']}
+              WHERE ST_Intersects(the_geom, #{geom_sql}) AND island_id = #{reallocated_from_island_id} AND status IS NOT NULL);
+        SQL
+
+        # Remove validated area from original layer for this island
+        sql = sql + <<-SQL
+          UPDATE #{APP_CONFIG['cartodb_table']}
+          SET the_geom=ST_Multi(ST_Union(ST_Difference(the_geom,copied_area.validated_geom), ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY')))
+          FROM (SELECT ST_Multi(ST_Intersection(the_geom, #{geom_sql})) AS validated_geom
+                FROM #{APP_CONFIG['cartodb_table']}
+                WHERE ST_Intersects(the_geom, #{geom_sql}) AND island_id = #{reallocated_from_island_id} AND status IS NOT NULL
+          ) as copied_area
+          WHERE ST_Intersects(the_geom, copied_area.validated_geom) AND status = 'original' AND island_id = #{island_id};
         SQL
 
       when 'add'

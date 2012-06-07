@@ -21,8 +21,29 @@ class UserGeoEditsController < ApplicationController
 
   def reallocate_geometry
     # Get/Create the island to reallocate to
-    @new_island = Island.find_or_create_by_name(params[:reallocate_new_island_name])
+    @destination_island = Island.find_or_create_by_name(params[:reallocate_to_island_name])
 
-    respond_with @new_island
+    # Reallocate the poly to destination island
+    @destination_reallocate = UserGeoEdit.new(
+      :polygon => params[:reallocate_polygon],
+      :knowledge => params[:reallocate_knowledge],
+      :island_id => @destination_island.id,
+      :reallocated_from_island_id => params[:reallocate_from_island_id],
+      :action => 'reallocate',
+      :user => current_user
+    )
+    @destination_reallocate.save
+
+    # Remove the poly from the current island
+    @from_delete = UserGeoEdit.new(
+      :polygon => params[:reallocate_polygon],
+      :knowledge => params[:reallocate_knowledge],
+      :island_id => params[:reallocate_from_island_id].to_i,
+      :action => 'delete',
+      :user => current_user
+    )
+    @from_delete.save
+
+    respond_with @destination_island
   end
 end

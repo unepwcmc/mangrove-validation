@@ -110,8 +110,8 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     # Fill form
     $("#reallocate-geometry-form input#reallocate_polygon").val(@pointsToCoordArray(@mapPolygon).join(','))
 
-    $("#reallocate-geometry-form input#reallocate_island_id").val(@model.get('id'))
-    $("#reallocate-geometry-form input#reallocate_new_island_name").val($('#new_island_name').val())
+    $("#reallocate-geometry-form input#reallocate_from_island_id").val(@model.get('id'))
+    $("#reallocate-geometry-form input#reallocate_to_island_name").val($('#to_island_name').val())
     $("#reallocate-geometry-form input#reallocate_knowledge").val($("#reallocate-knowledge").val())
 
     $('div.actions input').addClass('disabled')
