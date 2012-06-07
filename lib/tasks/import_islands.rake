@@ -13,4 +13,8 @@ task :import_islands_from_cartodb => :environment do
 
     page = page + 1
   end while result.rows.length == per_page
+
+  # Reset ID sequence to max id + 1
+  Island.connection.execute "SELECT SETVAL('islands_id_seq', (SELECT MAX(id) FROM islands) + 1);"
+  
 end
