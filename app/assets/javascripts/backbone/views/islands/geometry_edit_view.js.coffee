@@ -14,6 +14,7 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     "click #validate-btn": "startValidate"
     "click #add-area-btn": "startAdd"
     "click #delete-area-btn": "startDelete"
+    "click #reallocate-btn": "startReallocate"
     "click #submit-polygon" : "submitPolygon"
     "click #erase-polygon" : "clearCurrentEdits"
 
@@ -29,12 +30,19 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
 
   startValidate: (event) =>
     @drawNewPolygon('validate', '#46a546', event)
+    @showEditDialog()
 
   startAdd: (event) =>
     @drawNewPolygon('add', '#08C', event)
+    @showEditDialog()
 
   startDelete: (event) =>
     @drawNewPolygon('delete', '#9d261d', event)
+    @showEditDialog()
+
+  startReallocate: (event) =>
+    @drawNewPolygon('reallocate', '#08C', event)
+    @showReallocateDialog()
 
   # Start drawing a new polygon on the map, for the given action and color
   drawNewPolygon: (action, color, event) ->
@@ -85,7 +93,7 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
 
     $("form#new_user_geo_edit input#user_geo_edit_island_id").val(@model.get('id'))
     $("form#new_user_geo_edit input#user_geo_edit_action").val(window.VALIDATION.currentAction)
-    $("form#new_user_geo_edit input#user_geo_edit_knowledge").val($(".knowledge").val())
+    $("form#new_user_geo_edit input#user_geo_edit_knowledge").val($("#edit-knowledge").val())
 
     $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
 
@@ -123,3 +131,11 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
       $.each(errors.knowledge || [], (index, value) ->
         $("select.knowledge").after($("<span class='help-block'>Source #{value}</span>")).parents("div.control-group").addClass("error")
       )
+
+  showEditDialog: =>
+    $('#edit-dialog').slideDown()
+    $('#reallocate-dialog').slideUp()
+
+  showReallocateDialog: =>
+    $('#reallocate-dialog').slideDown()
+    $('#edit-dialog').slideUp()

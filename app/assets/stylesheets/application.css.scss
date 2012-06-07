@@ -255,29 +255,29 @@ html, body {
 
   #island-attributes {
     padding: 15px;
+  }
 
-    .field {
-      overflow:hidden;
-      margin-bottom: 4px;
-      label {
-        color: #F5CD03;
-        float:left;
-        width: 80px;
-      }
-      span, input {
-        float:left;
-        width: 150px;
-        color: #FF6600;
-      }
-      input {
-        border: 1px solid #535353;
-        background-color: #4A4A4A;
-      }
+  .field {
+    overflow:hidden;
+    margin-bottom: 4px;
+    label {
+      color: #F5CD03;
+      float:left;
+      width: 80px;
     }
-    .field.full-width {
-      input {
-        width: 230px;
-      }
+    span, input {
+      float:left;
+      width: 150px;
+      color: #FF6600;
+    }
+    input {
+      border: 1px solid #535353;
+      background-color: #4A4A4A;
+    }
+  }
+  .field.full-width {
+    input {
+      width: 230px;
     }
   }
   .actions {
@@ -292,6 +292,17 @@ html, body {
       border: 1px solid #664D26;
       background-color: #665926;
     }
+  }
+  h4 {
+    color: #FFCC00;
+    margin-bottom: 10px;
+  }
+  select {
+    width: 100%;
+  }
+
+  #reallocate-dialog, #edit-dialog {
+    display:none;
   }
 }
 
@@ -363,7 +374,16 @@ footer {
     }
 
     .btn {
-      width: 45px;
+      width: 49px;
+      font-size: 11px;
+    }
+
+    hr {
+      clear:both;
+      border: 0px;
+      border-bottom: 1px solid #DDD;
+      margin: 0 0 5px 0;
+      padding-top: 5px;
     }
   }
 }

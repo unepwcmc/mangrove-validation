@@ -4,15 +4,35 @@
     <a href="#" id='add-area-btn' class="add-area btn btn-primary"><i class="icon-plus icon-white"></i><br/>Add</a>
     <a href="#" id='delete-area-btn' class="delete-area btn btn-danger"><i class="icon-trash icon-white"></i><br/>Delete</a>
   </div>
+  <hr/>
+  <a href="#" id='reallocate-btn' class="reallocate btn"><i class="icon-share-alt"></i><br/>Reallocate</a>
 </div>
-<select class="knowledge">
-  <option value="">Please select evidence type</option>
-  <option value="imagery">Underlying imagery in browser</option>
-  <option value="local data">Local data</option>
-  <option value="local knowledge">Local knowledge</option>
-</select>
-<div class="actions">
-  <input type="submit" id="submit-polygon" value="Update Island">
-  <input type="submit" id="erase-polygon" value="Clear">
+<div id='reallocate-dialog'>
+  <h4>Reallocate to:</h4>
+  <div class="field full-width">
+    <input type="text" name="source" id="source" value="Search or create new area by name">
+  </div>
+  <select class="knowledge">
+    <option value="">Please select evidence type</option>
+    <option value="imagery">Underlying imagery in browser</option>
+    <option value="local data">Local data</option>
+    <option value="local knowledge">Local knowledge</option>
+  </select>
+  <div class="actions">
+    <input type="submit" id="submit-polygon" value="Reallocate">
+    <input type="submit" id="erase-polygon" value="Clear">
+  </div>
 </div>
-<div id="alert-message" class='alert'>
+<div id='edit-dialog'>
+  <select id='edit-knowledge' class="knowledge">
+    <option value="">Please select evidence type</option>
+    <option value="imagery">Underlying imagery in browser</option>
+    <option value="local data">Local data</option>
+    <option value="local knowledge">Local knowledge</option>
+  </select>
+  <div class="actions">
+    <input type="submit" id="submit-polygon" value="Update Island">
+    <input type="submit" id="erase-polygon" value="Clear">
+  </div>
+</div>
+<div id="alert-message" class='alert'></div>
