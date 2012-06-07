@@ -16,17 +16,16 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     "click #delete-area-btn": "startDelete"
     "click #reallocate-btn": "startReallocate"
     "click #submit-polygon" : "submitPolygon"
-    "click #erase-polygon" : "clearCurrentEdits"
+    "click .erase-polygon" : "clearCurrentEdits"
 
   addPoint: (latLng) =>
     # Add a point to the current polygons path
     if @mapPolygon?
       path = @mapPolygon.getPath()
       path.push(latLng)
-      if path.length > 0
-        $('.erase-polygon').removeClass('disabled')
+      $('.erase-polygon').removeClass('disabled')
       if path.length > 2
-        $('.submit-polygon').removeClass('disabled')
+        $('#submit-polygon').removeClass('disabled')
 
   startValidate: (event) =>
     @drawNewPolygon('validate', '#46a546', event)
@@ -70,8 +69,7 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     window.VALIDATION.currentAction = null
     
     $('#tools .btn').removeClass('active')
-    $('#main_menu .submit-or-erase').slideUp()
-    $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
+    $('div.actions input').addClass('disabled')
 
   render : ->
     $(@el).html(@template(@model.toJSON() ))

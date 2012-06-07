@@ -304,6 +304,10 @@ html, body {
   #reallocate-dialog, #edit-dialog {
     display:none;
   }
+
+  .disabled {
+    opacity: 0.5;
+  }
 }
 
 #right-main.disabled {
