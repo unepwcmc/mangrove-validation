@@ -2,7 +2,7 @@ class UserGeoEditsController < ApplicationController
   before_filter :authenticate_user!, :only => :create
 
   respond_to :html, :only => :index
-  respond_to :json, :only => :create
+  respond_to :json, :only => [:create, :reallocate_geometry]
 
   def index
     @user_geo_edit = UserGeoEdit.new
@@ -17,5 +17,12 @@ class UserGeoEditsController < ApplicationController
     @user_geo_edit.user = current_user
     @user_geo_edit.save
     respond_with @user_geo_edit
+  end
+
+  def reallocate_geometry
+    # Get/Create the island to reallocate to
+    @new_island = Island.find_or_create_by_name(params[:reallocate_new_island_name])
+
+    respond_with @new_island
   end
 end

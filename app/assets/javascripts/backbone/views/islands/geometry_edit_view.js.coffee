@@ -10,13 +10,18 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     $('form#new_user_geo_edit').bind('ajax:success', @afterPolySubmission)
     $('form#new_user_geo_edit').bind('ajax:error', @failedPolySubmission)
 
-  events :
+    $('#reallocate-geometry-form').bind('ajax:success', @afterReallocation)
+    $('#reallocate-geometry-form').bind('ajax:error', @failedPolySubmission)
+
+  events:
     "click #validate-btn": "startValidate"
     "click #add-area-btn": "startAdd"
     "click #delete-area-btn": "startDelete"
     "click #reallocate-btn": "startReallocate"
-    "click #submit-polygon" : "submitPolygon"
-    "click .erase-polygon" : "clearCurrentEdits"
+    "click #submit-polygon": "submitPolygon"
+    "click #reallocate-polygon": "reallocatePolygon"
+    "click .erase-polygon": "clearCurrentEdits"
+
 
   addPoint: (latLng) =>
     # Add a point to the current polygons path
@@ -26,6 +31,7 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
       $('.erase-polygon').removeClass('disabled')
       if path.length > 2
         $('#submit-polygon').removeClass('disabled')
+        $('#reallocate-polygon').removeClass('disabled')
 
   startValidate: (event) =>
     @drawNewPolygon('validate', '#46a546', event)
@@ -85,6 +91,7 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     coordinates.push("#{path.getAt(0).lng()} #{path.getAt(0).lat()}") # Close the polygon
     coordinates
 
+  # Populates form for current poly, and submits
   submitPolygon: =>
     # Fill form
     $("form#new_user_geo_edit input#user_geo_edit_polygon").val(@pointsToCoordArray(@mapPolygon).join(','))
@@ -93,10 +100,24 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     $("form#new_user_geo_edit input#user_geo_edit_action").val(window.VALIDATION.currentAction)
     $("form#new_user_geo_edit input#user_geo_edit_knowledge").val($("#edit-knowledge").val())
 
-    $('#main_menu .submit-polygon, #main_menu .erase-polygon').addClass('disabled')
+    $('div.actions input').addClass('disabled')
 
     # Submit form
     $('form#new_user_geo_edit').submit()
+
+  # Populates form for reallocating the current user poly, and submits
+  reallocatePolygon: =>
+    # Fill form
+    $("#reallocate-geometry-form input#reallocate_polygon").val(@pointsToCoordArray(@mapPolygon).join(','))
+
+    $("#reallocate-geometry-form input#reallocate_island_id").val(@model.get('id'))
+    $("#reallocate-geometry-form input#reallocate_new_island_name").val($('#new_island_name').val())
+    $("#reallocate-geometry-form input#reallocate_knowledge").val($("#reallocate-knowledge").val())
+
+    $('div.actions input').addClass('disabled')
+
+    # Submit form
+    $('#reallocate-geometry-form').submit()
 
   # Occurs after the polygon submission comes back successfully 
   afterPolySubmission: (evt, data, status, xhr) =>
@@ -129,6 +150,20 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
       $.each(errors.knowledge || [], (index, value) ->
         $("select.knowledge").after($("<span class='help-block'>Source #{value}</span>")).parents("div.control-group").addClass("error")
       )
+
+  # Occurs after the polygon submission comes back successfully 
+  afterReallocation: (evt, data, status, xhr) =>
+    @clearCurrentEdits()
+
+    # Thank user for submission
+    $("#alert-message").removeClass('alert-error').addClass('alert-success').html("Successfully reallocated this geometry to <a href='##{data.id}'>#{data.name}</a>, thank you for your contribution.")
+    $("#alert-message").fadeIn()
+
+    # Unset any errors
+    $("select.knowledge").parents('.control-group').removeClass('error').find('.help-block').remove()
+
+    # Redraw maps
+    MangroveValidation.bus.trigger('layersChanged')
 
   showEditDialog: =>
     $('#edit-dialog').slideDown()

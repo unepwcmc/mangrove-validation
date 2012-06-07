@@ -3,7 +3,11 @@ MangroveValidation::Application.routes.draw do
 
   devise_for :users
 
-  resources :user_geo_edits, :only => [:index, :show, :create]
+  resources :user_geo_edits, :only => [:index, :show, :create] do
+    collection do
+      post :reallocate_geometry
+    end
+  end
 
   resources :site_texts, :only => [:update]
 
