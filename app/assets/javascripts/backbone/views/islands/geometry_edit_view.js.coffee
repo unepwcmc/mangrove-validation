@@ -78,6 +78,9 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     $('#tools .btn').removeClass('active')
     $('div.actions input').addClass('disabled')
 
+  onClose: ->
+    @clearCurrentEdits()
+
   render : ->
     $(@el).html(@template(@model.toJSON() ))
 
