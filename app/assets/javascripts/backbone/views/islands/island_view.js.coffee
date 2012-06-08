@@ -13,13 +13,15 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
     @currentView = options.view
     @currentView ||= 'show'
 
+    @tabbedContentManager = new MangroveValidation.ViewManager("#tabbed-content")
+
     # Zoom to the bounds of the island
     @model.getBounds (bounds) ->
       MangroveValidation.bus.trigger('zoomToBounds', bounds)
 
     # Bind to island events
-    @model.on('change', @render)
-    MangroveValidation.bus.on('changeIslandView', @changeView)
+    @bindTo(@model, 'change', @render)
+    @bindTo(MangroveValidation.bus, 'changeIslandView', @changeView)
 
   tagName: "div"
 
@@ -39,6 +41,10 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
     # Change the current view and render
     @currentView = view
     @render()
+
+  # On close, close the tabbed content view
+  onClose: =>
+    @tabbedContentManager.currentView.close()
 
   render: =>
     @$el.parent().removeClass('disabled')
@@ -63,6 +69,6 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
     else if @currentView == 'geometry'
       view = new MangroveValidation.Views.Islands.GeometryEditView({model: @model})
 
-    $('#tabbed-content').html(view.render().el)
+    @tabbedContentManager.showView(view)
 
     return this

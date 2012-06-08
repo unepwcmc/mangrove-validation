@@ -13,10 +13,10 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
     @showLayers = true
 
     # Bus binding
-    MangroveValidation.bus.bind("zoomToBounds", @zoomToBounds)
-    MangroveValidation.bus.bind("toggleMapLayers", @toggleMapLayers)
-    MangroveValidation.bus.bind("addToMap", @addToMap)
-    MangroveValidation.bus.bind("layersChanged", @redrawLayers)
+    @bindTo(MangroveValidation.bus, "zoomToBounds", @zoomToBounds)
+    @bindTo(MangroveValidation.bus, "toggleMapLayers", @toggleMapLayers)
+    @bindTo(MangroveValidation.bus, "addToMap", @addToMap)
+    @bindTo(MangroveValidation.bus, "layersChanged", @redrawLayers)
 
     # Bind to island events
     @island.on('change', @render)

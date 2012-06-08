@@ -5,8 +5,10 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
   id: 'geometry-edit'
 
   initialize: ->
-    MangroveValidation.bus.bind('mapClickAt', @addPoint)
+    @bindTo(MangroveValidation.bus, 'mapClickAt', @addPoint)
 
+    # These binding could stand to be refactored, the forms should really be inside the view itself
+    # currently, these will leak memory
     $('form#new_user_geo_edit').bind('ajax:success', @afterPolySubmission)
     $('form#new_user_geo_edit').bind('ajax:error', @failedPolySubmission)
 
@@ -21,7 +23,6 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     "click #submit-polygon": "submitPolygon"
     "click #reallocate-polygon": "reallocatePolygon"
     "click .erase-polygon": "clearCurrentEdits"
-
 
   addPoint: (latLng) =>
     # Add a point to the current polygons path
