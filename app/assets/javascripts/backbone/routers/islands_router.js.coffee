@@ -3,6 +3,8 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     @islands = new MangroveValidation.Collections.IslandsCollection()
     @island = new MangroveValidation.Models.Island()
 
+    @sidePanelManager = new MangroveValidation.ViewManager("#right-main")
+
     # Base layout
     @baseLayout()
 
@@ -25,15 +27,8 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     #@islands.getAndResetById(id)
     @island.set({id: id})
     @island.fetch()
-
-    @view = new MangroveValidation.Views.Islands.IslandView(model: @island)
-    $("#right-main").html(@view.render().el)
-
-  edit: (id) ->
-    island = @islands.get(id)
-
-    @view = new MangroveValidation.Views.Islands.EditView(model: island)
-    $("#islands").html(@view.render().el)
+    
+    @sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: @island))
 
   baseLayout: ->
     # Search box
