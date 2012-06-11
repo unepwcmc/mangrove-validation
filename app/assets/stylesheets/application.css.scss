@@ -138,6 +138,7 @@ html, body {
 #download-modal {
   display:none;
   padding: 15px;
+  height: auto;
 
   #download-option-strip {
     padding: 10px;
@@ -151,6 +152,10 @@ html, body {
       font-size: 15px;
       line-height: 35px;
     }
+  }
+  #user-download-feedback {
+    display:none;
+    margin: 0 0 9px 25px;
   }
 
   h3 {

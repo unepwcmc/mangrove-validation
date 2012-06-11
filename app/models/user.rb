@@ -12,4 +12,5 @@ class User < ActiveRecord::Base
   validates :name, presence: true
 
   has_many :user_geo_edits
+  has_many :user_geo_edits_downloads
 end

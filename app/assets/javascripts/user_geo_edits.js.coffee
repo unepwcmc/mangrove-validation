@@ -47,3 +47,22 @@ jQuery ->
   $('#login-btn').click () ->
     window.VALIDATION.showUserLogin()
 
+  # Downloads buttons
+  $('#download-option-strip a').click (e) ->
+    e.preventDefault()
+
+    $.ajax(
+      url: $(e.target).attr('href')
+      success: ->
+        $('#user-download-feedback').removeClass('alert-danger').addClass('alert-success')
+        $('#user-download-feedback').text('Started building your download, you will received and email when finished')
+        $('#user-download-feedback').slideDown()
+        setTimeout("$('#user-download-feedback').slideUp('slow')", 2000)
+      error: ->
+        $('#user-download-feedback').removeClass('alert-success').addClass('alert-danger')
+        $('#user-download-feedback').text('Unable to build your download, please try again')
+        $('#user-download-feedback').slideDown()
+        setTimeout("$('#user-download-feedback').slideUp('slow')", 2000)
+    )
+
+

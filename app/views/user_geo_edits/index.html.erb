@@ -59,12 +59,13 @@
     </div>
 
     <div class="modal" id="download-modal">
-      <h3>Generate a new download:</h3>
+      <h3>Generate a new download</h3>
       <div id='download-option-strip'>
-        <a href='#' class='download-btn btn btn-primary'><span>All Islands</span></a>
+        <%= link_to "All Islands", generate_download_path(:range => 'all'), :class => 'download-btn btn btn-primary' %>
         <a href='#' class='download-btn btn btn-primary'><span>Islands I've Edited</span></a>
         <a href='#' class='download-btn btn btn-primary'><span>Every Island Currently Visible</span></a>
       </div>
+      <div id='user-download-feedback' class="alert alert-success"></div>
 
       <h3>Download existing datasets</h3>
       <ul id='user-downloads'>
