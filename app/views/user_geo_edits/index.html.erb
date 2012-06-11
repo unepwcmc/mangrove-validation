@@ -13,7 +13,7 @@
             <a id='about-btn' href="#">About</a>
           </li>
           <li>
-            <a href="#">Help</a>
+            <a id='show-downloads-btn' href="#">Download data</a>
           </li>
           <li>
             <%= link_to "Logout #{current_user.email}", destroy_user_session_path, :method => 'delete' if current_user.present? %>
@@ -56,6 +56,25 @@
         </a>
         <p class="footer">Copyright UNEP-WCMC 2012</p>
       </div>
+    </div>
+
+    <div class="modal" id="download-modal">
+      <h3>Generate a new download:</h3>
+      <div id='download-option-strip'>
+        <a href='#' class='download-btn btn btn-primary'><span>All Islands</span></a>
+        <a href='#' class='download-btn btn btn-primary'><span>Islands I've Edited</span></a>
+        <a href='#' class='download-btn btn btn-primary'><span>Every Island Currently Visible</span></a>
+      </div>
+
+      <h3>Download existing datasets</h3>
+      <ul id='user-downloads'>
+        <li>
+          All Islands <span class='creation-date'>16:26 on 7th May</span> <a href='#' class='btn'>Download</a>
+        </li>
+        <li>
+          17 Islands <span class='creation-date'>09:55 on 2nd May</span> <a href='#' class='btn'>Download</a>
+        </li>
+      </ul>
     </div>
 
     <div class="modal hide" id="authModal"></div>

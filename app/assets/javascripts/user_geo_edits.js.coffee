@@ -41,6 +41,9 @@ jQuery ->
   $('#about-btn').click (e) ->
     $('#landingModal').modal()
 
+  $('#show-downloads-btn').click (e) ->
+    $('#download-modal').modal()
+
   $('#login-btn').click () ->
     window.VALIDATION.showUserLogin()
 

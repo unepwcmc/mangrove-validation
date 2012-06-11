@@ -36,10 +36,10 @@ html, body {
   }
 }
 
-#landingModal {
+.modal {
   display:none;
   overflow: hidden;
-  background: #5c5d5e image-url('landing-bg.png') no-repeat;
+  background: #5c5d5e;
   width: 798px;
   height: 260px;
   color: #ffcc00;
@@ -52,6 +52,11 @@ html, body {
   p {
     font-size: 11px;
   }
+
+}
+
+#landingModal {
+  background: #5c5d5e image-url('landing-bg.png') no-repeat;
 
   .modal-middle {
     float: left;
@@ -126,6 +131,53 @@ html, body {
       clear: both;
       margin-right: 15px;
       margin-top: 32px;
+    }
+  }
+}
+
+#download-modal {
+  display:none;
+  padding: 15px;
+
+  #download-option-strip {
+    padding: 10px;
+    background-color: #333;
+    border-radius: 5px;
+    margin: 0 0 9px 25px;
+
+    .download-btn {
+      width: 200px;
+      margin-left: 20px;
+      font-size: 15px;
+      line-height: 35px;
+    }
+  }
+
+  h3 {
+    margin-top: 15px;
+    margin-bottom: 8px;
+  }
+  h3:first-child {
+    margin-top: 0;
+  }
+
+  ul#user-downloads {
+    border-radius: 5px;
+    background-color: #333;
+
+    li {
+      list-style-type:none;
+      overflow:hidden;
+      border-top: 1px solid #666;
+      line-height: 30px;
+      padding: 5px 8px;
+
+      a {
+        float:right;
+      }
+    }
+    li:first-child {
+      border-top: 0;
     }
   }
 }
