@@ -14,6 +14,7 @@ class MangroveValidation.Models.Island extends Backbone.Model
     query = "SELECT ST_Extent(the_geom) AS bbox FROM #{window.CARTODB_TABLE} WHERE island_id = #{@.get('id')}"
     $.ajax
       url: "#{window.CARTODB_API_ADDRESS}?q=#{query}"
+      dataType: 'json'
       success: (data) ->
         # Build the bounds from the WKT bbox
         wktBbox = data.rows[0].bbox
