@@ -50,8 +50,8 @@ class DownloadJob
 
         user_geo_edit_download.update_attributes(:status => :finished)
       end
-    rescue
-      puts "Failed"
+    rescue Exception => msg
+      puts msg
       user_geo_edit_download.update_attributes(:status => :failed)
     end
   end
