@@ -19,8 +19,6 @@
 //= require backbone_rails_sync
 //= require backbone_datalink
 //= require bootstrap-generators
-//= require wax.g
-//= require cartodb-gmapsv3
 //= require backbone/mangrove_validation
 //= require view_manager
 //= require user_geo_edits
