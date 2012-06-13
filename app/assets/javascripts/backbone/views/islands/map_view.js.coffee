@@ -82,6 +82,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
 
     $.ajax
       url: "#{window.CARTODB_API_ADDRESS}?q=#{query}"
+      dataType: 'json'
       success: (data) ->
         if data.rows.length > 0
           # If we find a island, redirect to it
