@@ -2,6 +2,8 @@ MangroveValidation::Application.routes.draw do
 
   match "download/generate/:range" => 'download#generate', :as => 'generate_download'
 
+  match "download/available" => 'user_geo_edits#user_downloads', :as => 'user_downloads'
+
   get "download/download"
 
   resources :islands

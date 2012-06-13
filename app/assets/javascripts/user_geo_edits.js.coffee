@@ -43,6 +43,7 @@ jQuery ->
 
   $('#show-downloads-btn').click (e) ->
     $('#download-modal').modal()
+    update_available_downloads()
 
   $('#login-btn').click () ->
     window.VALIDATION.showUserLogin()
@@ -58,6 +59,7 @@ jQuery ->
         $('#user-download-feedback').text('Started building your download, you will received and email when finished')
         $('#user-download-feedback').slideDown()
         setTimeout("$('#user-download-feedback').slideUp('slow')", 2000)
+        update_available_downloads()
       error: ->
         $('#user-download-feedback').removeClass('alert-success').addClass('alert-danger')
         $('#user-download-feedback').text('Unable to build your download, please try again')
@@ -65,4 +67,16 @@ jQuery ->
         setTimeout("$('#user-download-feedback').slideUp('slow')", 2000)
     )
 
+  update_available_downloads = () ->
+    $.ajax
+      url: '/download/available'
+      success: (data) ->
+        $('#user-downloads').html(data)
+        poll()
+      dataType: 'html'
 
+  poll = () ->
+    setTimeout (->
+      update_available_downloads()
+      poll()
+    ), 30000
