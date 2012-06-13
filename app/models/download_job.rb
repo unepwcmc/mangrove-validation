@@ -31,7 +31,7 @@ class DownloadJob
           query << " LIMIT #{APP_CONFIG['admin_user_edits_limit']} OFFSET #{offset * APP_CONFIG['admin_user_edits_limit']}"
           uri = URI.parse(URI.escape("http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}&format=geojson"))
           res = Net::HTTP.get_response(uri)
-          file << res.body
+          file << res.body.force_encoding('UTF-8')
         end
 
         file.rewind
@@ -43,6 +43,9 @@ class DownloadJob
 
         system "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{file.path}"
         system "zip -j #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{ogr2ogr_dir}/*"
+
+        # Move the file to a download directory (in /public)
+        # Replace this and #download_directory to use something like S3
         system "mv #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{self.download_directory(:user_geo_edit)}"
 
         user_geo_edit_download.update_attributes(:status => :finished)
