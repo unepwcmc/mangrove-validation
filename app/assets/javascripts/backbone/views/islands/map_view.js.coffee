@@ -28,33 +28,41 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
   # Adds cartodb layer of all islands in subtle colour
   showIslandOverlays: ->
     if @showLayers
-      # Build the layers if they don't exist
-      # Original layer
-      query = "SELECT cartodb_id, the_geom_webmercator, status, island_id FROM #{window.CARTODB_TABLE} WHERE status IS NOT NULL"
-      color = '#00FFFF'
-      carto_css = "##{window.CARTODB_TABLE}{polygon-fill:#{color};line-color:#{color};polygon-opacity:0.5;line-width:1;line-opacity:0.7;}
-          ##{window.CARTODB_TABLE} [status = 'validated'] {line-color: #00FF00;polygon-fill: #00FF00;}
+      unselected_color = '#00FFFF'
+      selected_color = '#FFFF00'
+      unselected_validated_color = '#00FF00'
+      selected_validated_color = '#00FF00'
+
+      base_carto_css = "##{window.CARTODB_TABLE}{polygon-fill:#{unselected_color};line-color:#{unselected_color};polygon-opacity:0.1;line-width:1;line-opacity:0.7;}
+          ##{window.CARTODB_TABLE} [status = 'validated'] {line-color: #{unselected_validated_color};polygon-fill: #{unselected_validated_color};}
           ##{window.CARTODB_TABLE} [zoom <= 7] {line-width:2} ##{window.CARTODB_TABLE} [zoom <= 4] {line-width:3}"
+
+      # Build the layer options
+      query = "SELECT cartodb_id, the_geom_webmercator, status, island_id FROM #{window.CARTODB_TABLE} WHERE status IS NOT NULL"
 
       # Add island highlighting
       if @island.get('id')
-        carto_css += "##{window.CARTODB_TABLE} [island_id = #{@island.get('id')}] {line-color: #FFFF00;polygon-fill: #FFFF00;}
-          ##{window.CARTODB_TABLE} [island_id = #{@island.get('id')}][status='validated'] {line-color: #33FF33;polygon-fill: #33FF33;}"
+        carto_css = base_carto_css + "##{window.CARTODB_TABLE} [island_id = #{@island.get('id')}] {line-color: #{selected_color};polygon-fill:#{selected_color};line-width:3; polygon-opacity:0.4}
+          ##{window.CARTODB_TABLE} [island_id = #{@island.get('id')}][status='validated'] {line-color: #{selected_validated_color};polygon-fill: #{selected_validated_color};}"
+      else
+        carto_css = base_carto_css
 
-      layerParams =
-        map_canvas: 'map_canvas'
-        map: @map
-        user_name: 'carbon-tool'
-        table_name: window.CARTODB_TABLE
-        query: query
-        tile_style: carto_css
+      @currentlyShownIslandId = @island.get('id')
 
-      # Remove existing layer and show new
-      @allIslandsLayer.setMap(null) if @allIslandsLayer?
-      @allIslandsLayer = new CartoDBLayer layerParams
-      @allIslandsLayer.show()
+      siteOptions =
+        getTileUrl: (coord, zoom) ->
+          "http://carbon-tool.cartodb.com/tiles/#{window.CARTODB_TABLE}/#{zoom}/#{coord.x}/#{coord.y}.png?sql=#{query}&style=#{encodeURIComponent(carto_css)}"
+        tileSize: new google.maps.Size(256, 256)
+
+      # Remove existing layer
+      if @allIslandsLayer?
+        @allIslandsLayer.unbindAll() 
+
+      # Show the layer
+      @allIslandsLayer = new google.maps.ImageMapType(siteOptions)
+      @map.overlayMapTypes.setAt 0, @allIslandsLayer
     else
-      @allIslandsLayer.hide() if @allIslandsLayer?
+      @allIslandsLayer.setMap(null) if @allIslandsLayer?
 
   handleMapClick: (event) =>
     if window.VALIDATION.currentAction == null
@@ -100,8 +108,9 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
   # Redraw the layers
   redrawLayers: () =>
     # Remove existing layers and set to null to force redraws
-    @allIslandsLayer.hide() && @allIslandsLayer = null if @allIslandsLayer?
-    @currentIslandLayer.hide() && @currentIslandLayer = null if @currentIslandLayer?
+    if @allIslandsLayer?
+      @allIslandsLayer.unbindAll()
+      @allIslandsLayer = null
 
     @render()
 
