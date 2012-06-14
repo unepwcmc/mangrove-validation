@@ -7,7 +7,7 @@ def run_worker(queue, count = 1)
   count.times {
     ## Using Kernel.spawn and Process.detach because regular system() call would
     ## cause the processes to quit when capistrano finishes
-    pid = spawn(env_vars, "rake resque:work", ops)
+    pid = spawn(env_vars, "bundle exec rake resque:work", ops)
     Process.detach(pid)
   }
 end
@@ -22,7 +22,7 @@ def run_scheduler
   }
   ops = {:pgroup => true, :err => [(Rails.root + "log/scheduler_error.log").to_s, "a"],
                           :out => [(Rails.root + "log/scheduler.log").to_s, "a"]}
-  pid = spawn(env_vars, "rake resque:scheduler", ops)
+  pid = spawn(env_vars, "bundle exec rake resque:scheduler", ops)
   Process.detach(pid)
 end
 
@@ -52,8 +52,7 @@ namespace :resque do
   
   desc "Start workers"
   task :start_workers => :environment do
-    run_worker("*", 2)
-    run_worker("high", 1)
+    run_worker("download_serve", 2)
   end
 
   desc "Restart scheduler"
