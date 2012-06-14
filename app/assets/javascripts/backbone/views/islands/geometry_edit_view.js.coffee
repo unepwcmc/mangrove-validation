@@ -146,7 +146,7 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
       $("#alert-message").removeClass('alert-success').addClass('alert-error').html("There was some error while trying to submit the data.")
       $("#alert-message").show()
       setTimeout("$('#alert-message').fadeOut('slow')", 2000)
-      
+
       # Errors
       errors = $.parseJSON(data.responseText).errors
 
