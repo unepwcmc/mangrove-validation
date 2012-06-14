@@ -55,7 +55,6 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
 
         siteOptions =
           getTileUrl: (coord, zoom) ->
-            console.log "http://carbon-tool.cartodb.com/tiles/#{window.CARTODB_TABLE}/#{zoom}/#{coord.x}/#{coord.y}.png?sql=#{query}&style=#{encodeURIComponent(carto_css)}"
             "http://carbon-tool.cartodb.com/tiles/#{window.CARTODB_TABLE}/#{zoom}/#{coord.x}/#{coord.y}.png?sql=#{query}&style=#{encodeURIComponent(carto_css)}"
           tileSize: new google.maps.Size(256, 256)
 

@@ -152,7 +152,7 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
 
       $('select.knowledge').parents('.control-group').removeClass('error').find('.help-block').remove()
       $.each(errors.knowledge || [], (index, value) ->
-        $("select.knowledge").after($("<span class='help-block'>Source #{value}</span>")).parents("div.control-group").addClass("error")
+        $("select:visible[id*='knowledge']").after($("<span class='help-block'>Source #{value}</span>")).parents("div.control-group").addClass("error")
       )
 
   # Occurs after the polygon submission comes back successfully 
@@ -164,7 +164,7 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     $("#alert-message").fadeIn()
 
     # Unset any errors
-    $("select.knowledge").parents('.control-group').removeClass('error').find('.help-block').remove()
+    $("select:visible[id*='knowledge']").parents('.control-group').removeClass('error').find('.help-block').remove()
 
     # Redraw maps
     MangroveValidation.bus.trigger('layersChanged')
