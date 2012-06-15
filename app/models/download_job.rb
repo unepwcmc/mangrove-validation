@@ -42,11 +42,14 @@ class DownloadJob
         # Debug
         # system "cp #{file.path} ~/Desktop"
 
+        puts "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{file.path}"
         puts `ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{file.path}`
+        puts "zip -j #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{ogr2ogr_dir}/*"
         puts `zip -j #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{ogr2ogr_dir}/*`
 
         # Move the file to a download directory (in /public)
         # Replace this and #download_directory to use something like S3
+        puts "mv #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{self.download_directory(:user_geo_edit)}"
         puts `mv #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{self.download_directory(:user_geo_edit)}`
 
         puts "Successfully generated a download for #{user_geo_edit_download.id}"

@@ -4,7 +4,7 @@ def run_worker(queue, count = 1)
   ops = {:pgroup => true, :err => [(Rails.root + "log/workers_error.log").to_s, "a"],
                           :out => [(Rails.root + "log/workers.log").to_s, "a"]}
   env_vars = {
-    "VVERBOSE" => '1',
+    "VERBOSE" => '1',
     "QUEUE" => queue.to_s,
     "RAILS_ENV" => Rails.env
   }
