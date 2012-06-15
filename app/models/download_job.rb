@@ -6,6 +6,7 @@ class DownloadJob
     require 'uri'
 
     user_geo_edit_download = UserGeoEditDownload.find(options['user_geo_edit'])
+    puts "Generating download #{user_geo_edit_download.id} at #{Time.now}"
 
     begin
       # Where clause
@@ -41,13 +42,14 @@ class DownloadJob
         # Debug
         # system "cp #{file.path} ~/Desktop"
 
-        system "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{file.path}"
-        system "zip -j #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{ogr2ogr_dir}/*"
+        puts `ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{file.path}`
+        puts `zip -j #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{ogr2ogr_dir}/*`
 
         # Move the file to a download directory (in /public)
         # Replace this and #download_directory to use something like S3
-        system "mv #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{self.download_directory(:user_geo_edit)}"
+        puts `mv #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{self.download_directory(:user_geo_edit)}`
 
+        puts "Successfully generated a download for #{user_geo_edit_download.id}"
         user_geo_edit_download.update_attributes(:status => :finished)
       end
     rescue Exception => msg
