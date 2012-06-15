@@ -34,8 +34,13 @@ class UserGeoEditsController < ApplicationController
   end
 
   def reallocate_geometry
-    # Get/Create the island to reallocate to
-    @destination_island = Island.find_or_create_by_name(params[:reallocate_to_island_name])
+    # Get the island to reallocate based on ID if input is numerica
+    if !((params[:reallocate_to_island_name] =~ /^[0-9]+$/).nil?)
+      @destination_island = Island.find_by_id(params[:reallocate_to_island_name])
+    else
+      # Get/Create the island to reallocate to
+      @destination_island = Island.find_or_create_by_name(params[:reallocate_to_island_name])
+    end
 
     # Reallocate the poly to destination island
     @destination_reallocate = UserGeoEdit.new(

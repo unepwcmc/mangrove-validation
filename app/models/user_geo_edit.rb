@@ -29,22 +29,12 @@ class UserGeoEdit < ActiveRecord::Base
         SQL
 
       when 'reallocate'
-        # Insert copy polygon area from reallocated_from_island that's different from the existing validated geometry on island_id
-        # TODO this doesn't quite work, ST_Difference doesn't behave how it's expected to
+        # Insert copy polygon area from reallocated_from_island
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, island_id, status, action, email)
-            (SELECT ST_Multi(
-                      ST_Union(
-                        ST_Difference(
-                          ST_Intersection(from_island.the_geom, #{geom_sql}),
-                          destination_island_validated.geometry
-                        ),
-                        ST_GeomFromEWKT('SRID=4326;POLYGON EMPTY')
-                      )
-                    ), #{island_id}, 'validated', '#{action}', '#{user.email}'
-              FROM #{APP_CONFIG['cartodb_table']} AS from_island,
-                (SELECT the_geom AS geometry FROM #{APP_CONFIG['cartodb_table']} WHERE island_id = #{island_id} AND status = 'validated') AS destination_island_validated
-              WHERE ST_Intersects(from_island.the_geom, #{geom_sql}) AND from_island.island_id = #{reallocated_from_island_id} AND from_island.status IS NOT NULL);
+            (SELECT ST_Multi(ST_Intersection(the_geom, #{geom_sql})), #{island_id}, 'validated', '#{action}', '#{user.email}'
+              FROM #{APP_CONFIG['cartodb_table']}
+              WHERE ST_Intersects(the_geom, #{geom_sql}) AND island_id = #{reallocated_from_island_id} AND status IS NOT NULL);
         SQL
 
         # Remove validated area from original layer for this island
