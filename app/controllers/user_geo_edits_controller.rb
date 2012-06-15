@@ -46,7 +46,6 @@ class UserGeoEditsController < ApplicationController
       :action => 'reallocate',
       :user => current_user
     )
-    @destination_reallocate.save
 
     # Remove the poly from the current island
     @from_delete = UserGeoEdit.new(
@@ -56,8 +55,13 @@ class UserGeoEditsController < ApplicationController
       :action => 'delete',
       :user => current_user
     )
-    @from_delete.save
 
-    respond_with @destination_island
+    if !@destination_reallocate.save 
+      respond_with @destination_reallocate
+    elsif !@from_delete.save
+      respond_with @from_delete
+    else
+      respond_with @destination_island
+    end
   end
 end
