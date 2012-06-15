@@ -31,21 +31,5 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     @sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: @island))
 
   baseLayout: ->
-    # Search box
-    $("#search").typeahead
-      source: (typeahead, query) =>
-        @islands.search query, (collection, response) ->
-          typeahead.process(response)
-      items: 4
-      property: 'name'
-      onselect: (obj) ->
-        window.router.navigate("#{obj.id}", true)
-    $("#search").focus (e) =>
-      $(e.target).val('')
-      @islands.search(null)
-    # Prevent search form submission
-    $(".navbar-search").submit (e) ->
-      e.preventDefault()
-
     @mapView = new MangroveValidation.Views.Islands.MapView(@island)
-    @searchResultsView = new MangroveValidation.Views.Islands.SearchResultsView(@islands)
+    @searchResultsView = new MangroveValidation.Views.Islands.SearchView @islands, $(".navbar-search"), (obj) ->window.router.navigate("#{obj.id}", true)
