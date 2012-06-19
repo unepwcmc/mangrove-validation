@@ -43,8 +43,24 @@ $ ->
         $("form#form_sign_up input#user_password").after($("<span class='help-block'>Password #{value}</span>")).parents("div.control-group").addClass("error")
       )
 
+      policy_error_msg = $("<span class='help-block'>You must agree to the Submission Usage and Downloads Policies to continue</span>")
+
       $.each(errors.usage_agreement || [], (index, value) ->
-        $("form#form_sign_up input#user_usage_agreement").parents("div.control-group").addClass("error").append($("<span class='help-block'>You must agree to the Submission Usage Policy to continue</span>"))
+        $("form#form_sign_up input#user_usage_agreement")
+          .parents("div.control-group")
+          .addClass("error")
+          .append(policy_error_msg)
+      )
+
+      $.each(errors.downloads_agreement || [], (index, value) ->
+        # Only show one error message for the policy checkboxes (don't
+        # show one if the usage_agreement is already displaying an
+        # error)
+        if !$("form#form_sign_up input#user_usage_agreement").parents("div.control-group").hasClass("error")
+          $("form#form_sign_up input#user_usage_agreement")
+            .parents("div.control-group")
+            .addClass("error")
+            .append(policy_error_msg)
       )
     else
       errors = $.parseJSON(data.responseText)
