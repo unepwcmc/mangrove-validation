@@ -11,6 +11,12 @@ class MangroveValidation.Views.Islands.SearchView extends Backbone.View
     @setElement(element,true)
     @onSelect = onSelect
 
+  setReallocateTarget: (obj) ->
+    $('#to_island_name').text(obj.name)
+
+  setSearchTarget: (obj) ->
+    window.router.navigate("#{obj.id}", true)
+
   doSearch: =>
     @$el.children("input[type=text]").typeahead
       # Override typeahead's matcher

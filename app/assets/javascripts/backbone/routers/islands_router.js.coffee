@@ -27,9 +27,9 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     #@islands.getAndResetById(id)
     @island.set({id: id})
     @island.fetch()
-    
+
     @sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: @island))
 
   baseLayout: ->
     @mapView = new MangroveValidation.Views.Islands.MapView(@island)
-    @searchResultsView = new MangroveValidation.Views.Islands.SearchView @islands, $(".navbar-search"), (obj) ->window.router.navigate("#{obj.id}", true)
+    @searchResultsView = new MangroveValidation.Views.Islands.SearchView @islands, $(".navbar-search"), MangroveValidation.Views.Islands.SearchView::setSearchTarget

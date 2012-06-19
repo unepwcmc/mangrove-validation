@@ -12,11 +12,11 @@
           <li>
             <a id='about-btn' href="#">About</a>
           </li>
+          <% if user_signed_in? %>
           <li>
-            <% if user_signed_in? %>
               <a id='show-downloads-btn' href="#">Download data</a>
-            <% end %>
           </li>
+          <% end %>
           <li>
             <%= link_to "Logout #{current_user.email}", destroy_user_session_path, :method => 'delete' if current_user.present? %>
             <%= link_to 'Login', '#', :id => 'login-btn' unless current_user.present? %>

@@ -50,7 +50,7 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     @drawNewPolygon('reallocate', '#08C', event)
     @showReallocateDialog()
     @islands = new MangroveValidation.Collections.IslandsCollection()
-    @geomSearchView = new MangroveValidation.Views.Islands.SearchView @islands, $("#reallocate-dialog .field"), (obj) ->$("#to_island_name").text(obj.name)
+    @geomSearchView = new MangroveValidation.Views.Islands.SearchView @islands, $("#reallocate-dialog .field"), MangroveValidation.Views.Islands.SearchView::setReallocateTarget
 
   # Start drawing a new polygon on the map, for the given action and color
   drawNewPolygon: (action, color, event) ->
