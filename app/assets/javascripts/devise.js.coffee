@@ -42,6 +42,10 @@ $ ->
       $.each(errors.password || [], (index, value) ->
         $("form#form_sign_up input#user_password").after($("<span class='help-block'>Password #{value}</span>")).parents("div.control-group").addClass("error")
       )
+
+      $.each(errors.usage_agreement || [], (index, value) ->
+        $("form#form_sign_up input#user_usage_agreement").parents("div.control-group").addClass("error").append($("<span class='help-block'>You must agree to the Submission Usage Policy to continue</span>"))
+      )
     else
       errors = $.parseJSON(data.responseText)
       $("form#form_forgot_password span.help-block").remove()
