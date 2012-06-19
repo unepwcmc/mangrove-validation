@@ -6,10 +6,6 @@
 window.checkUserSignedIn = ->
   $.getJSON '/me', (data) ->
     $('<li><a id="show-downloads-btn" href="#">Download data</a></li>').insertBefore($('#login-btn').parent())
-    $('#show-downloads-btn').click (e) ->
-      $('#download-modal').modal()
-      update_available_downloads()
-      poll_downloads()
 
     $("#login-btn").text("Logout #{data.email}")
       .attr('id', "logout-btn")
@@ -64,7 +60,7 @@ jQuery ->
   $('#login-btn').click () ->
     window.VALIDATION.showUserLogin()
 
-  $('#show-downloads-btn').click (e) ->
+  $(document).on 'click', '#show-downloads-btn', () =>
     $('#download-modal').modal()
     update_available_downloads()
     poll_downloads()
