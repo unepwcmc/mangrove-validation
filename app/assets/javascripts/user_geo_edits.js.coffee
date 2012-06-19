@@ -5,14 +5,34 @@
 # Check if user signed in
 window.checkUserSignedIn = ->
   $.getJSON '/me', (data) ->
+    $('<li><a id="show-downloads-btn" href="#">Download data</a></li>').insertBefore($('#login-btn').parent())
+    $('#show-downloads-btn').click (e) ->
+      $('#download-modal').modal()
+      update_available_downloads()
+      poll_downloads()
+
     $("#login-btn").text("Logout #{data.email}")
       .attr('id', "logout-btn")
       .attr('href', "/users/sign_out")
       .attr('data-method', 'delete')
 
+
 # Show the user login page in a modal
 window.VALIDATION.showUserLogin = ->
   $.fancybox.open('/users/sign_in', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 380, closeBtn: false})
+
+update_available_downloads = () ->
+  $.ajax
+    url: '/download/available'
+    success: (data) ->
+      $('#user-downloads').html(data)
+    dataType: 'html'
+
+poll_downloads = () ->
+  setTimeout (->
+    update_available_downloads()
+    poll_downloads()
+  ), 30000
 
 jQuery ->
   # Check if user signed in
@@ -24,7 +44,7 @@ jQuery ->
   # Init routers
   window.router = new MangroveValidation.Routers.IslandsRouter()
   Backbone.history.start()
-  
+
   # Toggle map layers button
   $('#toggle-map-layers').click (e) ->
     target = $(e.target)
@@ -41,13 +61,13 @@ jQuery ->
   $('#about-btn').click (e) ->
     $('#landingModal').modal()
 
+  $('#login-btn').click () ->
+    window.VALIDATION.showUserLogin()
+
   $('#show-downloads-btn').click (e) ->
     $('#download-modal').modal()
     update_available_downloads()
-    poll()
-
-  $('#login-btn').click () ->
-    window.VALIDATION.showUserLogin()
+    poll_downloads()
 
   # Downloads buttons
   $('#download-option-strip a').click (e) ->
@@ -61,23 +81,10 @@ jQuery ->
         $('#user-download-feedback').slideDown()
         setTimeout("$('#user-download-feedback').slideUp('slow')", 2000)
         update_available_downloads()
-        poll()
+        poll_downloads()
       error: ->
         $('#user-download-feedback').removeClass('alert-success').addClass('alert-danger')
         $('#user-download-feedback').text('Unable to build your download, please try again')
         $('#user-download-feedback').slideDown()
         setTimeout("$('#user-download-feedback').slideUp('slow')", 2000)
     )
-
-  update_available_downloads = () ->
-    $.ajax
-      url: '/download/available'
-      success: (data) ->
-        $('#user-downloads').html(data)
-      dataType: 'html'
-
-  poll = () ->
-    setTimeout (->
-      update_available_downloads()
-      poll()
-    ), 30000
