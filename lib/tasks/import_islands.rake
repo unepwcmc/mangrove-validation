@@ -18,3 +18,11 @@ task :import_islands_from_cartodb => :environment do
   Island.connection.execute "SELECT SETVAL('islands_id_seq', (SELECT MAX(id) FROM islands) + 1);"
   
 end
+
+desc 'Import countries from CSV'
+task :import_countries => :environment do
+  require 'csv'
+  CSV.foreach("#{Rails.root}/lib/data/countrylist.csv", :headers => true) do |row|
+    Country.find_or_create_by_iso_3( row.field('ISO 3166-1 3 Letter Code'), :name => row.field('Common Name'))
+  end
+end
