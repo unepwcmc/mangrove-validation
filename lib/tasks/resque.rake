@@ -42,10 +42,8 @@ namespace :resque do
   
   desc "Quit running workers"
   task :stop_workers => :environment do
-    pids = Array.new
-    Resque.workers.each do |worker|
-      pids.concat(worker.worker_pids)
-    end
+    pids = Resque.workers[0].worker_pids.join if Resque.workers.length > 0
+
     if pids.empty?
       puts "No workers to kill"
     else
