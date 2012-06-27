@@ -47,7 +47,7 @@ namespace :resque do
 
       syscmd = "kill -s QUIT #{pids}"
       puts "Running syscmd: #{syscmd}"
-      puts `#{syscmd}`
+      puts `#{syscmd} > /dev/null 2>&1`
     else
       puts "No workers to kill"
     end
@@ -55,7 +55,7 @@ namespace :resque do
   
   desc "Start workers"
   task :start_workers => :environment do
-    run_worker("download_serve", 2)
+    run_worker("*", 2)
   end
 
   desc "Restart scheduler"
