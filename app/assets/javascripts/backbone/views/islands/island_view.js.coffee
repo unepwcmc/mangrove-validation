@@ -65,7 +65,7 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
     if @currentView == 'show'
       view = new MangroveValidation.Views.Islands.ShowView({model: @model})
     else if @currentView == 'edit'
-      view = new MangroveValidation.Views.Islands.EditView({model: @model})
+      view = new MangroveValidation.Views.Islands.AttributeEditView({model: @model})
     else if @currentView == 'geometry'
       view = new MangroveValidation.Views.Islands.GeometryEditView({model: @model})
 

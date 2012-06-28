@@ -20,7 +20,7 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
     "click #add-area-btn": "startAdd"
     "click #delete-area-btn": "startDelete"
     "click #reallocate-btn": "startReallocate"
-    "click #submit-polygon": "submitPolygon"
+    "click #submit-polygon": "checkPolygonSubmission"
     "click #reallocate-polygon": "reallocatePolygon"
     "click .erase-polygon": "clearCurrentEdits"
 
@@ -96,6 +96,12 @@ class MangroveValidation.Views.Islands.GeometryEditView extends Backbone.View
       coordinates.push("#{coordinate.lng()} #{coordinate.lat()}")
     coordinates.push("#{path.getAt(0).lng()} #{path.getAt(0).lat()}") # Close the polygon
     coordinates
+
+  # Ask user to confirm polygon submission is for bounds
+  checkPolygonSubmission: =>
+    @model.getBounds (bounds) =>
+      confirm_view = new MangroveValidation.Views.Islands.ConfirmEditView(bounds, @submitPolygon)
+      $(@el).append(confirm_view.render().el)
 
   # Populates form for current poly, and submits
   submitPolygon: =>
