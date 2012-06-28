@@ -7,11 +7,12 @@ window.checkUserSignedIn = ->
   $.getJSON '/me', (data) ->
     $('<li><a id="show-downloads-btn" href="#">Download data</a></li>').insertBefore($('#login-btn').parent())
 
-    $("#login-btn").text("Logout #{data.email}")
-      .attr('id', "logout-btn")
-      .attr('href', "/users/sign_out")
-      .attr('data-method', 'delete')
-
+    $.ajax
+      url: '/templates/navbar/user'
+      success: (data) ->
+        $('#login-btn').parents('ul').append(data)
+        $('#login-btn').remove()
+      dataType: 'html'
 
 # Show the user login page in a modal
 window.VALIDATION.showUserLogin = ->
