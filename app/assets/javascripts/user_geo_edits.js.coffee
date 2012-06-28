@@ -18,6 +18,9 @@ window.checkUserSignedIn = ->
 window.VALIDATION.showUserLogin = ->
   $.fancybox.open('/users/sign_in', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 380, closeBtn: false})
 
+window.VALIDATION.showUserEdit = ->
+  $.fancybox.open('/users/edit', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 390, closeBtn: false})
+
 update_available_downloads = () ->
   $.ajax
     url: '/download/available'
@@ -60,6 +63,9 @@ jQuery ->
 
   $('#login-btn').click () ->
     window.VALIDATION.showUserLogin()
+
+  $('#user-edit-btn').click () ->
+    window.VALIDATION.showUserEdit()
 
   $(document).on 'click', '#show-downloads-btn', () =>
     $('#download-modal').modal()
