@@ -242,6 +242,7 @@ html, body {
   padding: 10px 15px;
   height: 120px;
   color: #F9D000;
+  box-shadow: inset 0px -3px 15px #545454;
 
   h2, h4 {
     color: #F9D000;
@@ -295,6 +296,7 @@ html, body {
       color: #F5CD03;
       font-weight: bold;
       cursor:pointer;
+      box-shadow: inset -3px -4px 7px #545451;
 
       img {
         margin-right:10px;
@@ -307,6 +309,7 @@ html, body {
     li.active {
       background-color: #323232;
       cursor:auto;
+      box-shadow: none;
     }
   }
 
@@ -560,4 +563,20 @@ footer {
 
 ::-webkit-scrollbar-thumb:window-inactive {
   background: rgba(0,0,0,.4);
+}
+
+#confirm-edit-dialog {
+  clear:both;
+  overflow:hidden;
+  p {
+    width: 210px;
+  }
+  div.btn-row {
+    width: 210px;
+    a {
+      float:right;
+      width: 30px;
+      margin-left: 5px;
+    }
+  }
 }
