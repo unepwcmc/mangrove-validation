@@ -43,8 +43,6 @@ namespace :resque do
   desc "Quit running workers"
   task :stop_workers => :environment do
     if Resque.workers.length > 0
-      pids = Resque.workers[0].worker_pids.join(" ")
-
       Resque.workers.each {|w| w.unregister_worker}
     else
       puts "No workers to kill"

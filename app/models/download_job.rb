@@ -4,6 +4,7 @@ class DownloadJob
   def self.perform(options)
     require 'net/http'
     require 'uri'
+    require 'securerandom'
 
     user_geo_edit_download = UserGeoEditDownload.find(options['user_geo_edit'])
     puts "Generating download #{user_geo_edit_download.id} at #{Time.now}"
@@ -25,7 +26,8 @@ class DownloadJob
       # Result count
       count = JSON.parse(res.body)["rows"].first["count"]
 
-      Tempfile.open(['download', '.json']) do |file|
+      filename = "#{Rails.root}/tmp/download#{SecureRandom.hex(5)}.json",
+      File.open(filename, 'w+') do |file|
         0.upto (count/APP_CONFIG['admin_user_edits_limit']).round do |offset|
           query = "SELECT * FROM #{APP_CONFIG['cartodb_table']}"
           query << " WHERE #{where_clause}" if !user_geo_edit_download.island_ids.empty?
@@ -33,35 +35,38 @@ class DownloadJob
           uri = URI.parse(URI.escape("http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}&format=geojson"))
           res = Net::HTTP.get_response(uri)
           file << res.body.force_encoding('UTF-8')
+          puts "Processing #{offset}/#{count}"
         end
-
-        file.rewind
-
-        ogr2ogr_dir = self.ogr2ogr_directory(:user_geo_edit, user_geo_edit_download.id)
-
-        # Debug
-        # system "cp #{file.path} ~/Desktop"
-
-        puts "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{file.path}"
-        puts `ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{file.path}`
-        puts "zip -j #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{ogr2ogr_dir}/*"
-        puts `zip -j #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{ogr2ogr_dir}/*`
-
-        # Move the file to a download directory (in /public)
-        # Replace this and #download_directory to use something like S3
-        puts "mv #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{self.download_directory(:user_geo_edit)}"
-        puts `mv #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{self.download_directory(:user_geo_edit)}`
-
-        puts "Successfully generated a download for #{user_geo_edit_download.id}"
-        user_geo_edit_download.update_attributes(:status => :finished)
       end
+
+      ogr2ogr_dir = self.ogr2ogr_directory(:user_geo_edit, user_geo_edit_download.id)
+
+      # Debug
+      # system "cp #{filename} ~/Desktop"
+
+      puts "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{filename}"
+      puts `ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{filename}`
+      if $? != 0 then raise end
+
+      puts "zip -j #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{ogr2ogr_dir}/*"
+      puts `zip -j #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{ogr2ogr_dir}/*`
+      if $? != 0 then raise end
+
+      # Move the file to a download directory (in /public)
+      # Replace this and #download_directory to use something like S3
+      puts "mv #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{self.download_directory(:user_geo_edit)}"
+      puts `mv #{self.zip_path(:user_geo_edit, user_geo_edit_download.id)} #{self.download_directory(:user_geo_edit)}`
+      if $? != 0 then raise end
+
+      puts "Successfully generated a download for #{user_geo_edit_download.id}"
+      user_geo_edit_download.update_attributes(:status => :finished)
     rescue Exception => msg
       puts msg
       user_geo_edit_download.update_attributes(:status => :failed)
     end
   end
 
-    def self.download_directory(type)
+  def self.download_directory(type)
     path = "#{Rails.root}/public/exports/#{type}/"
     FileUtils.mkdir_p path unless File.exists?(path)
     path
