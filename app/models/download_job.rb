@@ -5,6 +5,7 @@ class DownloadJob
     require 'net/http'
     require 'uri'
     require 'securerandom'
+    require 'rake'
 
     user_geo_edit_download = UserGeoEditDownload.find(options['user_geo_edit'])
     puts "Generating download #{user_geo_edit_download.id} at #{Time.now}"
@@ -50,10 +51,12 @@ class DownloadJob
         puts `ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir}/#{offset} #{self.temp_file_name(hash, offset)}`
         if $? != 0 then raise end
 
+        # Merge this shapefile with our master shapefile "all.shp"
+        # Allows the very large "all islands" dataset to be downloaded
+        # and converted on low memory boxes
         ogr_command = "ogr2ogr "
         ogr_command << "-update -append " if offset>0
         ogr_command << "#{ogr2ogr_dir}/all.shp #{ogr2ogr_dir}/#{offset}/OGRGeoJSON.shp"
-        puts ogr_command
         system ogr_command
       end
 
@@ -62,13 +65,20 @@ class DownloadJob
       if $? != 0 then raise end
 
       # Move the file to a download directory (in /public)
-      # Replace this and #download_directory to use something like S3
+      # Replace this and self#download_directory to use something like S3
       puts "mv #{zip_dir} #{self.download_directory(:user_geo_edit)}"
       puts `mv #{zip_dir} #{self.download_directory(:user_geo_edit)}`
       if $? != 0 then raise end
 
       puts "Successfully generated a download for #{user_geo_edit_download.id}"
       user_geo_edit_download.update_attributes(:status => :finished)
+
+      # Remove temporary files
+      rm_tmp_cmd  = "rm -r #{Rails.root}/tmp/exports/user_geo_edit/#{user_geo_edit_download.id}/"
+      rm_json_cmd = "rm -r #{Rails.root}/tmp/download#{hash}*.json"
+
+      system(rm_tmp_cmd)
+      system(rm_json_cmd)
     rescue Exception => msg
       puts msg
       user_geo_edit_download.update_attributes(:status => :failed)
