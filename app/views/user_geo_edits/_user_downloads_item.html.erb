@@ -1,6 +1,6 @@
   <% downloads.each do |d| %>
     <li>
-      <%= d.name %> at <span class="creation-date"><%= d.created_at.strftime("%H:%M") %> on <%= d.created_at.strftime("%w %b") %></span> 
+      <%= d.name %> at <span class="creation-date"><%= d.created_at.strftime("%H:%M") %> on <%= d.created_at.strftime("%-d %b") %></span> 
       <% if d.status=='active' %>
         <span style="float: right"><%= image_tag "spinner.gif" %></span>
       <% else %>
