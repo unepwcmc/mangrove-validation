@@ -4,7 +4,7 @@
       <% if d.status=='active' %>
         <span style="float: right"><%= image_tag "spinner.gif" %></span>
       <% else %>
-        <a href="<%= get_location(d.id) %>" class="btn">Download</a>
+        <a href="<%= root_path + get_location(d.id) %>" class="btn">Download</a>
       <% end %>
     </li>
   <% end %>
