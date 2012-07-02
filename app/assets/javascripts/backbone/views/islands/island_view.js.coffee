@@ -58,6 +58,7 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
 
     if @currentView == 'edit'
       @model.off('change', @render)
+      $('#name').focus()
     else
       @model.on('change', @render)
 

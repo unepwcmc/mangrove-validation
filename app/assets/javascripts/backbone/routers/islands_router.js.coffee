@@ -10,9 +10,10 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
 
   routes:
     "index"    : "index"
+    "new"      : "new"
     ":id/edit" : "edit"
     ":id"      : "show"
-    ".*"        : "index"
+    ".*"       : "index"
 
   index: ->
     @view = new MangroveValidation.Views.Islands.IndexView(islands: @islands)
@@ -22,6 +23,13 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     $('#map_menu .show-tooltip').tooltip({placement: 'bottom'})
 
     $('#landingModal').modal()
+
+  new: ->
+    @island.create (data) =>
+      @island.set({id: data.id})
+      @island.fetch()
+      @sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: @island))
+      MangroveValidation.bus.trigger('changeIslandView','edit')
 
   show: (id) ->
     #@islands.getAndResetById(id)

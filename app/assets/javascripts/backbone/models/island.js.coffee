@@ -9,6 +9,13 @@ class MangroveValidation.Models.Island extends Backbone.Model
     name_local: null
     iso_3: null
 
+  create: (callback) ->
+    $.ajax
+      url: '/islands'
+      type: 'POST'
+      success: (data) =>
+        callback(data)
+
   # get gmaps LatLngBounds of this island from cartodb, and pass it to callback
   getBounds: (callback) ->
     query = "SELECT ST_Extent(the_geom) AS bbox FROM #{window.CARTODB_TABLE} WHERE island_id = #{@.get('id')}"

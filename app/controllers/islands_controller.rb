@@ -1,9 +1,20 @@
 class IslandsController < ApplicationController
+  before_filter :authenticate_user!, :only => :create
   respond_to :json
 
   def index
     @islands = Island.filter(params).limit(4)
     respond_with @islands
+  end
+
+  def create
+    @island = Island.new
+
+    if @island.save
+      respond_with @island
+    elsif
+      render text: 'Not saved', :status => :unprocessable_entity
+    end
   end
 
   def show
