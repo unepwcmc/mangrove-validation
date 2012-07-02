@@ -374,6 +374,9 @@ html, body {
   h2, span, img, #island-attributes, .actions{
     opacity: 0.4;
   }
+  .enabled {
+    opacity: 1;
+  }
 }
 
 #stats {
