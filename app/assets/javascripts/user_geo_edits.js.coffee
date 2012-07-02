@@ -21,6 +21,9 @@ window.VALIDATION.showUserLogin = ->
 window.VALIDATION.showUserEdit = ->
   $.fancybox.open('/users/edit', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 480, closeBtn: false})
 
+window.VALIDATION.showResetPassword = (id) ->
+  $.fancybox.open("/users/password/edit?reset_password_token=#{id}", {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 320, closeBtn: false})
+
 update_available_downloads = () ->
   $.ajax
     url: '/download/available'

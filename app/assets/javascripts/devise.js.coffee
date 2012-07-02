@@ -78,6 +78,15 @@ $ ->
       $.each(errors.current_password || [], (index, value) ->
         $("form#form_user_edit input#user_current_password").after($("<span class='help-block'>current password #{value}</span>")).parents("div.control-group").addClass("error")
       )
+    else if $(evt.target).attr("id") == "form_password_edit"
+      errors = ($.parseJSON(data.responseText)).errors
+      console.log errors
+      $("form#form_password_edit span.help-block").remove()
+      $("form#form_password_edit div.control-group").removeClass("error")
+
+      $.each(errors.password || [], (index, value) ->
+        $("form#form_password_edit input#user_password").after($("<span class='help-block'>password #{value}</span>")).parents("div.control-group").addClass("error")
+      )
     else
       errors = $.parseJSON(data.responseText)
       $("form#form_forgot_password span.help-block").remove()
