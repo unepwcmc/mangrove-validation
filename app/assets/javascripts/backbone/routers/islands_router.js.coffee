@@ -11,9 +11,10 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
 
   routes:
     "index"    : "index"
+    "new"      : "new"
     ":id/edit" : "edit"
     ":id"      : "show"
-    ".*"        : "index"
+    ".*"       : "index"
 
   index: ->
     if (@sidePanelManager.isEmpty())
@@ -24,6 +25,11 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
 
     @sidePanelManager.showView(new MangroveValidation.Views.Islands.IndexView())
     $(@sidePanelElem).addClass('disabled')
+
+  new: ->
+    @island = new MangroveValidation.Models.Island
+    @sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: @island))
+    MangroveValidation.bus.trigger('changeIslandView','edit')
 
   show: (id) ->
     @island.set({id: id})
