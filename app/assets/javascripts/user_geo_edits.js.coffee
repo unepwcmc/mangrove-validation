@@ -7,15 +7,22 @@ window.checkUserSignedIn = ->
   $.getJSON '/me', (data) ->
     $('<li><a id="show-downloads-btn" href="#">Download data</a></li>').insertBefore($('#login-btn').parent())
 
-    $("#login-btn").text("Logout #{data.email}")
-      .attr('id', "logout-btn")
-      .attr('href', "/users/sign_out")
-      .attr('data-method', 'delete')
-
+    $.ajax
+      url: '/templates/navbar/user'
+      success: (data) ->
+        $('#login-btn').parents('ul').append(data)
+        $('#login-btn').remove()
+      dataType: 'html'
 
 # Show the user login page in a modal
 window.VALIDATION.showUserLogin = ->
   $.fancybox.open('/users/sign_in', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 380, closeBtn: false})
+
+window.VALIDATION.showUserEdit = ->
+  $.fancybox.open('/users/edit', {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 480, closeBtn: false})
+
+window.VALIDATION.showResetPassword = (id) ->
+  $.fancybox.open("/users/password/edit?reset_password_token=#{id}", {type: 'iframe', padding: 0, margin: [60, 20, 20, 20], maxWidth: 600, minHeight: 320, closeBtn: false})
 
 update_available_downloads = () ->
   $.ajax
@@ -63,7 +70,10 @@ jQuery ->
   $('#login-btn').click () ->
     window.VALIDATION.showUserLogin()
 
-  $(document).on 'click', '#show-downloads-btn', () =>
+  $(document).on 'click', '#user-edit-btn', =>
+    window.VALIDATION.showUserEdit()
+
+  $(document).on 'click', '#show-downloads-btn', =>
     $('#download-modal').modal()
     update_available_downloads()
     poll_downloads()

@@ -1,7 +1,6 @@
 MangroveValidation::Application.routes.draw do
 
   match "download/generate/:range" => 'download#generate', :as => 'generate_download'
-
   match "download/available" => 'user_geo_edits#user_downloads', :as => 'user_downloads'
 
   get "download/download"
@@ -9,6 +8,7 @@ MangroveValidation::Application.routes.draw do
   resources :islands
 
   devise_for :users
+  match "templates/navbar/user" => 'user_geo_edits#user_navbar_links', :as => 'user_navbar_links'
 
   resources :user_geo_edits, :only => [:index, :show, :create] do
     collection do

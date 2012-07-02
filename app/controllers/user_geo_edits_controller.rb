@@ -33,6 +33,10 @@ class UserGeoEditsController < ApplicationController
     render :partial => "user_downloads"
   end
 
+  def user_navbar_links
+    render :partial => "navbar_user"
+  end
+
   def reallocate_geometry
     # Get the island to reallocate based on ID if input is numerica
     if !((params[:reallocate_to_island_name] =~ /^[0-9]+$/).nil?)
