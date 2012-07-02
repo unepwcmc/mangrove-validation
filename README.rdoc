@@ -30,11 +30,7 @@ You need redis-server installed and running. Default redis config is in config/r
 
 To get the workers running:
 
-  QUEUE=download_serve rake resque:work
-
-With debug and verbose:
-
-  VVERBOSE=1 QUEUE=download_serve bundle exec rake resque:work
+  rake resque:start_workers
 
 You can view the status of resque jobs in the browser using the resque-web tool.
 

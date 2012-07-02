@@ -1,0 +1,9 @@
+<h2>Global Islands Database download complete</h2>
+
+<p>
+  Your requested download for <em><%= @download.name %></em> completed at <%= @download.updated_at.strftime("%H:%M") %> on <%= @download.updated_at.strftime("%-d %b") %>.
+</p>
+
+<p>
+  <%= link_to "Download directly", root_url + get_location(@download.id) %> or visit the <%= link_to "Global Islands Database home page", root_url %>.
+</p>

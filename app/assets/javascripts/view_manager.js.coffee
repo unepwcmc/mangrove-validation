@@ -16,6 +16,9 @@ class MangroveValidation.ViewManager
 
     $(@element).html(this.currentView.el)
 
+  # Returns true if element is empty
+  isEmpty: () ->
+    return $(@element).is(':empty')
 
 # Augment backbone view to add binding management and close method
 # Inspired by http://stackoverflow.com/questions/7567404/backbone-js-repopulate-or-recreate-the-view/7607853#7607853

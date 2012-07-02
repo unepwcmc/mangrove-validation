@@ -24,6 +24,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
 
     # Bus binding
     @bindTo(MangroveValidation.bus, "zoomToBounds", @zoomToBounds)
+    @bindTo(MangroveValidation.bus, "map:getCurrentBounds", @getCurrentBounds)
     @bindTo(MangroveValidation.bus, "toggleMapLayers", @toggleMapLayers)
     @bindTo(MangroveValidation.bus, "addToMap", @addToMap)
     @bindTo(MangroveValidation.bus, "layersChanged", @redrawLayers)
@@ -102,6 +103,10 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
 
   zoomToBounds: (bounds) =>
     @map.fitBounds(bounds)
+
+  # passes the current map bounds to the callback
+  getCurrentBounds: (callback) =>
+    callback(@map.getBounds())
 
   # show or hide map overlays
   toggleMapLayers: (enable) =>

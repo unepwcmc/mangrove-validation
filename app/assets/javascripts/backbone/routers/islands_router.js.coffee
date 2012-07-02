@@ -3,7 +3,8 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     @islands = new MangroveValidation.Collections.IslandsCollection()
     @island = new MangroveValidation.Models.Island()
 
-    @sidePanelManager = new MangroveValidation.ViewManager("#right-main")
+    @sidePanelElem = '#right-main'
+    @sidePanelManager = new MangroveValidation.ViewManager(@sidePanelElem)
 
     # Base layout
     @baseLayout()
@@ -16,13 +17,14 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     ".*"       : "index"
 
   index: ->
-    @view = new MangroveValidation.Views.Islands.IndexView(islands: @islands)
-    $("#islands").html(@view.render().el)
+    if (@sidePanelManager.isEmpty())
+      # Show the modal is this is the first view loaded
+      $('#landingModal').modal()
 
-    # Tooltips
-    $('#map_menu .show-tooltip').tooltip({placement: 'bottom'})
+    @island.set({id: null})
 
-    $('#landingModal').modal()
+    @sidePanelManager.showView(new MangroveValidation.Views.Islands.IndexView())
+    $(@sidePanelElem).addClass('disabled')
 
   new: ->
     @island = new MangroveValidation.Models.Island
@@ -30,11 +32,11 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     MangroveValidation.bus.trigger('changeIslandView','edit')
 
   show: (id) ->
-    #@islands.getAndResetById(id)
     @island.set({id: id})
     @island.fetch()
 
     @sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: @island))
+    $(@sidePanelElem).removeClass('disabled')
 
   baseLayout: ->
     @mapView = new MangroveValidation.Views.Islands.MapView(@island)

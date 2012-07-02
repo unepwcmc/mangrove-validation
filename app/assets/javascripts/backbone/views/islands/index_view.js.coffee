@@ -1,20 +1,12 @@
 MangroveValidation.Views.Islands ||= {}
 
+# Side panel view when nothing is selected
 class MangroveValidation.Views.Islands.IndexView extends Backbone.View
-  template: JST["backbone/templates/islands/index"]
+  template: JST["backbone/templates/islands/no_island_selected"]
 
   initialize: () ->
-    #@options.islands.bind('reset', @addAll)
-
-  addAll: () =>
-    @options.islands.each(@addOne)
-
-  addOne: (island) =>
-    view = new MangroveValidation.Views.Islands.IslandView({model : island})
-    @$("tbody").append(view.render().el)
 
   render: =>
-    @$el.html(@template(islands: @options.islands.toJSON() ))
-    @addAll()
+    @$el.html(@template())
 
     return this

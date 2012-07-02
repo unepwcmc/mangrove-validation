@@ -3,7 +3,11 @@ def run_worker(queue, count = 1)
   puts "Starting #{count} worker(s) with QUEUE: #{queue}"
   ops = {:pgroup => true, :err => [(Rails.root + "log/workers_error.log").to_s, "a"],
                           :out => [(Rails.root + "log/workers.log").to_s, "a"]}
-  env_vars = {"QUEUE" => queue.to_s, "RAILS_ENV" => Rails.env}
+  env_vars = {
+    "VERBOSE" => '1',
+    "QUEUE" => queue.to_s,
+    "RAILS_ENV" => Rails.env
+  }
   count.times {
     ## Using Kernel.spawn and Process.detach because regular system() call would
     ## cause the processes to quit when capistrano finishes
@@ -38,22 +42,21 @@ namespace :resque do
   
   desc "Quit running workers"
   task :stop_workers => :environment do
-    pids = Array.new
-    Resque.workers.each do |worker|
-      pids.concat(worker.worker_pids)
-    end
-    if pids.empty?
-      puts "No workers to kill"
-    else
-      syscmd = "kill -s QUIT #{pids.join(' ')}"
+    if Resque.workers.length > 0
+      pids = Resque.workers[0].worker_pids.join(" ")
+      Resque.workers.each {|w| w.unregister_worker}
+
+      syscmd = "kill -s QUIT #{pids}"
       puts "Running syscmd: #{syscmd}"
-      system(syscmd)
+      puts `#{syscmd} > /dev/null 2>&1`
+    else
+      puts "No workers to kill"
     end
   end
   
   desc "Start workers"
   task :start_workers => :environment do
-    run_worker("download_serve", 2)
+    run_worker("*", 2)
   end
 
   desc "Restart scheduler"

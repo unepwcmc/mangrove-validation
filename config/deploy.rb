@@ -142,8 +142,8 @@ end
 after "deploy:setup", :setup_production_database_configuration
 after "deploy:setup", :setup_cartodb_configuration
 after "deploy:setup", :setup_http_auth_configuration
-after "deploy:update_code", "deploy:restart_workers"
-after "deploy:update_code", "deploy:restart_scheduler"
+after "deploy", "deploy:restart_workers"
+#after "deploy:restart_workers", "deploy:restart_scheduler"
 
 desc "Populate the island table from cartodb"
 task :import_islands_from_cartodb do
