@@ -57,6 +57,9 @@ jQuery ->
   $('#about-btn').click (e) ->
     $('#landingModal').modal()
 
+  $('.add-island').click (e) ->
+    window.router.navigate("/#new", true)
+
   $('#login-btn').click () ->
     window.VALIDATION.showUserLogin()
 
