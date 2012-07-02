@@ -42,6 +42,51 @@ $ ->
       $.each(errors.password || [], (index, value) ->
         $("form#form_sign_up input#user_password").after($("<span class='help-block'>Password #{value}</span>")).parents("div.control-group").addClass("error")
       )
+
+      policy_error_msg = $("<span class='help-block'>You must agree to the Submission Usage and Downloads Policies to continue</span>")
+
+      $.each(errors.usage_agreement || [], (index, value) ->
+        $("form#form_sign_up input#user_usage_agreement")
+          .parents("div.control-group")
+          .addClass("error")
+          .append(policy_error_msg)
+      )
+
+      $.each(errors.downloads_agreement || [], (index, value) ->
+        # Only show one error message for the policy checkboxes (don't
+        # show one if the usage_agreement is already displaying an
+        # error)
+        if !$("form#form_sign_up input#user_usage_agreement").parents("div.control-group").hasClass("error")
+          $("form#form_sign_up input#user_usage_agreement")
+            .parents("div.control-group")
+            .addClass("error")
+            .append(policy_error_msg)
+      )
+    else if $(evt.target).attr("id") == 'form_user_edit'
+      errors = ($.parseJSON(data.responseText)).errors
+      $("form#form_user_edit span.help-block").remove()
+      $("form#form_user_edit div.control-group").removeClass("error")
+
+      $.each(errors.email || [], (index, value) ->
+        $("form#form_user_edit input#user_email").after($("<span class='help-block'>email #{value}</span>")).parents("div.control-group").addClass("error")
+      )
+
+      $.each(errors.password || [], (index, value) ->
+        $("form#form_user_edit input#user_password").after($("<span class='help-block'>password #{value}</span>")).parents("div.control-group").addClass("error")
+      )
+
+      $.each(errors.current_password || [], (index, value) ->
+        $("form#form_user_edit input#user_current_password").after($("<span class='help-block'>current password #{value}</span>")).parents("div.control-group").addClass("error")
+      )
+    else if $(evt.target).attr("id") == "form_password_edit"
+      errors = ($.parseJSON(data.responseText)).errors
+      console.log errors
+      $("form#form_password_edit span.help-block").remove()
+      $("form#form_password_edit div.control-group").removeClass("error")
+
+      $.each(errors.password || [], (index, value) ->
+        $("form#form_password_edit input#user_password").after($("<span class='help-block'>password #{value}</span>")).parents("div.control-group").addClass("error")
+      )
     else
       errors = $.parseJSON(data.responseText)
       $("form#form_forgot_password span.help-block").remove()

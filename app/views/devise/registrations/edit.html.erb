@@ -1,22 +1,23 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<%= simple_form_for(resource, :remote => true, :as => resource_name, :url => '/users.json', :method => :put, :html => {:id => 'form_user_edit'}) do |f| %>
+  <div class="modal-header">
+    <a class="close">x</a>
+    <h3>Settings</h3>
+  </div>
+  <div class="modal-body">
+    <%= f.error_notification %>
+    <div class="inputs">
+      <%= f.input :email, :required => true, :autofocus => true %>
 
-<%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
-  <%= f.error_notification %>
+      <%= f.input :password, :autocomplete => "off", :hint => "leave it blank if you don't want to change it", :required => false %>
+      <%= f.input :password_confirmation, :required => false %>
 
-  <div class="inputs">
-    <%= f.input :email, :required => true, :autofocus => true %>
-    <%= f.input :password, :autocomplete => "off", :hint => "leave it blank if you don't want to change it", :required => false %>
-    <%= f.input :password_confirmation, :required => false %>
-    <%= f.input :current_password, :hint => "we need your current password to confirm your changes", :required => true %>
+      <hr />
+
+      <%= f.input :current_password, :hint => 'we need your current password to confirm your changes', :required => true %>
+    </div>
   </div>
 
-  <div class="actions">
-    <%= f.button :submit, "Update" %>
+  <div class="modal-footer">
+    <%= f.button :submit, "Save", class: 'btn-primary' %>
   </div>
 <% end %>
-
-<h3>Cancel my account</h3>
-
-<p>Unhappy? <%= link_to "Cancel my account", registration_path(resource_name), :confirm => "Are you sure?", :method => :delete %>.</p>
-
-<%= link_to "Back", :back %>

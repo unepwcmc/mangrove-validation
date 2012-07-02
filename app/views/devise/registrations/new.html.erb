@@ -11,6 +11,18 @@
       <%= f.input :password, :required => true %>
       <%= f.input :password_confirmation, :required => true %>
     </div>
+
+    <h4>Submission Usage Policy</h4>
+    <%= text_area_tag 'agreement_text', nil, :rows => 5, :style => "width:75%;margin:10px" %>
+
+    <div class="control-group" style="margin:0 10px">
+      <div class="inputs">
+        <%= f.check_box :usage_agreement, :required => true %> I agree to the Submission Usage Policy
+      </div>
+      <div class="inputs">
+        <%= f.check_box :downloads_agreement, :required => true %> I agree to the Downloads Policy
+      </div>
+    </div>
   </div>
   <div class="modal-footer">
     <%= f.button :submit, "Sign up", class: 'btn-primary' %>
