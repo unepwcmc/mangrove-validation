@@ -33,7 +33,10 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
 
     # Switch view if not current
     if tabLi.prop('id') == 'geometry-tab'
-      @changeView('geometry') if @currentView != 'geometry'
+      if @model.get('id')?
+        @changeView('geometry') if @currentView != 'geometry'
+      else
+        alert("You must save this island before you can edit its geometry")
     else if tabLi.prop('id') == 'attributes-tab'
       @changeView('show') if @currentView == 'geometry'
 
@@ -58,6 +61,7 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
 
     if @currentView == 'edit'
       @model.off('change', @render)
+      $('#name').focus()
     else
       @model.on('change', @render)
 

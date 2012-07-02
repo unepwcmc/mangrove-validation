@@ -2,15 +2,19 @@ class MangroveValidation.Models.Island extends Backbone.Model
   paramRoot: 'island'
 
   url: ->
-    "/islands/#{@id}"
+    if @get('id')?
+      "/islands/#{@get('id')}"
+    else
+      "/islands"
 
   defaults:
+    id: null
     name: null
     name_local: null
     iso_3: null
 
   # get gmaps LatLngBounds of this island from cartodb, and pass it to callback
-  getBounds: (callback) ->
+  getBounds: (successCallback, failureCallback) ->
     query = "SELECT ST_Extent(the_geom) AS bbox FROM #{window.CARTODB_TABLE} WHERE island_id = #{@.get('id')}"
     $.ajax
       url: "#{window.CARTODB_API_ADDRESS}?q=#{query}"
@@ -18,18 +22,21 @@ class MangroveValidation.Models.Island extends Backbone.Model
       success: (data) ->
         # Build the bounds from the WKT bbox
         wktBbox = data.rows[0].bbox
-        wktBbox = wktBbox.split('BOX(')[1]
-        wktBbox = wktBbox.split(')')[0]
+        if wktBbox?
+          wktBbox = wktBbox.split('BOX(')[1]
+          wktBbox = wktBbox.split(')')[0]
 
-        points = wktBbox.split(',')
-        point = points[0].split(' ')
-        tl = new google.maps.LatLng(point[1], point[0])
+          points = wktBbox.split(',')
+          point = points[0].split(' ')
+          tl = new google.maps.LatLng(point[1], point[0])
 
-        point = points[1].split(' ')
-        br = new google.maps.LatLng(point[1], point[0])
+          point = points[1].split(' ')
+          br = new google.maps.LatLng(point[1], point[0])
 
-        bounds = new google.maps.LatLngBounds(tl, br)
-        callback(bounds)
+          bounds = new google.maps.LatLngBounds(tl, br)
+          successCallback(bounds)
+        else
+          failureCallback() if failureCallback?
 
 class MangroveValidation.Collections.IslandsCollection extends Backbone.Collection
   model: MangroveValidation.Models.Island

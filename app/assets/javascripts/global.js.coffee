@@ -62,7 +62,7 @@ window.VALIDATION =
     mapTypeId: google.maps.MapTypeId.SATELLITE
     mapTypeControl: true
     mapTypeControlOptions: 
-      mapTypeIds: [google.maps.MapTypeId.SATELLITE, google.maps.MapTypeId.TERRAIN, google.maps.MapTypeId.HYBRID]
+      mapTypeIds: [google.maps.MapTypeId.SATELLITE, google.maps.MapTypeId.HYBRID]
       style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
     panControl: false
     zoomControl: true
