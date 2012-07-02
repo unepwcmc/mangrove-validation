@@ -14,6 +14,7 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     ":id/edit" : "edit"
     ":id"      : "show"
     ".*"        : "index"
+    "password/:id" : "reset_password"
 
   index: ->
     if (@sidePanelManager.isEmpty())
@@ -35,3 +36,6 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
   baseLayout: ->
     @mapView = new MangroveValidation.Views.Islands.MapView(@island)
     @searchResultsView = new MangroveValidation.Views.Islands.SearchView @islands, $(".navbar-search"), MangroveValidation.Views.Islands.SearchView::setSearchTarget
+
+  reset_password: (id) ->
+    window.VALIDATION.showResetPassword(id)

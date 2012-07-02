@@ -17,10 +17,8 @@
               <a id='show-downloads-btn' href="#">Download data</a>
           </li>
           <% end %>
-          <li>
-            <%= link_to "Logout #{current_user.email}", destroy_user_session_path, :method => 'delete' if current_user.present? %>
-            <%= link_to 'Login', '#', :id => 'login-btn' unless current_user.present? %>
-          </li>
+
+          <%= render 'navbar_user' %>
         </ul>
         <div class="pull-right">
           <form class="navbar-search" action="" autocomplete="off">
