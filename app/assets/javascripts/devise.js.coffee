@@ -62,6 +62,22 @@ $ ->
             .addClass("error")
             .append(policy_error_msg)
       )
+    else if $(evt.target).attr("id") == 'form_user_edit'
+      errors = ($.parseJSON(data.responseText)).errors
+      $("form#form_user_edit span.help-block").remove()
+      $("form#form_user_edit div.control-group").removeClass("error")
+
+      $.each(errors.email || [], (index, value) ->
+        $("form#form_user_edit input#user_email").after($("<span class='help-block'>email #{value}</span>")).parents("div.control-group").addClass("error")
+      )
+
+      $.each(errors.password || [], (index, value) ->
+        $("form#form_user_edit input#user_password").after($("<span class='help-block'>password #{value}</span>")).parents("div.control-group").addClass("error")
+      )
+
+      $.each(errors.current_password || [], (index, value) ->
+        $("form#form_user_edit input#user_current_password").after($("<span class='help-block'>current password #{value}</span>")).parents("div.control-group").addClass("error")
+      )
     else
       errors = $.parseJSON(data.responseText)
       $("form#form_forgot_password span.help-block").remove()

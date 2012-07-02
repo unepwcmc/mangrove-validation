@@ -1,4 +1,4 @@
-<%= simple_form_for(resource, :remote => true, :as => resource_name, :url => registration_path(resource_name), :html => {:id => 'form_user_edit', :method => :put }) do |f| %>
+<%= simple_form_for(resource, :remote => true, :as => resource_name, :url => '/users.json', :method => :put, :html => {:id => 'form_user_edit'}) do |f| %>
   <div class="modal-header">
     <a class="close">x</a>
     <h3>Settings</h3>
