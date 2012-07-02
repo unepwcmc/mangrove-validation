@@ -8,7 +8,7 @@ class IslandsController < ApplicationController
   end
 
   def create
-    @island = Island.new
+    @island = Island.create(params[:island])
 
     if @island.save
       respond_with @island

@@ -2,19 +2,16 @@ class MangroveValidation.Models.Island extends Backbone.Model
   paramRoot: 'island'
 
   url: ->
-    "/islands/#{@id}"
+    if @get('id')?
+      "/islands/#{@get('id')}"
+    else
+      "/islands"
 
   defaults:
+    id: null
     name: null
     name_local: null
     iso_3: null
-
-  create: (callback) ->
-    $.ajax
-      url: '/islands'
-      type: 'POST'
-      success: (data) =>
-        callback(data)
 
   # get gmaps LatLngBounds of this island from cartodb, and pass it to callback
   getBounds: (callback) ->

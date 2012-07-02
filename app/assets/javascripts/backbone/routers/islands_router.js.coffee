@@ -25,11 +25,9 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     $('#landingModal').modal()
 
   new: ->
-    @island.create (data) =>
-      @island.set({id: data.id})
-      @island.fetch()
-      @sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: @island))
-      MangroveValidation.bus.trigger('changeIslandView','edit')
+    @island = new MangroveValidation.Models.Island
+    @sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: @island))
+    MangroveValidation.bus.trigger('changeIslandView','edit')
 
   show: (id) ->
     #@islands.getAndResetById(id)
