@@ -10,6 +10,10 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
+# Ignore config files
+config/environments/development.rb
+config/environments/production.rb
+
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
