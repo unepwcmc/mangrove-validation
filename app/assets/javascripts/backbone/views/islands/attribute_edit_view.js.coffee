@@ -22,7 +22,7 @@ class MangroveValidation.Views.Islands.AttributeEditView extends Backbone.View
     @model.save(null,
       success : (island) =>
         @model = island
-        window.router.navigate("#{@model.get('id')}/", true)
+        window.router.navigate("#{@model.get('id')}", true)
         MangroveValidation.bus.trigger('changeIslandView','show')
     )
 
