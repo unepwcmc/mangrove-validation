@@ -41,6 +41,9 @@ namespace :resque do
     Resque.workers.each do |worker|
       pids.concat(worker.worker_pids)
     end
+    # Not sure why the current process PIDs end up in here, but they do
+    pids.delete(Process.pid.to_s)
+    pids.delete(Process.ppid.to_s)
     if pids.empty?
       puts "No workers to kill"
     else
