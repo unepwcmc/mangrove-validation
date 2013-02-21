@@ -8,8 +8,8 @@ set :default_environment, {
 set :user, 'rails'
 set :use_sudo, false
 
-set :domain, 'ec2-107-22-142-254.compute-1.amazonaws.com'
-server 'ec2-107-22-142-254.compute-1.amazonaws.com', :app, :web, :db, :primary => true, :jobs => true
+set :domain, 'validation.unep-wcmc.org'
+server 'validation.unep-wcmc.org', :app, :web, :db, :primary => true, :jobs => true
 
 set :rails_env, "production"
 

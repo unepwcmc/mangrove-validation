@@ -86,8 +86,8 @@ namespace :deploy do
   end
 end
 
-after "deploy", 'deploy:rescue:restart_scheduler'
-after "deploy", 'deploy:rescue:restart_workers'
+after "deploy", 'deploy:resque:restart_workers'
+after 'deploy:resque:restart_workers', 'deploy:resque:restart_scheduler'
 
 task :setup_production_database_configuration do
   the_host = Capistrano::CLI.ui.ask("Database IP address: ")
