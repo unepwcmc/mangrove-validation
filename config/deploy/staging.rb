@@ -8,7 +8,7 @@ set :rails_env, "staging"
 set :domain, "unepwcmc-005.vm.brightbox.net"
 
 ## List of servers
-server "unepwcmc-005.vm.brightbox.net", :app, :web, :db, :primary => true
+server "unepwcmc-005.vm.brightbox.net", :app, :web, :db, :primary => true, :jobs => true
 
 set :branch, "development"
 

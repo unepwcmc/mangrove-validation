@@ -34,6 +34,12 @@ With debug and verbose:
 
 You can view the status of resque jobs in the browser using the resque-web tool.
 
+=== Capistrano
+
+Workers can be manipulated with a few custom capistrano commands, to get the full list, run:
+
+  cap -vT | grep resque
+
 == CartoDB SQL
 
 SQL to create the initial database on CartoDB:

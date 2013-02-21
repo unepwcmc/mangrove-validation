@@ -49,6 +49,46 @@ default_run_options[:pty] = true # Must be set for the password prompt from git 
 set :local_shared_files, %w(config/database.yml config/cartodb_config.yml config/http_auth_config.yml)
 set :local_shared_dirs, %w(public/system tmp/exports)
 
+##
+# Rake helper task.
+# http://pastie.org/255489
+# http://geminstallthat.wordpress.com/2008/01/27/rake-tasks-through-capistrano/
+# http://ananelson.com/said/on/2007/12/30/remote-rake-tasks-with-capistrano/
+def run_remote_rake(rake_cmd)
+  rake_args = ENV['RAKE_ARGS'].to_s.split(',')
+  cmd = "cd #{fetch(:latest_release)} && bundle exec #{fetch(:rake, "rake")} RAILS_ENV=#{fetch(:rails_env, "production")} #{rake_cmd}"
+  cmd += "['#{rake_args.join("','")}']" unless rake_args.empty?
+  run cmd
+  set :rakefile, nil if exists?(:rakefile)
+end
+
+namespace :deploy do
+  namespace :resque do
+    desc "Restart Resque Workers"
+    task :restart_workers, :roles => :db, :only => { :jobs => true } do
+      run_remote_rake "resque:restart_workers"
+    end
+
+    desc "Stop Resque workers"
+    task :stop_workers, :roles => :db, :only => { :jobs => true } do
+      run_remote_rake "resque:stop_workers"
+    end
+
+    desc "Debug resque worker"
+    task :run_verbose_worker, :roles => :db, :only => { :jobs => true } do
+      run_remote_rake "VVERBOSE=1 QUEUE=download_serve resque:work"
+    end
+
+    desc "Restart Resque scheduler"
+    task :restart_scheduler, :roles => :db, :only => { :jobs => true } do
+      run_remote_rake "resque:restart_scheduler"
+    end
+  end
+end
+
+after "deploy", 'deploy:rescue:restart_scheduler'
+after "deploy", 'deploy:rescue:restart_workers'
+
 task :setup_production_database_configuration do
   the_host = Capistrano::CLI.ui.ask("Database IP address: ")
   database_name = Capistrano::CLI.ui.ask("Database name: ")
