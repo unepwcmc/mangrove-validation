@@ -65,6 +65,7 @@ window.VALIDATION =
     zoomControl: false
     rotateControl: false
     streetViewControl: false
+    scaleControl: true
   mapPolygon: null # Google Maps Polygon
   mapPolygonOptions:
     editable: true
