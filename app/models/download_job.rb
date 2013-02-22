@@ -38,7 +38,7 @@ class DownloadJob
         # Debug
         # system "cp #{file.path} ~/Desktop"
 
-        system "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{Rails.root}#{file.path}"
+        system "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir} #{file.path}"
         system "zip -j #{self.zip_path(:layer, layer_download.id)} #{ogr2ogr_dir}/*"
 
         layer_download.update_attributes(finished: true)
