@@ -7,9 +7,9 @@ gem 'rails', '3.2.12'
 
 gem 'pg'
 gem 'bootstrap-generators', '~> 2.0', :git => 'git://github.com/decioferreira/bootstrap-generators.git'
-gem 'simple_form', :git => 'git://github.com/plataformatec/simple_form.git'
+gem 'simple_form'
 gem 'underscore-rails'
-gem 'cartodb-rb-client', :git => 'git://github.com/decioferreira/cartodb-rb-client.git'
+gem 'cartodb-rb-client'
 gem 'RedCloth'
 
 # Gems used only for assets and not required
@@ -51,6 +51,8 @@ group :development, :test do
 end
 
 gem 'rake', '0.9.2'
+
+gem 'json', '1.5.3'
 
 gem 'rspec-rails', '~> 2.6', :group => [:development, :test]
 group :test do
