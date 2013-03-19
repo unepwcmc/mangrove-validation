@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.12'
+gem 'rails', '3.2.13'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -9,7 +9,7 @@ gem 'pg'
 gem 'bootstrap-generators', '~> 2.0', :git => 'git://github.com/decioferreira/bootstrap-generators.git'
 gem 'simple_form'
 gem 'underscore-rails'
-gem 'cartodb-rb-client'
+gem 'cartodb-rb-client', :git => "https://github.com/Vizzuality/cartodb-rb-client.git"
 gem 'RedCloth'
 
 # Gems used only for assets and not required
