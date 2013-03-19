@@ -1,0 +1,11 @@
+<h3>Generate a new download</h3>
+<div id='download-option-strip'>
+  <%= link_to "All Islands", generate_download_path(:range => 'all'), :class => 'download-btn btn btn-primary' %>
+  <%= link_to "Islands I've Edited", generate_download_path(:range => 'user_edits'), :class => 'download-btn btn btn-primary' %>
+</div>
+<div id='user-download-feedback' class="alert alert-success"></div>
+
+<h3>Download existing datasets</h3>
+<ul id='user-downloads'>
+  <li>Loading...</li>
+</ul>

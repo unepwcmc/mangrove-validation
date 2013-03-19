@@ -1,0 +1,8 @@
+<li>
+  <%= download.name %> at <span class="creation-date"><%= download.created_at.strftime("%H:%M") %> on <%= download.created_at.strftime("%-d %b") %></span> 
+  <% if download.status=='active' %>
+    <span style="float: right"><%= image_tag "spinner.gif" %></span>
+  <% else %>
+    <a href="<%= root_path + get_location(download.id) %>" class="btn">Download</a>
+  <% end %>
+</li>

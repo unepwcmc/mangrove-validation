@@ -35,14 +35,14 @@
     <div id="map_canvas"></div>
 
     <a href="http://www.unep-wcmc.org" target="_blank" id="logo"></a>
-    
+
     <a href="#" id="toggle-map-layers" class="active">Hide Map Layers</a>
 
     <!-- Modals -->
     <div class="modal" id="landingModal">
       <div class="modal-middle">
         <h3>Global Islands Database</h3>
-        <p><%= RedCloth.new(@modal_text.text.to_s).to_html.html_safe %></p>
+        <p>Yo</p>
       </div>
       <div class="modal-right">
         <a class="search-site" href="#" data-dismiss="modal">
@@ -59,18 +59,7 @@
     </div>
 
     <div class="modal" id="download-modal">
-      <h3>Generate a new download</h3>
-      <div id='download-option-strip'>
-        <%= link_to "All Islands", generate_download_path(:range => 'all'), :class => 'download-btn btn btn-primary' %>
-        <%= link_to "Islands I've Edited", generate_download_path(:range => 'user_edits'), :class => 'download-btn btn btn-primary' %>
-        <a href='#' class='download-btn btn btn-primary'><span>Every Island Currently Visible</span></a>
-      </div>
-      <div id='user-download-feedback' class="alert alert-success"></div>
-
-      <h3>Download existing datasets</h3>
-      <ul id='user-downloads'>
-        <li>Loading...</li>
-      </ul>
+      <%= render "download/download_modal" %>
     </div>
 
     <div class="modal hide" id="authModal"></div>
@@ -82,16 +71,7 @@
   <div id="right-panel">
     <div id='right-main'>
     </div>
-    <div id='stats'>
-      <span>
-        <h4>12%</h4>
-        <p>validated</p>
-      </span>
-      <span class='right'>
-        <h4>9,001</h4>
-        <p>Total # islands</p>
-      </span>
-    </div>
+
     <footer>
       Copyright UNEP-WCMC <%= Date.today.year %>
       <%= image_tag 'unep-wcmc-logo.png' %>

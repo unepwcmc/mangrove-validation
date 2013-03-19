@@ -1,6 +1,0 @@
-<% if @downloads_all_islands.length > 0 || @downloads_user.length > 0 %>
-  <%= render :partial => "user_downloads_item", :locals => {:downloads => @downloads_all_islands} %>
-  <%= render :partial => "user_downloads_item", :locals => {:downloads => @downloads_user} %>
-<% else %>
-  <li>No downloads available</li>
-<% end %>

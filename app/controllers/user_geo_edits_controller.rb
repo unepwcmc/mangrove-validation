@@ -1,5 +1,5 @@
 class UserGeoEditsController < ApplicationController
-  before_filter :authenticate_user!, :only => [:create, :user_downloads]
+  before_filter :authenticate_user!, :only => [:create]
 
   respond_to :html, :only => [:index, :user_downloads]
   respond_to :json, :only => [:create, :reallocate_geometry]
@@ -12,25 +12,10 @@ class UserGeoEditsController < ApplicationController
 
   def create
     @user_geo_edit = UserGeoEdit.new(params[:user_geo_edit])
-    @user_geo_edit.island_id = params[:user_geo_edit][:island_id].to_i
-    @user_geo_edit.action = params[:user_geo_edit][:action]
     @user_geo_edit.user = current_user
     @user_geo_edit.save
+
     respond_with @user_geo_edit
-  end
-
-  def user_downloads
-    @downloads_all_islands = UserGeoEditDownload.find(:all,
-                                          :limit => 1,
-                                          :order => "created_at DESC",
-                                          :conditions => ["user_id IS ? AND status IN ('active','finished')", nil])
-
-    @downloads_user = UserGeoEditDownload.find(:all,
-                                               :limit => 1,
-                                               :order => "created_at DESC",
-                                               :conditions => ["user_id = ? AND status IN ('active', 'finished')", current_user.id])
-
-    render :partial => "user_downloads"
   end
 
   def user_navbar_links

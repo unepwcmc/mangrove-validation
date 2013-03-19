@@ -139,12 +139,13 @@ html, body {
   display:none;
   padding: 15px;
   height: auto;
+  width: 560px;
 
   #download-option-strip {
-    padding: 10px;
+    padding: 10px 25px;
     background-color: #333;
     border-radius: 5px;
-    margin: 0 0 9px 25px;
+    margin: 0 0 9px 0;
 
     .download-btn {
       width: 200px;
@@ -153,9 +154,10 @@ html, body {
       line-height: 35px;
     }
   }
+
   #user-download-feedback {
     display:none;
-    margin: 0 0 9px 25px;
+    margin: 0 0 9px 0;
   }
 
   h3 {
@@ -169,6 +171,7 @@ html, body {
   ul#user-downloads {
     border-radius: 5px;
     background-color: #333;
+    margin: 0 0 9px 0;
 
     li {
       list-style-type:none;
@@ -300,10 +303,6 @@ html, body {
 
       img {
         margin-right:10px;
-      }
-      span {
-        position:relative;
-        top:-6px;
       }
     }
     li.active {
