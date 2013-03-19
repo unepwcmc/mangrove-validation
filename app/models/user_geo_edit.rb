@@ -9,7 +9,6 @@ class UserGeoEdit < ActiveRecord::Base
   validates :knowledge, presence: true
 
   before_create :cartodb
-
   def cartodb
     geom_sql = "ST_GeomFromText('MULTIPOLYGON(((#{polygon})))', 4326)"
     # SQL CartoDB

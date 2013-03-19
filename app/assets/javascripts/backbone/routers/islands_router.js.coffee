@@ -34,10 +34,13 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
 
   show: (id) ->
     @island.set({id: id})
-    @island.fetch()
-
-    @sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: @island))
-    $(@sidePanelElem).removeClass('disabled')
+    @island.fetch(
+      success: (model, response, options) =>
+        @sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: model))
+        $(@sidePanelElem).removeClass('disabled')
+      error: (model, xhr, options) =>
+        @index()
+    )
 
   baseLayout: ->
     @mapView = new MangroveValidation.Views.Islands.MapView(@island)

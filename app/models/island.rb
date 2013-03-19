@@ -13,4 +13,16 @@ class Island < ActiveRecord::Base
 
     result
   end
+
+  before_destroy :delete_from_cartodb
+  def delete_from_cartodb
+    sql = <<-SQL
+          DELETE FROM #{APP_CONFIG['cartodb_table']}
+          WHERE island_id = '#{self.id}'
+          SQL
+    CartoDB::Connection.query sql
+  rescue CartoDB::Client::Error
+    errors.add :base, 'There was an error trying to render the map.'
+    logger.info "There was an error trying to execute the following query:\n#{sql}"
+  end
 end

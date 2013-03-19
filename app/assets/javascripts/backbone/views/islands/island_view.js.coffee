@@ -7,6 +7,7 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
 
   events:
     'click #tabs li': 'tabClicked'
+    'click .delete': 'deleteIsland'
 
   initialize: (options) ->
     # The sub-view to show can be passed as a param, default show
@@ -44,6 +45,12 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
     # Change the current view and render
     @currentView = view
     @render()
+
+  deleteIsland: (e) ->
+    if confirm('Are you sure you want to delete this island?')
+      @model.destroy(
+        success: -> window.router.navigate("/", true)
+      )
 
   # On close, close the tabbed content view
   onClose: =>

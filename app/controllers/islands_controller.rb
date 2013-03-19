@@ -1,5 +1,5 @@
 class IslandsController < ApplicationController
-  before_filter :authenticate_user!, :only => :create
+  before_filter :authenticate_user!, :only => [:create, :update, :destroy]
   respond_to :json
 
   def index
@@ -25,7 +25,14 @@ class IslandsController < ApplicationController
   def update
     @island = Island.find(params[:id])
     @island.update_attributes(params[:island])
-    
+
+    respond_with @island
+  end
+
+  def destroy
+    @island = Island.find(params[:id])
+    @island.destroy
+
     respond_with @island
   end
 end
