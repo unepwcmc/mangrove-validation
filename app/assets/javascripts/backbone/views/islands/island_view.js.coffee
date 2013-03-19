@@ -50,6 +50,9 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
     if confirm('Are you sure you want to delete this island?')
       @model.destroy(
         success: -> window.router.navigate("/", true)
+        error: (model, xhr, options) ->
+          if xhr.status == 401
+            window.VALIDATION.showUserLogin()
       )
 
   # On close, close the tabbed content view
