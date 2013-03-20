@@ -8,6 +8,8 @@ class DownloadController < ApplicationController
         select(:island_id).
         map(&:island_id).
         join(',')
+      redirect_to :back unless island_ids.length > 0
+
       name = "Islands I've Edited"
       user = current_user
     else # All
