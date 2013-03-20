@@ -1,4 +1,7 @@
 <% if current_user.present? %>
+  <li>
+    <a id="show-downloads-btn" href="#">Download data</a>
+  </li>
   <li class="dropdown">
     <a href="#" class="dropdown-toggle"data-toggle="dropdown">
           <%= "Logged in as #{current_user.email}" %>

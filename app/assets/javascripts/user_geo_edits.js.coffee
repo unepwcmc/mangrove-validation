@@ -8,8 +8,6 @@ window.checkUserSignedIn = (options = {}) ->
     url: '/me'
     dataType: 'json'
     success: =>
-      $('<li><a id="show-downloads-btn" href="#">Download data</a></li>').insertBefore($('#login-btn').parent())
-
       $.ajax
         url: '/templates/navbar/user'
         success: (data) ->
