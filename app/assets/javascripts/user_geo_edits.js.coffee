@@ -3,16 +3,23 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 # Check if user signed in
-window.checkUserSignedIn = ->
-  $.getJSON '/me', (data) ->
-    $('<li><a id="show-downloads-btn" href="#">Download data</a></li>').insertBefore($('#login-btn').parent())
+window.checkUserSignedIn = (options = {}) ->
+  $.ajax(
+    url: '/me'
+    dataType: 'json'
+    success: =>
+      $('<li><a id="show-downloads-btn" href="#">Download data</a></li>').insertBefore($('#login-btn').parent())
 
-    $.ajax
-      url: '/templates/navbar/user'
-      success: (data) ->
-        $('#login-btn').parents('ul').append(data)
-        $('#login-btn').remove()
-      dataType: 'html'
+      $.ajax
+        url: '/templates/navbar/user'
+        success: (data) ->
+          $('#login-btn').parents('ul').append(data)
+          $('#login-btn').remove()
+        dataType: 'html'
+
+      options.success.apply(@, arguments) if options.success
+    error: options.error || null
+  )
 
 # Show the user login page in a modal
 window.VALIDATION.showUserLogin = ->

@@ -28,9 +28,13 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     $(@sidePanelElem).addClass('disabled')
 
   new: ->
-    @island = new MangroveValidation.Models.Island
-    @sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: @island))
-    MangroveValidation.bus.trigger('changeIslandView','edit')
+    window.checkUserSignedIn(
+      success: =>
+        @island = new MangroveValidation.Models.Island
+        @sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: @island))
+        MangroveValidation.bus.trigger('changeIslandView','edit')
+      error: window.VALIDATION.showUserLogin
+    )
 
   show: (id) ->
     @island.set({id: id})
@@ -42,9 +46,9 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
         @index()
     )
 
+  reset_password: (id) ->
+    window.VALIDATION.showResetPassword(id)
+
   baseLayout: ->
     @mapView = new MangroveValidation.Views.Islands.MapView(@island)
     @searchResultsView = new MangroveValidation.Views.Islands.SearchView @islands, $(".navbar-search"), MangroveValidation.Views.Islands.SearchView::setSearchTarget
-
-  reset_password: (id) ->
-    window.VALIDATION.showResetPassword(id)
