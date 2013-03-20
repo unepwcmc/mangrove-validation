@@ -23,13 +23,14 @@ class DownloadController < ApplicationController
       :status => :active
     )
 
-    Resque.enqueue(DownloadJob, {:user_geo_edit => user_geo_edit_download.id})
+    Resque.enqueue(DownloadJob, user_geo_edit_download.id)
 
     redirect_to :back
   end
 
   def available
     @all_islands_download = UserGeoEditDownload.
+      where("user_id = ?", nil).
       where("status IN ('active', 'finished')").
       order("created_at DESC").
       first

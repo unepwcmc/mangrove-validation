@@ -1,7 +1,12 @@
 <h3>Generate a new download</h3>
 <div id='download-option-strip'>
   <%= link_to "All Islands", generate_download_path(:range => 'all'), :class => 'download-btn btn btn-primary' %>
-  <%= link_to "Islands I've Edited", generate_download_path(:range => 'user_edits'), :class => 'download-btn btn btn-primary' %>
+
+  <% if (@user_geo_edits_count > 0) %>
+    <%= link_to "Islands I've Edited", generate_download_path(:range => 'user_edits'), :class => 'download-btn btn btn-primary' %>
+  <% else %>
+    <%= link_to "Islands I've Edited", "", :class => 'download-btn btn btn-primary disabled', :title => "You have not edited any islands" %>
+  <% end %>
 </div>
 <div id='user-download-feedback' class="alert alert-success"></div>
 

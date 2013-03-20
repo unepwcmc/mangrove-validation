@@ -1,118 +1,122 @@
 class DownloadJob
   @queue = :download_serve
 
-  def self.perform(options)
-    require 'net/http'
-    require 'uri'
-    require 'securerandom'
-    require 'rake'
+  def self.perform(id)
+    DownloadJob.new(id)
+  end
 
-    user_geo_edit_download = UserGeoEditDownload.find(options['user_geo_edit'])
-    puts "Generating download #{user_geo_edit_download.id} at #{Time.now}"
+  def initialize(id)
+    download = UserGeoEditDownload.find(id)
+    puts "Generating download for ID #{download.id} (Name: #{download.name}; Islands: #{download.island_ids}) at #{Time.now}"
 
-    hash = SecureRandom.hex(5)
+    @id = download.id
+
+    island_count = DownloadJob.get_island_count(download.island_ids)
+    puts "Processing #{island_count} island geometries"
+
+    0.upto (island_count/APP_CONFIG['admin_user_edits_limit']).round do |offset|
+      File.open(temp_file_name(offset), "w+") do |file|
+        puts "Retrieving geojson for #{offset + 1}/#{(island_count / APP_CONFIG['admin_user_edits_limit']) + 1}"
+        file << DownloadJob.get_islands(download.island_ids, offset)
+      end
+
+      generate_shapefiles(offset)
+    end
+
+    generate_zipfile()
+
+    puts "Successfully generated download for ID #{@id}"
+    download.update_attributes(:status => :finished)
 
     begin
-      # Where clause
-      where = []
-      if user_geo_edit_download.island_ids.present?
-        where << ActiveRecord::Base.send(:sanitize_sql_array, ["island_id IN (#{user_geo_edit_download.island_ids})"])
-      end
-      where_clause = where.join(' AND ')
-
-      # CartoDB Query
-      query = "SELECT COUNT(*) FROM #{APP_CONFIG['cartodb_table']}"
-      query << " WHERE #{where_clause}" if !user_geo_edit_download.island_ids.empty?
-      uri = URI.parse(URI.escape("http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}"))
-      res = Net::HTTP.get_response(uri)
-
-      # Result count
-      count = JSON.parse(res.body)["rows"].first["count"]
-
-      ogr2ogr_dir = self.ogr2ogr_directory(:user_geo_edit, user_geo_edit_download.id)
-      zip_dir = self.zip_path(:user_geo_edit, user_geo_edit_download.id)
-
-      0.upto (count/APP_CONFIG['admin_user_edits_limit']).round do |offset|
-        File.open(self.temp_file_name(hash, offset), 'w+') do |file|
-          query = "SELECT * FROM #{APP_CONFIG['cartodb_table']}"
-          query << " WHERE #{where_clause}" if !user_geo_edit_download.island_ids.empty?
-          query << " LIMIT #{APP_CONFIG['admin_user_edits_limit']} OFFSET #{offset * APP_CONFIG['admin_user_edits_limit']}"
-          uri = URI.parse(URI.escape("http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}&format=geojson"))
-          res = Net::HTTP.get_response(uri)
-          file << res.body.force_encoding('UTF-8')
-
-          puts "Processing #{offset}/#{count / APP_CONFIG['admin_user_edits_limit']}"
-          puts "Saving to file #{file.path}"
-        end
-
-        # Debug
-        # system "cp #{filename} ~/Desktop"
-
-        puts "ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir}/#{offset} #{self.temp_file_name(hash, offset)}"
-        puts `ogr2ogr -overwrite -skipfailures -f 'ESRI Shapefile' #{ogr2ogr_dir}/#{offset} #{self.temp_file_name(hash, offset)}`
-        if $? != 0 then raise end # Check the return code the system call
-
-        # Merge this shapefile with our master shapefile "all.shp"
-        # Allows the very large "all islands" dataset to be downloaded
-        # and converted on low memory boxes
-        ogr_command = "ogr2ogr "
-        ogr_command << "-update -append " if offset>0
-        ogr_command << "#{ogr2ogr_dir}/all.shp #{ogr2ogr_dir}/#{offset}/OGRGeoJSON.shp"
-        system ogr_command
-      end
-
-      puts "zip -j #{zip_dir} #{ogr2ogr_dir}/all.*"
-      puts `zip -j #{zip_dir} #{ogr2ogr_dir}/all.*`
-      if $? != 0 then raise end
-
-      # Move the file to a download directory (in /public)
-      # Replace this and self#download_directory to use something like S3
-      puts "mv #{zip_dir} #{self.download_directory(:user_geo_edit)}"
-      puts `mv #{zip_dir} #{self.download_directory(:user_geo_edit)}`
-      if $? != 0 then raise end
-
-      puts "Successfully generated a download for #{user_geo_edit_download.id}"
-      user_geo_edit_download.update_attributes(:status => :finished)
-
-      # Catch email related exceptions here so that the job does not fail if an email can't be delivered
-      begin
-        DownloadNotifier.download_email(user_geo_edit_download.user, user_geo_edit_download).deliver
-      rescue Exception => msg
-        puts msg
-        puts "Cannot deliver email"
-      end
+      puts "Sending notification mail to #{download.user.email}"
+      DownloadNotifier.download_email(download).deliver
     rescue Exception => msg
+      puts "***** Mail Delivery FAILED *****"
+      puts "Cannot deliver email:"
       puts msg
-      user_geo_edit_download.update_attributes(:status => :failed)
-    ensure
-      # Remove temporary files
-      rm_tmp_cmd  = "rm -r #{Rails.root}/tmp/exports/user_geo_edit/#{user_geo_edit_download.id}/"
-      rm_json_cmd = "rm -r #{Rails.root}/tmp/download#{hash}*.json"
+      puts msg.backtrace
+      puts "********************************"
+    end
+  rescue Exception => msg
+    puts "***** Download FAILED *****"
+    puts msg
+    puts msg.backtrace
+    puts "***************************"
+    download.update_attributes(:status => :failed)
+  ensure
+    cleanup()
+  end
 
-      system(rm_tmp_cmd)
-      system(rm_json_cmd)
+  def self.get_islands(ids, offset)
+    query = "SELECT * FROM #{APP_CONFIG['cartodb_table']}"
+    query << " WHERE island_id IN (#{ids})" if !ids.empty?
+    query << " LIMIT #{APP_CONFIG['admin_user_edits_limit']} OFFSET #{offset * APP_CONFIG['admin_user_edits_limit']}"
+
+    uri = URI.parse(URI.escape("http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}&format=geojson"))
+    res = Net::HTTP.get_response(uri)
+
+    return res.body.force_encoding('UTF-8')
+  end
+
+  def self.get_island_count(ids)
+    query =  "SELECT COUNT(*) FROM #{APP_CONFIG['cartodb_table']}"
+    query << " WHERE island_id IN (#{ids})" if !ids.empty?
+
+    uri = URI.parse(URI.escape("http://carbon-tool.cartodb.com/api/v1/sql?q=#{query}"))
+    res = Net::HTTP.get_response(uri)
+
+    return JSON.parse(res.body)["rows"].first["count"]
+  end
+
+  def generate_shapefiles(offset)
+    dir = "#{job_directory}/#{offset}"
+    FileUtils.mkdir_p dir unless File.exists?(dir)
+
+    system "ogr2ogr -skipfailures -f 'ESRI Shapefile' #{dir} #{temp_file_name(offset)}"
+    if $? != 0
+      raise Exception, "ogr2ogr failed"
+    end
+
+    ogr_command = "ogr2ogr "
+    ogr_command << "-update -append " if offset>0
+    ogr_command << "#{job_directory}/all.shp #{dir}/OGRGeoJSON.shp"
+
+    system ogr_command
+    if $? != 0
+      raise Exception, "ogr2ogr failed"
     end
   end
 
-  def self.temp_file_name(hash, num)
-    "#{Rails.root}/tmp/download#{hash}-#{num}.json"
+  def cleanup
+    FileUtils.rm_rf(job_directory)
+    FileUtils.rm_rf(temp_file_name("*"))
   end
 
-  def self.download_directory(type)
-    path = "#{Rails.root}/public/exports/#{type}/"
+  def generate_zipfile
+    system "zip -j #{zip_path} #{job_directory}/all.*"
+    if $? != 0
+      raise Exception, "Zip failed"
+    end
+  end
+
+  def temp_file_name(offset)
+    "#{Rails.root}/tmp/download#{@id}-#{offset}.json"
+  end
+
+  def download_directory
+    path = "#{Rails.root}/public/exports"
     FileUtils.mkdir_p path unless File.exists?(path)
     path
   end
 
-  def self.ogr2ogr_directory(type, id)
-    path = "#{Rails.root}/tmp/exports/#{type}/#{id}"
+  def job_directory
+    path = "#{download_directory}/#{@id}"
     FileUtils.mkdir_p path unless File.exists?(path)
     path
   end
 
-  def self.zip_path(type, id)
-    path = "#{Rails.root}/tmp/exports/#{type}"
-    FileUtils.mkdir_p path unless File.exists?(path)
-    "#{path}/#{id}.zip"
+  def zip_path
+    "#{job_directory}.zip"
   end
 end

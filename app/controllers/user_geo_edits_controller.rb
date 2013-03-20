@@ -6,7 +6,10 @@ class UserGeoEditsController < ApplicationController
 
   def index
     @user_geo_edit = UserGeoEdit.new
-    @modal_text = SiteText.find_or_create_by_name('landing_modal')
+
+    @user_geo_edits_count = 0
+    @user_geo_edits_count = current_user.user_geo_edits.count if current_user
+
     respond_with @user_geo_edit
   end
 
