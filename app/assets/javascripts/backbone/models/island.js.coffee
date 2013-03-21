@@ -12,6 +12,7 @@ class MangroveValidation.Models.Island extends Backbone.Model
     name: null
     name_local: null
     iso_3: null
+    source: null
 
   # get gmaps LatLngBounds of this island from cartodb, and pass it to callback
   getBounds: (successCallback, failureCallback) ->

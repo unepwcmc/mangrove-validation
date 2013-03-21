@@ -1,4 +1,9 @@
 class Island < ActiveRecord::Base
+  validates :name, presence: true
+  validates :name_local, presence: true
+  validates :iso_3, presence: true
+  validates :source, presence: true
+
   def self.filter(params)
     result = self.scoped
 

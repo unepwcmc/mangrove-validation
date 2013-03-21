@@ -22,20 +22,29 @@
     <div id='island-attributes'>
       <div class='field'>
         <label for="name"> Name</label>
-        <input type="text" name="name" id="name" value="$NAME" >
+        <input type="text" name="name" id="name" disabled>
       </div>
       <div class='field'>
         <label for="local-name"> Local name</label>
-        <input type="text" name="local-name" id="local-name" value="$LOCAL-NAME" >
+        <input type="text" name="local-name" id="local-name" disabled>
+      </div>
+      <div class='field'>
+        <label for="country"> Country</label>
+        <input type="text" name="country" id="country" disabled>
       </div>
 
       <div class='field full-width'>
-        <input type="text" name="local-name" id="local-name" value="$SOURCE" >
+        <select id='edit-knowledge' class="knowledge" disabled>
+          <option value="">Please select evidence type</option>
+          <option value="imagery">Underlying imagery in browser</option>
+          <option value="local data">Local data</option>
+          <option value="local knowledge">Local knowledge</option>
+        </select>
       </div>
 
       <div class="actions">
-        <input type="submit" class='primary' value="Update Island" />
-        <input type="submit" value="Clear" />
+        <input type="submit" class='primary' value="Update Island" disabled>
+        <input type="submit" value="Clear" disabled>
       </div>
     </div>
   </div>

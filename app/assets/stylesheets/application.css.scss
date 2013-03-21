@@ -213,6 +213,7 @@ html, body {
   height: 120px;
   color: #F9D000;
   box-shadow: inset 0px -3px 15px #545454;
+  position: relative;
 
   h2, h4 {
     color: #F9D000;
@@ -233,7 +234,7 @@ html, body {
     margin-right: 5px;
     width: 100px;
     font-weight:bold;
-    line-height: 26px;
+    line-height: 40px;
     font-size: 23px;
     overflow:hidden;
 
@@ -251,7 +252,9 @@ html, body {
   }
 
   .btn {
-    margin-top: 20px;
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
   }
 }
 

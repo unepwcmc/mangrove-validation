@@ -1,19 +1,24 @@
 <form id="edit-island" action="/islands/<%= id %>" method="post">
-  <div class="field">
+  <div class="field control-group">
     <label for="name"> Name</label>
     <input type="text" name="name" id="name" value="<%= name %>">
   </div>
-  <div class="field">
+  <div class="field control-group">
     <label for="local-name"> Local name</label>
     <input type="text" name="name_local" id="name_local" value="<%= name_local %>">
   </div>
-  <div class="field">
+  <div class="field control-group">
     <label for="iso_3">Country</label>
     <input type="text" name="iso_3" id="iso_3" value="<%= iso_3 %>">
   </div>
 
-  <div class="field full-width">
-    <input type="text" name="source" id="source" value="$SOURCE">
+  <div class="field control-group full-width">
+    <select id='source' name="source" class="source">
+      <option value="">Please select evidence type</option>
+      <option value="imagery">Underlying imagery in browser</option>
+      <option value="local data">Local data</option>
+      <option value="local knowledge">Local knowledge</option>
+    </select>
   </div>
 
   <div class="actions">
