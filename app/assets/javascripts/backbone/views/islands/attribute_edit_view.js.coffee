@@ -24,7 +24,34 @@ class MangroveValidation.Views.Islands.AttributeEditView extends Backbone.View
         @model = island
         window.router.navigate("#{@model.get('id')}", true)
         MangroveValidation.bus.trigger('changeIslandView','show')
+      error : @failedSubmission
     )
+
+  failedSubmission: (model, xhr, options) =>
+    if xhr.status == 401 || xhr.status == 403
+      window.VALIDATION.showUserLogin()
+    else
+      $("#alert-message").
+        removeClass('alert-success').
+        addClass('alert-error').
+        html("There was some error while trying to submit the data.").
+        show
+      setTimeout("$('#alert-message').fadeOut('slow')", 2000)
+
+      errors = $.parseJSON(xhr.responseText).errors
+
+      $('form[id*="island"] :input').
+        parents('.control-group').
+        removeClass('error').
+        find('.alert').remove()
+
+      $.each(errors || [], (index, value) ->
+        $input = $(":input:visible[id='#{index}']")
+        field_name = $input.siblings('label').html() || 'Source'
+        $input.
+          after($("<span class='alert alert-error'>#{field_name} #{value}</span>")).
+          parents("div.control-group").addClass("error")
+      )
 
   render : ->
     $(@el).html(@template(@model.toJSON() ))
