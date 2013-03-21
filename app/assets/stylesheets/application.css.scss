@@ -72,65 +72,32 @@ html, body {
     float: right;
     width: 249px;
     padding-top: 105px;
-    
+    position: relative;
+
     a {
       background: #9d8c45;
-      font-size: 11px;
-      float: left;
-      width: 216px;
-      margin-bottom: 6px;
+      font-size: 1.5em;
       color: #ffcc00;
-      padding: 2px;
-      padding-left: 25px;
       position: relative;
-      
       -webkit-border-radius: 3px;
       -moz-border-radius: 3px;
       border-radius: 3px;
-      
-      &.search-site {
-        span:before {
-          content: '';
-          background: #9d8c45 image-url('landing-sprite.png') no-repeat 0 0;
-          width: 10px;
-          height: 11px;
-          position: absolute;
-          top: 5px;
-          left: 5px;
-        }
-      }
-
-      &.add-island {
-        span:before {
-          content: '';
-          background: #9d8c45 image-url('landing-sprite.png') no-repeat 0 -12px;
-          width: 10px;
-          height: 10px;
-          position: absolute;
-          top: 5px;
-          left: 5px;
-        }
-      }
-
-      &.let-me-help {
-        span:before {
-          content: '';
-          background: #9d8c45 image-url('landing-sprite.png') no-repeat 0 -23px;
-          width: 10px;
-          height: 12px;
-          position: absolute;
-          top: 5px;
-          left: 5px;
-        }
-      }
+      width: 45px;
+      position: absolute;
+      padding: 10px;
+      right: 15px;
+      bottom: -110px;
     }
-    
+
     .footer {
       color: #AAA;
       float: right;
       clear: both;
       margin-right: 15px;
       margin-top: 32px;
+      position: absolute;
+      bottom: -150px;
+      left: 85px;
     }
   }
 }
