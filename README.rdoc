@@ -34,6 +34,16 @@ To get the workers running:
 
 You can view the status of resque jobs in the browser using the resque-web tool.
 
+== Deployment
+
+Brightbox has a 32-bit architecture, and thus non-ruby gems have to be
+compiled as x86-linux, rather than x86_64. Currently this only affects
+`libv8`.
+
+When deploying, ensure that `/vendor/cache` contains an x86-linux
+version of `libv8`. This can be downloaded here:
+http://rubygems.org/downloads/libv8-3.11.8.13-x86-linux.gem
+
 == CartoDB SQL
 
 SQL to create the initial database on CartoDB:

@@ -57,20 +57,23 @@ html, body {
 
 #landingModal {
   background: #5c5d5e image-url('landing-bg.png') no-repeat;
+  height: 291px;
+  width: 870px;
 
   .modal-middle {
     float: left;
-    margin-left: 169px;
-    width: 330px;
+    margin-left: 189px;
+    width: 468px;
     padding: 15px 25px;
+    padding-top: 0;
   }
   
   .modal-right {
     background-image: image-url('unep-wcmc-logo.png');
-    background-position: 186px 10px;
+    background-position: 95px 10px;
     background-repeat: no-repeat;
     float: right;
-    width: 249px;
+    width: 163px;
     padding-top: 105px;
     position: relative;
 
@@ -86,7 +89,7 @@ html, body {
       position: absolute;
       padding: 10px;
       right: 15px;
-      bottom: -110px;
+      bottom: -150px;
     }
 
     .footer {
@@ -96,8 +99,7 @@ html, body {
       margin-right: 15px;
       margin-top: 32px;
       position: absolute;
-      bottom: -150px;
-      left: 85px;
+      bottom: -182px;
     }
   }
 }
