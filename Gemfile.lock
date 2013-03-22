@@ -196,7 +196,7 @@ GEM
     redis (3.0.3)
     redis-namespace (1.2.1)
       redis (~> 3.0.0)
-    ref (1.0.3)
+    ref (1.0.4)
     resque (1.23.1)
       multi_json (~> 1.0)
       redis-namespace (~> 1.0)
