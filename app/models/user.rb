@@ -9,7 +9,6 @@ class User < ActiveRecord::Base
 
   validates :name, presence: true
   validates :usage_agreement, presence: true, :on => :create
-  validates :downloads_agreement, presence: true, :on => :create
 
   has_many :user_geo_edits
   has_many :user_geo_edits_downloads
