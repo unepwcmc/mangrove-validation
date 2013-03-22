@@ -31,6 +31,9 @@ class DownloadController < ApplicationController
   end
 
   def available
+    @user_geo_edits_count = 0
+    @user_geo_edits_count = current_user.user_geo_edits.count if current_user
+
     @all_islands_download = UserGeoEditDownload.
       where("user_id = ?", nil).
       where("status IN ('active', 'finished')").
@@ -42,6 +45,6 @@ class DownloadController < ApplicationController
       order("created_at DESC").
       first
 
-    render "index"
+    render "_download_modal", :layout => false
   end
 end
