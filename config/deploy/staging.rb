@@ -9,13 +9,3 @@ set :domain, "unepwcmc-005.vm.brightbox.net"
 
 ## List of servers
 server "unepwcmc-005.vm.brightbox.net", :app, :web, :db, :primary => true, :jobs => true
-
-set :branch, "development"
-
-namespace :deploy do
-  namespace :assets do
-    task :precompile, :roles => :web, :except => { :no_release => true } do
-      run "cd #{latest_release} && bundle exec #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:precompile"
-    end
-  end
-end

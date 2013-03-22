@@ -1,10 +1,13 @@
 set :stages, %w(staging production)
 set :default_stage, 'staging'
 require 'capistrano/ext/multistage'
+load 'deploy/assets'
 
 # The name of your application.  Used for deployment directory and filenames
 # and Apache configs. Should be unique on the Brightbox
 set :application, "mangrove-validation"
+
+set :rake, "bundle exec rake"
 
 # Target directory for the application on the web and app servers.
 set(:deploy_to) { File.join("", "home", user, application) }
@@ -56,7 +59,7 @@ set :local_shared_dirs, %w(public/system tmp/exports)
 # http://ananelson.com/said/on/2007/12/30/remote-rake-tasks-with-capistrano/
 def run_remote_rake(rake_cmd)
   rake_args = ENV['RAKE_ARGS'].to_s.split(',')
-  cmd = "cd #{fetch(:latest_release)} && bundle exec #{fetch(:rake, "rake")} RAILS_ENV=#{fetch(:rails_env, "production")} #{rake_cmd}"
+  cmd = "cd #{fetch(:latest_release)} && exec #{fetch(:rake, "rake")} RAILS_ENV=#{fetch(:rails_env, "production")} #{rake_cmd}"
   cmd += "['#{rake_args.join("','")}']" unless rake_args.empty?
   run cmd
   set :rakefile, nil if exists?(:rakefile)

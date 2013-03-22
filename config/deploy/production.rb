@@ -11,6 +11,11 @@ set :use_sudo, false
 set :domain, 'validation.unep-wcmc.org'
 server 'validation.unep-wcmc.org', :app, :web, :db, :primary => true, :jobs => true
 
+default_run_options[:pty] = true
+ssh_options[:forward_agent] = true
+ssh_options[:auth_methods] = ["publickey"]
+ssh_options[:keys] = ["~/.ssh/ChefDeployNew.pem"]
+
 set :rails_env, "production"
 
 #after "deploy:symlink", "deploy:restart_workers"
