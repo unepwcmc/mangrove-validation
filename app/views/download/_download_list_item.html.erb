@@ -1,4 +1,7 @@
 <li>
+  <% if download.status == 'active' %>
+    <strong>Generating download for </strong>
+  <% end %>
   <%= download.name %> at <span class="creation-date"><%= download.created_at.strftime("%H:%M") %> on <%= download.created_at.strftime("%-d %b") %></span> 
   <% if download.status=='active' %>
     <span style="float: right"><%= image_tag "spinner.gif" %></span>

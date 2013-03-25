@@ -33,7 +33,7 @@ update_available_downloads = () ->
   $.ajax
     url: '/download/available'
     success: (data) ->
-      $('#user-downloads').html(data)
+      $('#download-modal').html(data)
     dataType: 'html'
 
 poll_downloads = () ->
