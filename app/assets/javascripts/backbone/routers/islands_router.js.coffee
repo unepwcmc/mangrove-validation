@@ -4,7 +4,7 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     @island = new MangroveValidation.Models.Island()
 
     @sidePanelElem = '#right-main'
-    @sidePanelManager = new MangroveValidation.ViewManager(@sidePanelElem)
+    @sidePanelManager = new Backbone.ViewManager(@sidePanelElem)
 
     # Base layout
     @baseLayout()
@@ -24,14 +24,14 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
 
     @island.set({id: null})
 
-    @sidePanelManager.showView(new MangroveValidation.Views.Islands.IndexView())
+    $(@sidePanelElem).html(@sidePanelManager.showView(new MangroveValidation.Views.Islands.IndexView()))
     $(@sidePanelElem).addClass('disabled')
 
   new: ->
     window.checkUserSignedIn(
       success: =>
         @island = new MangroveValidation.Models.Island
-        @sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: @island))
+        $(@sidePanelElem).html(@sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: @island)))
         MangroveValidation.bus.trigger('changeIslandView','edit')
       error: window.VALIDATION.showUserLogin
     )
@@ -40,7 +40,7 @@ class MangroveValidation.Routers.IslandsRouter extends Backbone.Router
     @island.set({id: id})
     @island.fetch(
       success: (model, response, options) =>
-        @sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: model))
+        $(@sidePanelElem).html(@sidePanelManager.showView(new MangroveValidation.Views.Islands.IslandView(model: model)))
         $(@sidePanelElem).removeClass('disabled')
       error: (model, xhr, options) =>
         @index()

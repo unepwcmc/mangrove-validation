@@ -14,7 +14,8 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
     @currentView = options.view
     @currentView ||= 'show'
 
-    @tabbedContentManager = new MangroveValidation.ViewManager("#tabbed-content")
+    @tabbedContentElem = "#tabbed-content"
+    @tabbedContentManager = new Backbone.ViewManager()
 
     # Zoom to the bounds of the island
     @model.getBounds (bounds) ->
@@ -83,6 +84,6 @@ class MangroveValidation.Views.Islands.IslandView extends Backbone.View
     else if @currentView == 'geometry'
       view = new MangroveValidation.Views.Islands.GeometryEditView({model: @model})
 
-    @tabbedContentManager.showView(view)
+    @$el.find(@tabbedContentElem).html(@tabbedContentManager.showView(view))
 
     return this
