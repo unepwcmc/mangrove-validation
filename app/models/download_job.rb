@@ -28,24 +28,20 @@ class DownloadJob
     puts "Successfully generated download for ID #{@id}"
     download.update_attributes(:status => :finished)
 
-    begin
-      puts "Sending notification mail to #{download.user.email}"
-      DownloadNotifier.download_email(download).deliver
-    rescue Exception => msg
-      puts "***** Mail Delivery FAILED *****"
-      puts "Cannot deliver email:"
-      puts msg
-      puts msg.backtrace
-      puts "********************************"
-    end
+    puts "Sending notification mail to #{download.user.email}"
+    DownloadNotifier.download_email(download).deliver
   rescue Exception => msg
-    puts "***** Download FAILED *****"
-    puts msg
-    puts msg.backtrace
-    puts "***************************"
-    download.update_attributes(:status => :failed)
+    DownloadJob.print_error(msg)
+    download.update_attributes(:status => :failed) unless download.status == :finished
   ensure
     cleanup()
+  end
+
+  def self.print_errpr(exception)
+    puts "***** EXCEPTION *****"
+    puts exception
+    puts exception.backtrace
+    puts "***************************"
   end
 
   def self.get_islands(ids, offset)
@@ -94,7 +90,7 @@ class DownloadJob
   end
 
   def generate_zipfile
-    system "zip -j #{zip_path} #{job_directory}/all.*"
+    system "zip -j #{zip_path} #{job_directory}/all.* #{download_directory}/README.txt"
     if $? != 0
       raise Exception, "Zip failed"
     end
