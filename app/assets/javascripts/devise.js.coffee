@@ -15,7 +15,16 @@ $ ->
     # Re-submit polygon
     parent.$('#main_menu .submit-polygon').click()
 
-  $("form").bind('ajax:success', signInSuccessful).bind('ajax:error', (evt, data, status, xhr) ->
+  signUpHandler = (evt, data, status, xhr) ->
+    if $(data).find('form').length > 1
+      signInSuccessful.apply(@, arguments)
+    else
+      $('.modal-content').html($(data).find('form'))
+      $('form#form_sign_up').bind('ajax:success', signUpHandler)
+
+  $('form#form_sign_up').bind('ajax:success', signUpHandler)
+
+  $("form").not('form#form_sign_up').bind('ajax:success', signInSuccessful).bind('ajax:error', (evt, data, status, xhr) ->
     if $(evt.target).attr("id") == 'form_sign_in'
       if data.status == 200
         signInSuccessful(evt, data, status, xhr)
@@ -41,6 +50,10 @@ $ ->
 
       $.each(errors.password || [], (index, value) ->
         $("form#form_sign_up input#user_password").after($("<span class='help-block'>Password #{value}</span>")).parents("div.control-group").addClass("error")
+      )
+
+      $.each(errors.usage_agreement || [], (index, value) ->
+        $("form#form_sign_up input#usage_agreement").after($("<span class='help-block'>You must agree to the terms and conditions.</span>")).parents("div.control-group").addClass("error")
       )
 
       policy_error_msg = $("<span class='help-block'>You must agree to the Submission Usage and Downloads Policies to continue</span>")
@@ -88,12 +101,22 @@ $ ->
         $("form#form_password_edit input#user_password").after($("<span class='help-block'>password #{value}</span>")).parents("div.control-group").addClass("error")
       )
     else
-      errors = $.parseJSON(data.responseText)
+      errors = null
+
+      try
+        errors = $.parseJSON(data.responseText)
+      catch e
+        errors = {error: "There was an unexpected error. Please try again later."}
+
+
       $("form#form_forgot_password span.help-block").remove()
+      $("form#form_forgot_password div.alert").remove()
       $("form#form_forgot_password div.control-group").removeClass("error")
 
+      $('form#form_forgot_password .modal-body').prepend("<div class='alert alert-error'>#{errors.error}</div>")
+
       $.each(errors.email || [], (index, value) ->
-        $("form#form_forgot_password input#user_email").after($("<span class='help-block'>Email #{value}</span>")).parents("div.control-group").addClass("error")
+        $("form#form_forgot_password input#user_email").after($("<span class='help-block'>#{value}</span>")).parents("div.control-group").addClass("error")
       )
 
       $.each(errors.password || [], (index, value) ->
