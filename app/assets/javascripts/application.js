@@ -21,6 +21,7 @@
 //= require bootstrap-generators
 //= require backbone/mangrove_validation
 //= require view_manager
+//= require old_view_manager
 //= require user_geo_edits
 
 /* Override Bootstrap Tooltip show function so the tooltip doesn't get out of the page */
