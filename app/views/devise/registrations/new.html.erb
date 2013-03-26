@@ -11,6 +11,7 @@
       <%= f.input :password, :required => true %>
       <%= f.input :password_confirmation, :required => true %>
       <%= f.check_box :usage_agreement, :required => true %> I agree to the <a href="http://www.unep-wcmc.org/general-data-licence-excluding-wdpa_559.html" target="_blank">Terms and Conditions of use</a>
+      <% if resource.errors["usage_agreement"].length > 0 %><span class="help-inline alert-error">You must agree to the Terms and Conditions.</span><% end %>
     </div>
   </div>
   <div class="modal-footer">
