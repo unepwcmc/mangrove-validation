@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me,
     :name, :institution, :generated_at, :finished, :usage_agreement, :downloads_agreement
 
+  validates :institution, presence: true
   validates :name, presence: true
   validates :usage_agreement, presence: true
 
