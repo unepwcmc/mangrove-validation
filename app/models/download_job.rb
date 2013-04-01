@@ -90,7 +90,7 @@ class DownloadJob
   end
 
   def generate_zipfile
-    system "zip -j #{zip_path} #{job_directory}/all.* #{download_directory}/README.txt"
+    system "zip -j #{zip_path} #{job_directory}/all.* #{download_directory}/README.txt #{download_directory}/General_Data_License_UNEP-WCMC.pdf"
     if $? != 0
       raise Exception, "Zip failed"
     end
