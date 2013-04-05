@@ -10,7 +10,7 @@ class UserGeoEdit < ActiveRecord::Base
 
   before_create :cartodb
   def cartodb
-    time_in_milliseconds = Time.now.to_f * 1000.0
+    time_in_milliseconds = (Time.now.to_f * 1000.0).round
     geom_sql = "ST_GeomFromText('MULTIPOLYGON(((#{polygon})))', 4326)"
     # SQL CartoDB
     case self.action
