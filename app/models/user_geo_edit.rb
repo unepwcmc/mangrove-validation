@@ -16,8 +16,8 @@ class UserGeoEdit < ActiveRecord::Base
       when 'validate'
         # Insert validated area polygon
         sql = <<-SQL
-          INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, island_id, status, action, email)
-            (SELECT ST_Multi(ST_Intersection(the_geom, #{geom_sql})), #{island_id}, 'validated', '#{action}', '#{user.email}'
+          INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, island_id, status, action, email, instituion, name)
+            (SELECT ST_Multi(ST_Intersection(the_geom, #{geom_sql})), #{island_id}, 'validated', '#{action}', '#{user.email}', '#{user.institution}', '#{user.name}'
               FROM #{APP_CONFIG['cartodb_table']}
               WHERE ST_Intersects(the_geom, #{geom_sql}) AND status = 'original' AND island_id = #{island_id});
         SQL
@@ -30,8 +30,8 @@ class UserGeoEdit < ActiveRecord::Base
       when 'reallocate'
         # Insert copy polygon area from reallocated_from_island
         sql = <<-SQL
-          INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, island_id, status, action, email)
-            (SELECT ST_Multi(ST_Intersection(the_geom, #{geom_sql})), #{island_id}, 'validated', '#{action}', '#{user.email}'
+          INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, island_id, status, action, email, instituion, name)
+            (SELECT ST_Multi(ST_Intersection(the_geom, #{geom_sql})), #{island_id}, 'validated', '#{action}', '#{user.email}', '#{user.institution}', '#{user.name}'
               FROM #{APP_CONFIG['cartodb_table']}
               WHERE ST_Intersects(the_geom, #{geom_sql}) AND island_id = #{reallocated_from_island_id} AND status IS NOT NULL);
         SQL
@@ -51,7 +51,7 @@ class UserGeoEdit < ActiveRecord::Base
 
         # Add the user geometry, minus existing validations (using ST_Difference if any polys intersect)
         sql = <<-SQL
-          INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, island_id, status, action, email) 
+          INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, island_id, status, action, email, instituion, name) 
             SELECT
               ST_Multi(CASE WHEN existing_validations.the_geom IS NOT NULL THEN 
                 ST_Difference(
@@ -60,7 +60,7 @@ class UserGeoEdit < ActiveRecord::Base
               ELSE
                 #{geom_sql}
               END)
-              ,#{island_id}, 'validated', '#{action}', '#{user.email}' FROM (
+              ,#{island_id}, 'validated', '#{action}', '#{user.email}', '#{user.institution}', '#{user.name}' FROM (
               SELECT ST_Union(the_geom) as the_geom
               FROM #{APP_CONFIG['cartodb_table']}
               WHERE ST_Intersects(#{geom_sql}, the_geom) AND status = 'validated' AND island_id = #{island_id}
@@ -75,8 +75,8 @@ class UserGeoEdit < ActiveRecord::Base
       when 'delete'
         # Insert deleted area
         sql = <<-SQL
-          INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, island_id, status, action, email)
-            (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{island_id}, NULL, '#{action}', '#{user.email}'
+          INSERT INTO #{APP_CONFIG['cartodb_table']} (the_geom, island_id, status, action, email, instituion, name)
+            (SELECT ST_Multi(ST_Intersection(the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))), #{island_id}, NULL, '#{action}', '#{user.email}', '#{user.institution}', '#{user.name}'
               FROM #{APP_CONFIG['cartodb_table']}
               WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326)) AND status IS NOT NULL AND island_id = #{island_id});
         SQL
