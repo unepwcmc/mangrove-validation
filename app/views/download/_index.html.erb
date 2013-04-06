@@ -1,6 +1,5 @@
 <%= render :partial => "download_list_item", :locals => {:download => @all_islands_download} if @all_islands_download %>
-<%= render :partial => "download_list_item", :locals => {:download => @user_download} if @user_download %>
 
-<% if @all_islands_download.nil? && @user_download.nil? %>
+<% if @all_islands_download.nil? %>
   <li>No downloads available</li>
 <% end %>

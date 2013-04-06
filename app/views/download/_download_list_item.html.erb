@@ -6,6 +6,6 @@
   <% if download.status=='active' %>
     <span style="float: right"><%= image_tag "spinner.gif" %></span>
   <% else %>
-    <a href="<%= root_path + get_location(download.id) %>" class="btn">Download</a>
+    <a href="<%= get_download_path(download.id) %>" class="btn">Download</a>
   <% end %>
 </li>

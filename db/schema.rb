@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130321102039) do
+ActiveRecord::Schema.define(:version => 20130406154340) do
 
   create_table "islands", :force => true do |t|
     t.string   "name"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20130321102039) do
     t.datetime "updated_at",                       :null => false
     t.text     "island_ids"
     t.integer  "user_id"
+    t.string   "file_id"
   end
 
   create_table "user_geo_edits", :force => true do |t|

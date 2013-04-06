@@ -5,5 +5,5 @@
 </p>
 
 <p>
-  <%= link_to "Download directly", root_url + get_location(@download.id) %> or visit the <%= link_to "Global Islands Database home page", root_url %>.
+  <%= link_to "Download directly", get_download_url(@download.id) %> or visit the <%= link_to "Global Islands Database home page", root_url %>.
 </p>
