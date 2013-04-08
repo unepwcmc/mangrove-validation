@@ -70,7 +70,7 @@ class DownloadJob
   def download_all_islands
     require 'open-uri'
     open(cache_file, "wb") do |fo|
-      fo.print open(download_url).read
+      fo.print open(download_url, 'r', :read_timeout => 900).read
     end
   end
 
