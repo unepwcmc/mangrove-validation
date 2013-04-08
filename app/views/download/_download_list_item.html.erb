@@ -3,9 +3,14 @@
     <strong>Generating download for </strong>
   <% end %>
   <%= download.name %> at <span class="creation-date"><%= download.created_at.strftime("%H:%M") %> on <%= download.created_at.strftime("%-d %b") %></span> 
-  <% if download.status=='active' %>
-    <span style="float: right"><%= image_tag "spinner.gif" %></span>
-  <% else %>
-    <a href="<%= get_download_path(download.id) %>" class="btn">Download</a>
-  <% end %>
+
+  <span style="float: right">
+    <% if download.status=='active' %>
+      <%= image_tag "spinner.gif" %>
+    <% elsif download.status == 'failed' %>
+      <strong>Download failed, please retry.</strong>
+    <% else %>
+      <a href="<%= get_download_path(download.id) %>" class="btn">Download</a>
+    <% end %>
+  </span>
 </li>

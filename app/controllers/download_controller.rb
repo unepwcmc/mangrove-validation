@@ -35,7 +35,6 @@ class DownloadController < ApplicationController
   def available
     @all_islands_download = UserGeoEditDownload.
       where("user_id = ?", current_user.id).
-      where("status IN ('active', 'finished')").
       order("created_at DESC").
       first
 
