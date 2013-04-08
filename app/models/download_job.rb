@@ -15,8 +15,12 @@ class DownloadJob
     download.update_attributes(:file_id => cache_id)
     download.update_attributes(:status => :finished)
 
-    puts "Sending notification mail to #{download.user.email}"
-    DownloadNotifier.download_email(download).deliver
+    begin
+      puts "Sending notification mail to #{download.user.email}"
+      DownloadNotifier.download_email(download).deliver
+    rescue Exception => msg
+      DownloadJob.print_error(msg)
+    end
   rescue Exception => msg
     DownloadJob.print_error(msg)
     cleanup
