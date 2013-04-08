@@ -17,7 +17,9 @@ task :import_islands_from_cartodb, :page, :needs => :environment do |t, args|
 
     result.rows.each do |row|
       island = Island.find_or_initialize_by_id(row.id)
-      island.update_attributes(row)
+      island.update_attribute('name', row.name)
+      island.update_attribute('name_local', row.name_local)
+      island.update_attribute('iso_3', row.iso_3)
     end
 
     page = page + 1
