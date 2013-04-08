@@ -36,7 +36,6 @@ class DownloadJob
   def generate_download
     if !File.exists?(cache_file)
       download_all_islands
-      add_readme_to_download
     end
   end
 
@@ -72,13 +71,6 @@ class DownloadJob
     require 'open-uri'
     open(cache_file, "wb") do |fo|
       fo.print open(download_url).read
-    end
-  end
-
-  def add_readme_to_download
-    Dir.chdir(download_directory) do
-      `zip -r #{cache_file} README.txt`
-      `zip -r #{cache_file} General_Data_License_UNEP-WCMC.pdf`
     end
   end
 
