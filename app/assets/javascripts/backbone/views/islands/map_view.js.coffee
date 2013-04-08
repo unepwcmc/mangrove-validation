@@ -46,13 +46,13 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
 
         # Add island highlighting (or don't)
         if @currentlyShownIslandId?
-          carto_css = @base_carto_css + "##{window.CARTODB_TABLE} [island_id = #{@currentlyShownIslandId}] {line-color: #{@selected_color};polygon-fill:#{@selected_color}; polygon-opacity:0.4}
-            ##{window.CARTODB_TABLE} [island_id = #{@island.get('id')}][status='validated'] {line-color: #{@selected_validated_color};polygon-fill: #{@selected_validated_color};}"
+          carto_css = @base_carto_css + "##{window.CARTODB_TABLE} [id_gid = #{@currentlyShownIslandId}] {line-color: #{@selected_color};polygon-fill:#{@selected_color}; polygon-opacity:0.4}
+            ##{window.CARTODB_TABLE} [id_gid = #{@island.get('id')}][status='validated'] {line-color: #{@selected_validated_color};polygon-fill: #{@selected_validated_color};}"
         else
           carto_css = @base_carto_css
 
         # base layer query
-        query = "SELECT cartodb_id, the_geom_webmercator, status, island_id FROM #{window.CARTODB_TABLE} WHERE status IS NOT NULL"
+        query = "SELECT cartodb_id, the_geom_webmercator, status, id_gid FROM #{window.CARTODB_TABLE} WHERE status IS NOT NULL"
 
         siteOptions =
           getTileUrl: (coord, zoom) ->
@@ -79,7 +79,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
   # Asks cartobd for any islands at the given point
   # and navigates to the island show path if one is found
   navigateToIslandAtPoint: (point) ->
-    query = "SELECT island_id FROM #{window.CARTODB_TABLE}
+    query = "SELECT id_gid FROM #{window.CARTODB_TABLE}
       WHERE ST_Intersects(the_geom, ST_GeomFromText('point(#{point.lng()} #{point.lat()})', 4326))
       LIMIT 1"
 
@@ -89,7 +89,7 @@ class MangroveValidation.Views.Islands.MapView extends Backbone.View
       success: (data) ->
         if data.rows.length > 0
           # If we find a island, redirect to it
-          window.router.navigate("#{data.rows[0].island_id}", true)
+          window.router.navigate("#{data.rows[0].id_gid}", true)
         else
           # If no island, redirect to root '/'
           window.router.navigate("/", true)
