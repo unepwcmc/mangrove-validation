@@ -10,7 +10,7 @@ task :import_islands_from_cartodb, :page, :needs => :environment do |t, args|
         MIN(name) AS name,
         MIN(name_local) AS name_local,
         MIN(iso3) AS iso_3
-      FROM gid_development_copy
+      FROM gid_production
       GROUP BY id_gid
       ORDER BY id_gid
       OFFSET #{page*per_page} LIMIT #{per_page}"
