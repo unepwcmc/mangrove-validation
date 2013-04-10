@@ -29,8 +29,6 @@ class Island < ActiveRecord::Base
             country    = '#{self.country}'
           WHERE id_gid = #{self.id};
           SQL
-    puts "SQL"
-    puts sql
     CartoDB::Connection.query sql
   rescue CartoDB::Client::Error
     errors.add :base, 'There was an error trying to update the island.'
