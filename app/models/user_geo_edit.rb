@@ -37,7 +37,7 @@ class UserGeoEdit < ActiveRecord::Base
         # Add the user geometry, minus existing validations (using ST_Difference if any polys intersect)
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']}
-            (the_geom, id_gid, status, action, email, institution, user_name, iso3, name, name_local, created_at, updated_at) 
+            (the_geom, id_gid, status, action, email, institution, user_name, country, iso3, name, name_local, created_at, updated_at) 
           SELECT
             ST_Multi(
               CASE WHEN existing_validations.the_geom IS NOT NULL THEN 
@@ -48,7 +48,7 @@ class UserGeoEdit < ActiveRecord::Base
                 #{geom_sql}
               END
             ),
-            #{island_id}, 'validated', '#{action}', '#{user.email}', '#{user.institution}', '#{user.name}', '#{h(island.iso_3)}', '#{h(island.name)}', '#{h(island.name_local)}', '#{island.created_at}', '#{island.updated_at}'
+            #{island_id}, 'validated', '#{action}', '#{user.email}', '#{user.institution}', '#{user.name}', '#{h(island.country)}', '#{h(island.iso_3)}', '#{h(island.name)}', '#{h(island.name_local)}', '#{island.created_at}', '#{island.updated_at}'
           FROM (
             SELECT ST_Union(the_geom) as the_geom
             FROM #{APP_CONFIG['cartodb_table']}
@@ -67,13 +67,13 @@ class UserGeoEdit < ActiveRecord::Base
         # Insert deleted area
         sql = <<-SQL
           INSERT INTO #{APP_CONFIG['cartodb_table']}
-            (the_geom, id_gid, status, action, email, institution, user_name, iso3, name, name_local, created_at, updated_at)
+            (the_geom, id_gid, status, action, email, institution, user_name, country, iso3, name, name_local, created_at, updated_at)
           (SELECT
             ST_Multi(
               ST_Intersection(
                 the_geom, ST_GeomFromText('POLYGON((#{polygon}))', 4326))
             ),
-            #{island_id}, NULL, '#{action}', '#{user.email}', '#{user.institution}', '#{user.name}', '#{h(island.iso_3)}', '#{h(island.name)}', '#{h(island.name_local)}', '#{island.created_at}', '#{island.updated_at}'
+            #{island_id}, NULL, '#{action}', '#{user.email}', '#{user.institution}', '#{user.name}', '#{h(island.country)}', '#{h(island.iso_3)}', '#{h(island.name)}', '#{h(island.name_local)}', '#{island.created_at}', '#{island.updated_at}'
           FROM #{APP_CONFIG['cartodb_table']}
           WHERE ST_Intersects(the_geom, ST_GeomFromText('SRID=4326;POLYGON((#{polygon}))', 4326))
             AND status IS NOT NULL

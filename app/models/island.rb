@@ -18,6 +18,25 @@ class Island < ActiveRecord::Base
     result
   end
 
+  after_update :update_cartodb
+  def update_cartodb
+    sql = <<-SQL
+          UPDATE #{APP_CONFIG['cartodb_table']}
+          SET
+            name       = '#{self.name}',
+            name_local = '#{self.name_local}',
+            iso3       = '#{self.iso_3}',
+            country    = '#{self.country}'
+          WHERE id_gid = #{self.id};
+          SQL
+    puts "SQL"
+    puts sql
+    CartoDB::Connection.query sql
+  rescue CartoDB::Client::Error
+    errors.add :base, 'There was an error trying to update the island.'
+    logger.info "There was an error trying to execute the following query:\n#{sql}"
+  end
+
   before_destroy :delete_from_cartodb
   def delete_from_cartodb
     sql = <<-SQL

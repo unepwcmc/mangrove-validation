@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130406154340) do
+ActiveRecord::Schema.define(:version => 20130410112652) do
 
   create_table "islands", :force => true do |t|
     t.string   "name"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(:version => 20130406154340) do
     t.string   "name_local"
     t.string   "iso_3"
     t.string   "source"
+    t.string   "country"
   end
 
   create_table "site_texts", :force => true do |t|

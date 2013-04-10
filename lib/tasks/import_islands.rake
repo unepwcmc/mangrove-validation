@@ -9,7 +9,8 @@ task :import_islands_from_cartodb, :page, :needs => :environment do |t, args|
       SELECT id_gid AS id,
         MIN(name) AS name,
         MIN(name_local) AS name_local,
-        MIN(iso3) AS iso_3
+        MIN(iso3) AS iso_3,
+        MIN(country) AS country
       FROM gid_production
       GROUP BY id_gid
       ORDER BY id_gid
@@ -20,6 +21,7 @@ task :import_islands_from_cartodb, :page, :needs => :environment do |t, args|
       island.update_attribute('name', row.name)
       island.update_attribute('name_local', row.name_local)
       island.update_attribute('iso_3', row.iso_3)
+      island.update_attribute('country', row.country)
     end
 
     page = page + 1

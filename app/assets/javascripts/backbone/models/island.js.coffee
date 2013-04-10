@@ -11,6 +11,7 @@ class MangroveValidation.Models.Island extends Backbone.Model
     id: null
     name: null
     name_local: null
+    country: null
     iso_3: null
     source: null
 
