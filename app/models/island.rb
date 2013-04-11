@@ -1,6 +1,5 @@
 class Island < ActiveRecord::Base
   validates :name, presence: true
-  validates :iso_3, presence: true
   validates :source, presence: true
 
   def self.filter(params)
@@ -25,7 +24,6 @@ class Island < ActiveRecord::Base
           SET
             name       = '#{self.name}',
             name_local = '#{self.name_local}',
-            iso3       = '#{self.iso_3}',
             country    = '#{self.country}'
           WHERE id_gid = #{self.id};
           SQL
