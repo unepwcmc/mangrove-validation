@@ -239,16 +239,17 @@ html, body {
     float:left;
     width: 145px;
   }
+
   > span {
     position:absolute;
     right: 0;
     opacity: 0.6;
     margin-right: 5px;
-    width: 100px;
     font-weight:bold;
     line-height: 40px;
     font-size: 23px;
     overflow:hidden;
+    display: block;
 
     span.up {
       position:relative;
