@@ -1,5 +1,5 @@
 module ApplicationHelper
   def page_title
-    'Global Islands Database'
+    'Global Island Database'
   end
 end
