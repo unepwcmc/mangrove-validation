@@ -20,7 +20,7 @@ set(:deploy_to) { File.join("", "home", user, application) }
 set :repository, "git@github.com:unepwcmc/mangrove-validation.git"
 
 set :scm, :git
-set :branch, "master"
+set :branch, "gid"
 set :scm_username, "unepwcmc-read"
 set :git_enable_submodules, 1
 default_run_options[:pty] = true # Must be set for the password prompt from git to work
