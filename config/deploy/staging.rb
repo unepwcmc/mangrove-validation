@@ -1,11 +1,56 @@
-# Generated with 'brightbox' on Thu Apr 21 11:12:49 +0100 2011
-gem 'brightbox', '>=2.3.8'
-require 'brightbox/recipes'
-require 'brightbox/passenger'
-
 set :rails_env, "staging"
 # Primary domain name of your application. Used in the Apache configs
-set :domain, "unepwcmc-005.vm.brightbox.net"
-
+set :domain, "unepwcmc-012.vm.brightbox.net"
 ## List of servers
-server "unepwcmc-005.vm.brightbox.net", :app, :web, :db, :primary => true, :jobs => true
+server "unepwcmc-012.vm.brightbox.net", :app, :web, :db, :primary => true
+
+set :application, ""
+set :server_name, ".unepwcmc-012.vm.brightbox.net"
+set :sudo_user, "rails"
+set :app_port, "80" 
+
+
+desc "Configure VHost"
+task :config_vhost do
+vhost_config =<<-EOF
+server {
+  listen 80;
+  client_max_body_size 4G;
+  server_name #{application}.unepwcmc-012.vm.brightbox.net #{application}.sw02.matx.info;
+  keepalive_timeout 5;
+  root #{deploy_to}/current/public;
+  passenger_enabled on;
+  rails_env staging;
+
+  add_header 'Access-Control-Allow-Origin' *;
+  add_header 'Access-Control-Allow-Methods' "GET, POST, PUT, DELETE, OPTIONS";
+  add_header 'Access-Control-Allow-Headers' "X-Requested-With, X-Prototype-Version";
+  add_header 'Access-Control-Max-Age' 1728000;
+  
+  gzip on;
+  location ^~ /assets/ {
+    expires max;
+    add_header Cache-Control public;
+  }
+  
+  if (-f $document_root/system/maintenance.html) {
+    return 503;
+  }
+
+  error_page 500 502 504 /500.html;
+  location = /500.html {
+    root #{deploy_to}/public;
+  }
+
+  error_page 503 @maintenance;
+  location @maintenance {
+    rewrite  ^(.*)$  /system/maintenance.html break;
+  }
+}
+EOF
+put vhost_config, "/tmp/vhost_config"
+sudo "mv /tmp/vhost_config /etc/nginx/sites-available/#{application}"
+sudo "ln -s /etc/nginx/sites-available/#{application} /etc/nginx/sites-enabled/#{application}"
+end
+ 
+after "deploy:setup", :config_vhost
