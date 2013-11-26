@@ -4,8 +4,8 @@ set :domain, "unepwcmc-012.vm.brightbox.net"
 ## List of servers
 server "unepwcmc-012.vm.brightbox.net", :app, :web, :db, :primary => true
 
-set :application, ""
-set :server_name, ".unepwcmc-012.vm.brightbox.net"
+set :application, "gid"
+set :server_name, "gid".unepwcmc-012.vm.brightbox.net"
 set :sudo_user, "rails"
 set :app_port, "80" 
 
