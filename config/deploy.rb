@@ -3,9 +3,14 @@ set :default_stage, 'staging'
 require 'capistrano/ext/multistage'
 load 'deploy/assets'
 
+
+require 'rvm/capistrano'
+set :rvm_ruby_string, '1.9.3'
+
+
 # The name of your application.  Used for deployment directory and filenames
 # and Apache configs. Should be unique on the Brightbox
-set :application, "mangrove-validation"
+set :application, "gid"
 
 set :rake, "bundle exec rake"
 
