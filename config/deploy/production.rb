@@ -1,11 +1,11 @@
 set :rails_env, "production"
 # Primary domain name of your application. Used in the Apache configs
-set :domain, "unepwcmc-012.vm.brightbox.net"
+set :domain, "unepwcmc-013.vm.brightbox.net"
 ## List of servers
-server "unepwcmc-012.vm.brightbox.net", :app, :web, :db, :primary => true
+server "unepwcmc-013.vm.brightbox.net", :app, :web, :db, :primary => true
 
 set :application, "gid"
-set :server_name, "gid".unepwcmc-012.vm.brightbox.net"
+set :server_name, "gid".unepwcmc-013.vm.brightbox.net"
 set :sudo_user, "rails"
 set :app_port, "80" 
 
@@ -16,7 +16,7 @@ vhost_config =<<-EOF
 server {
   listen 80;
   client_max_body_size 4G;
-  server_name #{application}.unepwcmc-012.vm.brightbox.net #{application}.sw02.matx.info;
+  server_name #{application}.unepwcmc-013.vm.brightbox.net #{application}.sw02.matx.info;
   keepalive_timeout 5;
   root #{deploy_to}/current/public;
   passenger_enabled on;
