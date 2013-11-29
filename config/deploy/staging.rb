@@ -5,7 +5,7 @@ set :domain, "unepwcmc-011.vm.brightbox.net"
 server "unepwcmc-011.vm.brightbox.net", :app, :web, :db, :primary => true
 
 set :application, "gid"
-set :server_name, "gid".unepwcmc-011.vm.brightbox.net"
+set :server_name, "gid.unepwcmc-011.vm.brightbox.net"
 set :sudo_user, "rails"
 set :app_port, "80" 
 
