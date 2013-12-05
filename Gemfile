@@ -5,12 +5,14 @@ gem 'rails', '3.2.13'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'pg'
+gem 'pg', '0.11.0'
 gem 'rvm-capistrano'
 gem 'bootstrap-generators', '~> 2.0', :git => 'git://github.com/decioferreira/bootstrap-generators.git'
 gem 'simple_form', :git => 'git://github.com/plataformatec/simple_form.git'
 gem 'underscore-rails'
-gem 'cartodb-rb-client', :git => 'git://github.com/decioferreira/cartodb-rb-client.git'
+# gem 'cartodb-rb-client', :git => 'git://github.com/decioferreira/cartodb-rb-client.git'
+
+gem 'cartodb-rb-client', :git => 'https://github.com/unepwcmc/cartodb-rb-client.git'
 
 # Gems used only for assets and not required
 # in production environments by default.

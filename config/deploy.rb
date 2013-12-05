@@ -1,3 +1,7 @@
+gem 'brightbox', '>=2.3.9'
+require 'brightbox/recipes'
+require 'brightbox/passenger'
+
 set :stages, %w(staging production)
 set :default_stage, 'staging'
 require 'capistrano/ext/multistage'
