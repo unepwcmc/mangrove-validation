@@ -7,6 +7,7 @@ set :default_stage, 'staging'
 require 'capistrano/ext/multistage'
 load 'deploy/assets'
 
+set :generate_webserver_config, false
 
 require 'rvm/capistrano'
 set :rvm_ruby_string, '1.9.3'
