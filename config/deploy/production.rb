@@ -2,7 +2,7 @@ gem 'brightbox', '>=2.3.8'
 require 'brightbox/recipes'
 require 'brightbox/passenger'
 
-set :rails_env, "staging"
+set :rails_env, "production"
 
 set :domain, "unepwcmc-013.vm.brightbox.net"
 server "unepwcmc-013.vm.brightbox.net", :app, :web, :db, :primary => true
