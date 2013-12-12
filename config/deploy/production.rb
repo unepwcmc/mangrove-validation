@@ -4,8 +4,8 @@ require 'brightbox/passenger'
 
 set :rails_env, "staging"
 
-set :domain, "unepwcmc-004.vm.brightbox.net"
-server "unepwcmc-004.vm.brightbox.net", :app, :web, :db, :primary => true
+set :domain, "unepwcmc-013.vm.brightbox.net"
+server "unepwcmc-013.vm.brightbox.net", :app, :web, :db, :primary => true
 
 set :branch, "gid"
 
